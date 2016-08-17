@@ -1,8 +1,8 @@
 # job_diary
 
-Web Technology: Flask
-DataBase: Mongodb
-ORM : pymongo
+Web Technology: Flask, 
+DataBase: Mongodb, 
+ORM : pymongo, 
 
 
 As a person who works all over London different places sometimes each week. I sometimes find it hard to keep track of the different locations that I have worked at. I often used Excel to keep track of my job outgoings including my pay. This has resulted in a huge Excel file that sometimes difficult to navigate especially if looking for a specific month or job.
