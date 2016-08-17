@@ -27,7 +27,7 @@ class Job(object):
         return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
 
     @staticmethod
-    def get_by_job(job):
+    def get_by_job_title(job):
         return [Job(**data) for data in db.search('jobs_details', query={'job_title':job.title()})]
 
 
