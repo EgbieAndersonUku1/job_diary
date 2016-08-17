@@ -31,9 +31,7 @@ class User(object):
     def get_by_row_id(self, num):
         return Job.find_by_row_id('#' + str(num).strip('#'))
     
-    def get_by_job(self, job):
-        pass
-
+    
     def get_by_job(self, job):
         return Job.get_by_job(job)
 
