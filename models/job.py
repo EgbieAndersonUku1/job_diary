@@ -45,7 +45,7 @@ class Job(object):
         return db.delete_row(collections, query={'row_id': '#'+str(row_id)})
 
     def get_daily_rate(self):
-        return 1
+        pass
 
     def get_json(self):
         return { 'job_title': self.job_title.title(),

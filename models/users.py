@@ -10,6 +10,7 @@ class User(object):
     def __init__(self, full_name, email, password, _id=None):
         self._full_name = full_name
         self._email = email
+        self._passwd = password
         self.id = uuid.uuid4().hex if _id is None else _id
 
     def add_job_details(self, title, descr, loc, start_time, finish_time,
@@ -29,6 +30,9 @@ class User(object):
 
     def get_by_row_id(self, num):
         return Job.find_by_row_id('#' + str(num).strip('#'))
+    
+    def get_by_job(self, job):
+        pass
 
     def get_by_job(self, job):
         return Job.get_by_job(job)
