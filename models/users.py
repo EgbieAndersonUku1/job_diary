@@ -16,7 +16,7 @@ class User(object):
                         hourly_rate, daily_rate=0, _id=None,
                         curr_date=None, curr_day=None):
 
-        job = Job(title=title, descr=descr, loc=loc, start_time=start_time,
+        job = Job(job_title=title, descr=descr, loc=loc, start_time=start_time,
                   finish_time=finish_time, hourly_rate=hourly_rate,
                   daily_rate=daily_rate, current_date=curr_date,
                   current_day=curr_day, user_id=self.id)
@@ -24,11 +24,14 @@ class User(object):
 
     def get_job_details(self):
         # return all jobs detail belong to specific email
-        data_obj = Job.get_job_details(collections='jobs_details', query={'user_id': self.id})
+        data_obj = Job.get_all(collections='jobs_details', query={'user_id': self.id})
         return [Job(**data) for data in data_obj]
 
     def get_by_row_id(self, num):
         return Job.find_by_row_id('#' + str(num).strip('#'))
+
+    def get_by_job(self, job):
+        return Job.get_by_job(job)
 
     def delete_row(self, row_id):
         return Job.delete_row(collections='jobs_details', row_id=row_id)

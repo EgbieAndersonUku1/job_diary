@@ -4,11 +4,11 @@ import random
 
 class Job(object):
 
-    def __init__(self, title, descr, loc, start_time,
+    def __init__(self, job_title, descr, loc, start_time,
                  finish_time, hourly_rate, user_id, daily_rate=0, _id=None,
                  current_date=None, current_day=None, row_id=None):
 
-        self.title = title
+        self.job_title = job_title
         self.descr = descr
         self.loc = loc
         self.start_time = start_time
@@ -27,6 +27,11 @@ class Job(object):
         return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
 
     @staticmethod
+    def get_by_job(job):
+        return [Job(**data) for data in db.search('jobs_details', query={'job_title':job.title()})]
+
+
+    @staticmethod
     def find_by_row_id(row_id):
         data = db.find_one(collections='jobs_details', query={'row_id':row_id})
         return Job(**data) if data is not None else None
@@ -43,13 +48,13 @@ class Job(object):
         return 1
 
     def get_json(self):
-        return { 'title': self.title.title(),
+        return { 'job_title': self.job_title.title(),
                  'descr': self.descr.title(),
                  'loc'  : self.loc.title(),
                  'start_time' : self.start_time,
                  'finish_time': self.finish_time,
                  'hourly_rate': self.hourly_rate,
-                 'daily_rate' : self.get_daily_rate(self.start_time, self.finish_time, self.hourly_rate),
+                 'daily_rate' : self.get_daily_rate(),
                  'current_date':time.strftime("%d/%m/%Y"),
                  'current_day' :time.strftime('%A'),
                  'user_id' :self.user_id,
