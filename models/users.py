@@ -30,6 +30,9 @@ class User(object):
 
     def get_by_row_id(self, num):
         return Job.find_by_row_id('#' + str(num).strip('#'))
+    
+    def get_by_job(self, job):
+        pass
 
     def delete_row(self, row_id):
         return Job.delete_row(collections='jobs_details', row_id=row_id)
