@@ -1,5 +1,20 @@
 from database import DataBase as db
 import random
+import time
+
+def translate_month(month):
+	'''translate_month(str) -> return(str)
+	Takes a string digit and returns the month equivalent of that
+	string.
+
+	>>> translate_month(01)
+	'January'
+	'''
+	months = {'01': 'January', '02':'February', '03':'March',
+		      '04': 'April',   '05':'May',      '06': 'June',
+		      '07':'July',     '08': 'August',  '09':'September',
+	          '10':'October',  '11':'November', '12': 'December'}
+	return months[month]
 
 class Records(object):
     """Records (class)
@@ -16,12 +31,12 @@ class Records(object):
         self.start_time = start_time
         self.finish_time = finish_time
         self.hourly_rate = hourly_rate
-        self.daily_rate  = daily_rate
         self.user_id = user_id
-        self._id = _id
+        self.daily_rate  = daily_rate
         self.date = time.strftime("%d/%m/%Y") if date is None else date
         self.day  = time.strftime('%A') if day is None else day
         self.row_id = row_id
+        self._id = _id
         self.track_times  = {}
 
     @classmethod
@@ -71,7 +86,6 @@ class Records(object):
 
     @classmethod
     def find_by_location(cls, loc):
-        """retreives the job via the location"""
         return cls._find(query={'loc': loc.title()})
 
     @classmethod
@@ -79,12 +93,54 @@ class Records(object):
         """retreives the job using the user id"""
         return cls._find(query)
 
+    # pay, bool_operation=None, amount=None, amount2=None, date=None, day=None
+    @classmethod
+    def find_by_amount(cls, pay, operand, amount, amount2, date, day):
+        """finds the job records based on amount"""
+
+        boolean_values = {'>':'$gt', '<': '$lt', '<=': '$lte', '>=':'$gte', '=':'$eq'}
+
+        if pay and not( operand and amount and amount2 and date and day):
+            return cls._find(query={'daily_rate': pay})
+        elif pay and date and day:
+            return cls._find(query={'daily_rate':pay, 'date':date, 'day':day})
+        elif pay and date:
+            return cls._find(query={'daily_rate':pay, 'date':date})
+
+        # fourth elif statement perfoms a comparision
+        # Returns an amount if less than, greater than or equal to a certain
+        # value amount
+        # e.g  > 100 return all amount greater then 100
+        # e.g < 100 return all amounts less then 100
+        elif amount and operand:
+            bool_opr = boolean_values[operand]
+            if day and date:
+                return cls._find(query={'daily_rate': {bool_opr:amount}, 'date': date, 'day':day})
+            elif not day and date:
+                return cls._find(query={'daily_rate': {bool_opr:amount}, 'date': date})
+            elif not date and day:
+                return cls._find(query={'daily_rate': {bool_opr:amount}, 'day':day})
+            else:
+                return cls._find(query={'daily_rate': {bool_opr:amount}})
+
+        # does a comparision operation between two amounts and returns all
+        # values that match the specific parameters
+        """retreives the job via the location"""
+        # e.g 400 <= 400 < 500 will return any amount between 400 and 499,
+        elif amount and amount2:
+            if amount > amount2:
+                return cls._find(query={'daily_rate': {'$gte': amount2, "$lte":amount}})
+            elif amount2 > amount:
+                return cls._find(query={'daily_rate': {'$gte': amount, "$lte":amount2}})
+            else:
+                return cls._find(query={'daily_rate': pay})
+
     @staticmethod
     def delete_row(row_id):
         """deletes the row using the id"""
-        return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id)})
 
     def get_daily_rate(self):
+        return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id)})
         """calculates the daily rate"""
         pass
 
@@ -101,7 +157,7 @@ class Records(object):
                  'start_time' : self.start_time,
                  'finish_time': self.finish_time,
                  'hourly_rate': self.hourly_rate,
-                 'daily_rate' : self.get_daily_rate(),
+                 'daily_rate' : self.daily_rate,
                  'date':time.strftime("%d/%m/%Y"),
                  'day' :time.strftime('%A'),
                  'user_id' :self.user_id,
