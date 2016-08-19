@@ -113,19 +113,18 @@ class Records(object):
         # e.g  > 100 return all amount greater then 100
         # e.g < 100 return all amounts less then 100
         elif amount and operand:
-            bool_opr = boolean_values[operand]
+            operand = boolean_values[operand]
             if day and date:
-                return cls._find(query={'daily_rate': {bool_opr:amount}, 'date': date, 'day':day})
+                return cls._find(query={'daily_rate': {operand:amount}, 'date': date, 'day':day})
             elif not day and date:
-                return cls._find(query={'daily_rate': {bool_opr:amount}, 'date': date})
+                return cls._find(query={'daily_rate': {operand:amount}, 'date': date})
             elif not date and day:
-                return cls._find(query={'daily_rate': {bool_opr:amount}, 'day':day})
+                return cls._find(query={'daily_rate': {operand:amount}, 'day':day})
             else:
-                return cls._find(query={'daily_rate': {bool_opr:amount}})
+                return cls._find(query={'daily_rate': {operand:amount}})
 
         # does a comparision operation between two amounts and returns all
         # values that match the specific parameters
-        """retreives the job via the location"""
         # e.g 400 <= 400 < 500 will return any amount between 400 and 499,
         elif amount and amount2:
             if amount > amount2:
