@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from database import DataBase as db
 from translator import translate_to_month_num
 import random
@@ -73,24 +75,25 @@ class Records(object):
         return cls._find({'date':date, 'day':day.title()})
 
     @classmethod
-    def find_by_monthly(month, month2):
+    def find_by_month(cls, month, month2):
 	"""find_by_month(str, str) -> return(None or obj)
-	Find the job by month
+
+	The method find_by_month receives a strings e.g. January from the User inteface.
+	It then translates it into a month number since the months are stored in the database
+	as numbers. (This makes it easy to query two months e.g. find days worked between
+	the month January and Feb which includes the starting and ending month January
+	and February.) It then uses the number to query the database for those days.
 	"""
-	# The Records receives the month via the user interface in the form of strings e.g. January
-	# It then translates it into numbers since month are strored in the database
-	# as numbers. This makes it easy to query two months e.g. find jobs between January and Feb
-	# It then uses the number to query the database for those months
 	if month and not month2:
-		return cls._find(translate_to_month_num(month)) # user wants information for a single month
-	elif month and month2: # user wants information between two months
+		return cls._find(query={'month':translate_to_month_num(month)}) # user wants information for a single month
+	elif month and month2: # user wants information between two given months
 
 		month  = translate_to_month_num(month)  # translate month to number
 		month2 = translate_to_month_num(month2) # translate month2 to number
 		month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
 
-		# return jobs between two months including the starting and ending month
-		return cls._find(query={'month': {{'$gte': month, "$lte":month2}}})
+		# return days worked between the two months given including the starting and ending month
+		return cls._find(query={'month': {'$gte': month, "$lte":month2}})
 
     @classmethod
     def find_by_location(cls, loc):
