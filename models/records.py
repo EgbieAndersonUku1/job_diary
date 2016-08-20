@@ -26,8 +26,8 @@ class Records(object):
 	self.day  = time.strftime('%A') if day is None else day
 	self.month = self.date.split('/')[1] # split the date by '/' and take the month part
 	self.row_id = row_id
-		self._id = _id
-		self.track_times  = {}
+	self._id = _id
+	self.track_times  = {}
 
     @classmethod
     def _find(cls, query):
