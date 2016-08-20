@@ -1,6 +1,10 @@
+
+########################################################################
+# Author : Egbie Uku
+#######################################################################
+
 from datetime import datetime
 from dateutil import relativedelta
-
 
 def translate_month(month_num):
 	'''translate_month(str) -> return(str)
