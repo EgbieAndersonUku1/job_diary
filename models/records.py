@@ -1,4 +1,5 @@
 from database import DataBase as db
+from translator import translate_to_month_num
 import random
 import time
 
