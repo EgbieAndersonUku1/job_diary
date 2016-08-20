@@ -162,16 +162,16 @@ class Records(object):
     def get_json(self):
         """returns a json represent of the class"""
 
-        return { 'job_title': self.job_title.title(),
-                 'descr': self.descr.title(),
-                 'loc'  : self.loc.title(),
+        return { 'job_title'  : self.job_title.title(),
+                 'descr'      : self.descr.title(),
+                 'loc'        : self.loc.title(),
                  'start_time' : self.start_time,
                  'finish_time': self.finish_time,
                  'hourly_rate': self.hourly_rate,
                  'daily_rate' : self.daily_rate,
-				 'month' : self.month,
-                 'date':time.strftime("%d/%m/%Y"),
-                 'day'  :time.strftime('%A'),
-				 'month': self.month,
-                 'user_id' :self.user_id,
-                 'row_id': self._gen_row_id()}
+		  'month'     : self.month,
+                 'date'       : time.strftime("%d/%m/%Y"),
+                 'day'        : time.strftime('%A'),
+		 'month'      : self.month,
+                 'user_id'    :self.user_id,
+                 'row_id'     : self._gen_row_id()}
