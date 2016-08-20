@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+####################################################################################
+# Author : Egbie Uku
+# The Records class has access to the entire job records created by the user via database
+####################################################################################
+
 from database import DataBase as db
 from translator import translate_to_month_num
 import random
