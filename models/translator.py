@@ -1,0 +1,69 @@
+from datetime import datetime
+from dateutil import relativedelta
+
+
+def translate_month(month_num):
+	'''translate_month(str) -> return(str)
+	Takes a string digit and returns the month equivalent of that
+	string.
+
+	>>> translate_month(01)
+	'January'
+	'''
+	months = {'01': 'January', '02':'February', '03':'March',
+		      '04': 'April',   '05':'May',      '06': 'June',
+		      '07':'July',     '08': 'August',  '09':'September',
+	          '10':'October',  '11':'November', '12': 'December'}
+	return months[month_num]
+
+def translate_to_month_num(month):
+	"""translate_to_month_num(int) -> return(str)
+	Takes a number between 1-12 and returns a month name
+	corresponding to that number.
+
+	e.g 1 returns January, 2 returns Feb, etc
+
+	>>> translate_to_month_num(01)
+	'January'
+	"""
+	months = {'January':'01', 'February':'02', 'March':'03',
+		      'April':'04',   'May':'05', 'June':'06',
+		      'July':'07', 'August':'08',  'September':'09',
+	          'October':'10',  'November':'11', 'December':'12'}
+	return months[month.title()]
+
+def get_hours_worked(start_date, start_time, finish_date, finish_time):
+	"""get_hours_worked(str, str, str, str) -> return(tuple)
+
+	start_date : The beginning date in the form of dd/mm/yy
+	end_date   : The ending date in the form of dd/mm/yy
+	start_time : The starting time in the form of hh:mm
+	finish_time: The starting time in the form of hh:mm
+	returns    : A tuple where the first element is the hours and second the minutes
+
+	Takes a starting date, starting time, ending date and a finishing time
+	and returns the number of hours, minutes that has elasped between the
+	two
+
+	>>> get_hours_worked('1/1/2016', '1/1/2016', '9:23', '21:26')
+	(12, 3)
+	>>> get_hours_worked('1/1/2016', '1/4/2016', '9:23', '21:26')
+	(83, 43)
+	"""
+
+	day1, month1, year1 = start_date.split('/')  # split the dates for the start date by  /
+	day2, month2, year2 = finish_date.split('/') # split the dates for the finish date by /
+	hours1, minutes1 = start_time.split(':')
+	hours2, minutes2 = finish_time.split(':')
+	first_date = datetime(int(year1), int(month1), int(day1), int(hours1), int(minutes1))
+	sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
+	difference = relativedelta.relativedelta(sec_date, first_date)
+
+	# if start date is not equal to the finish date it means that user
+	# started on one day and finish on another day
+	if start_date != finish_date:
+		hours = difference.days * 24           # convert days to hours
+		total_hours = difference.hours + hours # add the converted days hours to number of time hours worked
+		return total_hours, difference.minutes
+
+	return difference.hours, difference.minutes
