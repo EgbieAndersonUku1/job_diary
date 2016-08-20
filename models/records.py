@@ -2,7 +2,10 @@
 
 ####################################################################################
 # Author : Egbie Uku
-# The Records class has access to the entire job records created by the user via database
+# Unlike the User class the Records class has directly access to the database and so
+# can access the records of the jobs for any users. The Records class does not have
+# access to the User class or anything else. Its primary job is to execute and return
+# queries for the User class.
 ####################################################################################
 
 from database import DataBase as db
