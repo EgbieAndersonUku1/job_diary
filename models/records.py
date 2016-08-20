@@ -9,7 +9,7 @@
 ####################################################################################
 
 from database import DataBase as db
-from translator import translate_to_month_num, get_hours_worked
+from translator import translate_to_month_num, get_hours_worked, gen_row_id
 import random
 import time
 
@@ -18,24 +18,25 @@ class Records(object):
     The Records class has directly access to the database. It can use that access
     to either delete, retreive or update the record details of the user.
     """
-    def __init__(self, job_title, descr, loc, start_time, finish_time, 
+    def __init__(self, job_title, descr, loc, start_time, finish_time,
                  hourly_rate, user_id, daily_rate,
-                 date, day, row_id, _id, month=None):
+                 date, day, row_id, _id, hours_worked=None, month=None):
 
-	self.job_title = job_title
-	self.descr = descr
-	self.loc = loc
-	self.start_time = start_time
-	self.finish_time = finish_time
-	self.hourly_rate = hourly_rate
-	self.user_id = user_id
-	self.daily_rate  = daily_rate
-	self.date = time.strftime("%d/%m/%Y") if date is None else date
-	self.day  = time.strftime('%A') if day is None else day
-	self.month = self.date.split('/')[1] # split the date by '/' and take the month part
-	self.row_id = row_id
-	self._id = _id
-	self.track_times  = {}
+        self.job_title = job_title
+        self.descr = descr
+        self.loc = loc
+        self.start_time = start_time
+        self.finish_time = finish_time
+        self.hourly_rate = hourly_rate
+        self.hours_worked = hours_worked
+        self.user_id = user_id
+        self.daily_rate  = daily_rate
+        self.date = time.strftime("%d/%m/%Y") if date is None else date
+        self.day  = time.strftime('%A') if day is None else day
+        self.month = self.date.split('/')[1] # split the date by '/' and take the month part
+        self.row_id = row_id
+        self._id = _id
+        self.track_times  = {}
 
     @classmethod
     def _find(cls, query):
@@ -47,20 +48,11 @@ class Records(object):
 
     @classmethod
     def _find_one(cls, query):
-        """_find_one(str, str) -> return (obj or None)
-        A private helper function that searches the database for a value
+        """A private helper function that searches the database for a value
         and returns a single value that matches the users values
         """
         data = db.find_one(collections='jobs_details', query=query)
         return cls(**data) if data is not None else None
-
-    @staticmethod
-    def _gen_row_id():
-        """_gen_row_id(void) -> return(str)
-        A private function that generates a five digit string. This will
-        be used as a row id.
-        """
-        return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
 
     @classmethod
     def find_by_job_title(cls, query):
@@ -155,14 +147,9 @@ class Records(object):
 
     @staticmethod
     def delete_row(row_id):
-	"""deletes the row using the id"""
-	pass
-
-    def get_daily_rate(self):
+	    """deletes the row using the id"""
         return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id)})
-        """calculates the daily rate"""
-        pass
-
+        
     def save(self):
         """saves the data to the databases. It is saved in the form of json"""
         db.insert('jobs_details', self.get_json())
@@ -170,16 +157,18 @@ class Records(object):
     def get_json(self):
         """returns a json represent of the class"""
 
-        return { 'job_title'  : self.job_title.title(),
-                 'descr'      : self.descr.title(),
-                 'loc'        : self.loc.title(),
-                 'start_time' : self.start_time,
-                 'finish_time': self.finish_time,
-                 'hourly_rate': self.hourly_rate,
-                 'daily_rate' : self.daily_rate,
-		  'month'     : self.month,
-                 'date'       : time.strftime("%d/%m/%Y"),
-                 'day'        : time.strftime('%A'),
-		 'month'      : self.month,
-                 'user_id'    :self.user_id,
-                 'row_id'     : self._gen_row_id()}
+        return { 'job_title'   : self.job_title.title(),
+                 'descr'       : self.descr.title(),
+                 'loc'         : self.loc.title(),
+                 'start_time'  : self.start_time,
+                 'finish_time' : self.finish_time,
+                 'hours_worked': self.get_hours(),
+                 'hourly_rate' : self.hourly_rate,
+                 'daily_rate'  : self.daily_rate,
+		 'month'       : self.month,
+                 'date'        : time.strftime("%d/%m/%Y"),
+                 'day'         : time.strftime('%A'),
+		 'month'       : self.month,
+                 'user_id'     : self.user_id,
+                 'row_id'      : gen_row_id()
+                 }
