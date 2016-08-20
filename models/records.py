@@ -2,42 +2,29 @@ from database import DataBase as db
 import random
 import time
 
-def translate_month(month):
-	'''translate_month(str) -> return(str)
-	Takes a string digit and returns the month equivalent of that
-	string.
-
-	>>> translate_month(01)
-	'January'
-	'''
-	months = {'01': 'January', '02':'February', '03':'March',
-		      '04': 'April',   '05':'May',      '06': 'June',
-		      '07':'July',     '08': 'August',  '09':'September',
-	          '10':'October',  '11':'November', '12': 'December'}
-	return months[month]
-
 class Records(object):
     """Records (class)
     The Records class has directly access to the database. It can use that access
     to either delete, retreive or update the record details of the user.
     """
     def __init__(self, job_title, descr, loc, start_time,
-                 finish_time, hourly_rate, user_id, daily_rate=0,
-                 date=None, day=None, row_id=None, _id=None):
+                 finish_time, hourly_rate, user_id, daily_rate,
+                 date, day, row_id, _id, month=None):
 
-        self.job_title = job_title
-        self.descr = descr
-        self.loc = loc
-        self.start_time = start_time
-        self.finish_time = finish_time
-        self.hourly_rate = hourly_rate
-        self.user_id = user_id
-        self.daily_rate  = daily_rate
-        self.date = time.strftime("%d/%m/%Y") if date is None else date
-        self.day  = time.strftime('%A') if day is None else day
-        self.row_id = row_id
-        self._id = _id
-        self.track_times  = {}
+		self.job_title = job_title
+		self.descr = descr
+		self.loc = loc
+		self.start_time = start_time
+		self.finish_time = finish_time
+		self.hourly_rate = hourly_rate
+		self.user_id = user_id
+		self.daily_rate  = daily_rate
+		self.date = time.strftime("%d/%m/%Y") if date is None else date
+		self.day  = time.strftime('%A') if day is None else day
+		self.month = self.date.split('/')[1] # split the date by '/' and take the month part
+		self.row_id = row_id
+		self._id = _id
+		self.track_times  = {}
 
     @classmethod
     def _find(cls, query):
@@ -85,6 +72,26 @@ class Records(object):
         return cls._find({'date':date, 'day':day.title()})
 
     @classmethod
+    def find_by_monthly(month, month2):
+	"""find_by_month(str, str) -> return(None or obj)
+	Find the job by month
+	"""
+	# The Records receives the month via the user interface in the form of strings e.g. January
+	# It then translates it into numbers since month are strored in the database
+	# as numbers. This makes it easy to query two months e.g. find jobs between January and Feb
+	# It then uses the number to query the database for those months
+	if month and not month2:
+		return cls._find(translate_to_month_num(month)) # user wants information for a single month
+	elif month and month2: # user wants information between two months
+
+		month  = translate_to_month_num(month)  # translate month to number
+		month2 = translate_to_month_num(month2) # translate month2 to number
+		month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
+
+		# return jobs between two months including the starting and ending month
+		return cls._find(query={'month': {{'$gte': month, "$lte":month2}}})
+
+    @classmethod
     def find_by_location(cls, loc):
         return cls._find(query={'loc': loc.title()})
 
@@ -92,6 +99,7 @@ class Records(object):
     def find_by_user_id(cls, query):
         """retreives the job using the user id"""
         return cls._find(query)
+
 
     # pay, bool_operation=None, amount=None, amount2=None, date=None, day=None
     @classmethod
@@ -136,7 +144,8 @@ class Records(object):
 
     @staticmethod
     def delete_row(row_id):
-        """deletes the row using the id"""
+		"""deletes the row using the id"""
+		pass
 
     def get_daily_rate(self):
         return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id)})
@@ -157,7 +166,9 @@ class Records(object):
                  'finish_time': self.finish_time,
                  'hourly_rate': self.hourly_rate,
                  'daily_rate' : self.daily_rate,
+				 'month' : self.month,
                  'date':time.strftime("%d/%m/%Y"),
-                 'day' :time.strftime('%A'),
+                 'day'  :time.strftime('%A'),
+				 'month': self.month,
                  'user_id' :self.user_id,
                  'row_id': self._gen_row_id()}
