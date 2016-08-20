@@ -2,8 +2,8 @@
 
 ##################################################################################
 # Author : Egbie Uku
-# The User class does not have access to the database and can only access the job 
-# records of the users via the Record class
+# The User class does not have access to the database or anything else. It
+# can only access the job records of the users via the Record class.
 #################################################################################
 
 import time
