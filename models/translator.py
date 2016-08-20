@@ -1,7 +1,6 @@
-
 ########################################################################
 # Author : Egbie Uku
-#######################################################################
+#########################################################################
 
 from datetime import datetime
 from dateutil import relativedelta
@@ -71,3 +70,13 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
 		return total_hours, difference.minutes
 
 	return difference.hours, difference.minutes
+
+def gen_row_id():
+	"""_gen_row_id(void) -> return(str)
+	A private function that generates a five digit string. This will
+	be used as a row id.
+	"""
+	return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
+
+def get_daily_rate(hours, wages):
+	pass
