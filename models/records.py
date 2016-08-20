@@ -85,15 +85,15 @@ class Records(object):
 	and February.) It then uses the number to query the database for those days.
 	"""
 	if month and not month2:
-		return cls._find(query={'month':translate_to_month_num(month)}) # user wants information for a single month
+	    return cls._find(query={'month':translate_to_month_num(month)}) # user wants information for a single month
 	elif month and month2: # user wants information between two given months
 
-		month  = translate_to_month_num(month)  # translate month to number
-		month2 = translate_to_month_num(month2) # translate month2 to number
-		month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
+	    month  = translate_to_month_num(month)  # translate month to number
+	    month2 = translate_to_month_num(month2) # translate month2 to number
+	    month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
 
-		# return days worked between the two months given including the starting and ending month
-		return cls._find(query={'month': {'$gte': month, "$lte":month2}})
+	    # return days worked between the two months given including the starting and ending month
+	    return cls._find(query={'month': {'$gte': month, "$lte":month2}})
 
     @classmethod
     def find_by_location(cls, loc):
@@ -103,7 +103,6 @@ class Records(object):
     def find_by_user_id(cls, query):
         """retreives the job using the user id"""
         return cls._find(query)
-
 
     # pay, bool_operation=None, amount=None, amount2=None, date=None, day=None
     @classmethod
@@ -148,8 +147,8 @@ class Records(object):
 
     @staticmethod
     def delete_row(row_id):
-		"""deletes the row using the id"""
-		pass
+	"""deletes the row using the id"""
+	pass
 
     def get_daily_rate(self):
         return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id)})
