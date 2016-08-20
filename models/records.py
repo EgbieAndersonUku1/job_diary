@@ -10,22 +10,22 @@ class Records(object):
     The Records class has directly access to the database. It can use that access
     to either delete, retreive or update the record details of the user.
     """
-    def __init__(self, job_title, descr, loc, start_time,
-                 finish_time, hourly_rate, user_id, daily_rate,
+    def __init__(self, job_title, descr, loc, start_time, finish_time, 
+                 hourly_rate, user_id, daily_rate,
                  date, day, row_id, _id, month=None):
 
-		self.job_title = job_title
-		self.descr = descr
-		self.loc = loc
-		self.start_time = start_time
-		self.finish_time = finish_time
-		self.hourly_rate = hourly_rate
-		self.user_id = user_id
-		self.daily_rate  = daily_rate
-		self.date = time.strftime("%d/%m/%Y") if date is None else date
-		self.day  = time.strftime('%A') if day is None else day
-		self.month = self.date.split('/')[1] # split the date by '/' and take the month part
-		self.row_id = row_id
+	self.job_title = job_title
+	self.descr = descr
+	self.loc = loc
+	self.start_time = start_time
+	self.finish_time = finish_time
+	self.hourly_rate = hourly_rate
+	self.user_id = user_id
+	self.daily_rate  = daily_rate
+	self.date = time.strftime("%d/%m/%Y") if date is None else date
+	self.day  = time.strftime('%A') if day is None else day
+	self.month = self.date.split('/')[1] # split the date by '/' and take the month part
+	self.row_id = row_id
 		self._id = _id
 		self.track_times  = {}
 
