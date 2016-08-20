@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+##################################################################################
+# Author : Egbie Uku
+# The User class does not have access to the database and can only access the job 
+# records of the users via the Record class
+#################################################################################
+
 import time
 import uuid
 from records import Records
