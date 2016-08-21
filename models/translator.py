@@ -4,6 +4,7 @@
 
 from datetime import datetime
 from dateutil import relativedelta
+import random
 
 def translate_month(month_num):
 	'''translate_month(str) -> return(str)
@@ -78,5 +79,59 @@ def gen_row_id():
 	"""
 	return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
 
-def get_daily_rate(hours, wages):
-	pass
+def get_daily_rate(hours, hourly_rate):
+	"""get_daily_rate(tuple, float or int) -> returns(float)
+	hours         : (h, m)
+	hourly_rate   : The amount paid in hours
+	returns float : The total amount paid for the day
+	"""
+	units = '{}.{}'.format(hours[0], hours[1])
+	return '%.2f'%(float(units) * float(hourly_rate))
+
+def time_to_float(val):
+	"""
+	val   : contains a tuple (h, m) where is the hours and m is the minutes
+	return : return the time in float format
+
+	>>> time_to_float((2,2))
+	2.2
+	"""
+	if len(val) == 2:
+		return '{}.{}'.format(val[0], val[1])
+	new_val = ''.join([str(i) for i in val])
+	return float(new_val[0] + '.' + new_val[1:])
+
+def time_to_str(time):
+	"""time_to_str(tuple) -> return(str)
+
+	time   : contains a tuple (h, m) where is the hours and m is the minutes
+	return : return the time in string format
+
+	>>> time_to_str((1, 0))
+	1 hour
+	>>> time_to_str((2, 0))
+	2 hours
+	>>> time_to_str((0, 1))
+	1 minute
+	>>> time_to_str((0, 10))
+	10 minutes
+	"""
+	hours, mins = time
+
+	if hours > 1 and mins >1:
+		time_str = '{} hours and {} minutes'.format(hours, mins)
+	elif hours==1 and mins == 1:
+		time_str = '{} hour and {} minute'.format(hours, mins)
+	elif hours==1 and mins > 1:
+		time_str = '{} hour and {} minutes'.format(hours, mins)
+	elif hours>1 and mins ==1:
+		time_str = '{} hours  and {} minute'.format(hours, mins)
+	elif not hours and mins > 1:
+		time_str = '{} minutes '.format(mins)
+	elif not hours and mins == 1:
+		time_str = '{} minute'.format(mins)
+	elif hours == 1 and not mins:
+		time_str = '{} hour'.format(hours)
+	elif hours > 1 and not mins:
+		time_str = '{} hours '.format(hours)
+	return time_str
