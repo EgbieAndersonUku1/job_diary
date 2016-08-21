@@ -76,7 +76,7 @@ class Records(object):
         elif date and not day:
             return cls._find(query={'date': date})
         elif day and not date:
-            return cls._find(query={'day': day})
+            return cls._find(query={'day': day.title()})
         
     @classmethod
     def find_by_month(cls, month, month2):
