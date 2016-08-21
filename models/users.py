@@ -20,12 +20,12 @@ class User(object):
 
     def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
         self.full_name  = full_name
-        self.start_date =  start_date
-        self.end_date   =  end_date
-        self.day   = day
-        self.id = uuid.uuid4().hex if _id is None else _id
-        date = time.strftime("%d/%m/%Y")
+        self.start_date = start_date
+        self.end_date   = end_date
+        self.day = day
+        self.id  = uuid.uuid4().hex if _id is None else _id
 
+        date = time.strftime("%d/%m/%Y")
         if self.start_date == None:
            self.start_date = date
         if self.end_date == None:
