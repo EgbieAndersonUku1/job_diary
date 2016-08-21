@@ -2,17 +2,18 @@
 ##################################################################################
 # Author : Egbie Uku
 # The User class does not have access to the database or anything else. It
-# can only access the job records of the users via the Record class.
+# can only access the job records of the users via the Record class API.
 #################################################################################
 
 import time
 import uuid
 from records import Records
 from translator import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
+from records import Records
 
 class User(object):
     """User(class)
-    The User class has access to the job records. This allows the User class
+    The User class has access to the job records. The allows the User class
     to access the job details to either update, delete, view or add all
     via an easy interface.
     """
@@ -23,8 +24,8 @@ class User(object):
         self.end_date   =  end_date
         self.day   = day
         self.id = uuid.uuid4().hex if _id is None else _id
-
         date = time.strftime("%d/%m/%Y")
+
         if self.start_date == None:
            self.start_date = date
         if self.end_date == None:
@@ -46,7 +47,7 @@ class User(object):
                          user_id=self.id, daily_rate=get_daily_rate(hours, hourly_rate),
                          date=self.start_date,
                          day=self.day,
-                         month=self.start_date)
+                         month=self.start_date.split('/')[1])
         record.save()
 
     def get_by_hour(self, hours, date1=None, date2=None, month1=None,
@@ -57,7 +58,7 @@ class User(object):
         """get_by_user_id(None) -> return(obj)
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_user_id(query={'user_id':self.id})
+        return Records.find_by_user_id(self.id)
 
     def get_by_row_id(self, num):
         """get_by_row_id(None) -> return(obj)
@@ -65,7 +66,7 @@ class User(object):
 
         Returns: either a single job obj parameter or None.
         """
-        return Records.find_by_row_id('#' + str(num).strip('#'))
+        return Records.find_by_row_id(num, self.id)
 
     def get_by_job_title(self, job):
         """get_by_job_title(str) -> return(obj)
@@ -73,7 +74,7 @@ class User(object):
 
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_job_title(job)
+        return Records.find_by_job_title(job, self.id)
 
     def get_by_date_or_day(self, date=None, day=None):
         """get_by_date_and_day(str, str) -> return(str)
@@ -81,7 +82,7 @@ class User(object):
 
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_date_or_day(date, day)
+        return Records.find_by_date_or_day(date, day, self.id)
 
     def get_by_location(self, loc):
         """get_by_location(str) -> return(obj)
@@ -95,7 +96,7 @@ class User(object):
         """delete_row(str) -> return(None)
         Deletes a row from the database using the row id
         """
-        return Records.delete_row(row_id)
+        return Records.delete_row(row_id, self.id)
 
     def update_row(self, row_id):
         """update_row(str, str) -> return(None)
@@ -103,9 +104,8 @@ class User(object):
         """
         pass
 
-    def get_by_amount(self, pay=None, operand=None, amount=None,
-                      amount2=None, date=None, day=None):
-        return Records.find_by_amount(pay, operand, amount, amount2, date, day)
+    def get_by_amount(self, amount=None, operand=None, amount2=None, date=None, day=None):
+        return Records.find_by_amount(operand, amount, amount2, date, day, self.id)
 
     def get_by_month(self, month1, month2=None):
         """get_by_month(str, str(optional)) -> return(None or obj)
@@ -127,7 +127,7 @@ class User(object):
         e.g if Jan and june is given but the user did not work the entire of mar
         and Apr then the days worked in Jan, Feb, May, Jun would be returned.
         """
-        return Records.find_by_month(month1, month2)
+        return Records.find_by_month(month1, month2, self.id)
 
     def __repr__(self):
         return '{}'.format(self.full_name)
