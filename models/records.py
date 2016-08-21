@@ -19,11 +19,12 @@ class Records(object):
     The Records class has directly access to the database. It can use that access
     to either delete, retreive or update the record details of the user.
     """
+
     def __init__(self, job_title, descr, loc, start_time, finish_time,
                            hourly_rate, total_hours, _hours, user_id, daily_rate,
                           date, day, month, row_id=None, _id=None):
 
-        self.job_title   = job_title
+        self.job_title  = job_title
         self.descr = descr
         self.daily_rate  = daily_rate
         self.start_time  = start_time
@@ -32,13 +33,14 @@ class Records(object):
         self.total_hours = total_hours # hours in words e.g 2 hrs and 10 mins
         self._hours  = _hours                 # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
         self.user_id = user_id
-        self.date  =  date
-        self.day   =  day
-        self.loc   = loc
+        self.date =  date
+        self.day  =  day
+        self.loc  = loc
         self.row_id = gen_row_id() if row_id is None else row_id
         self.month = month
         self._id = uuid.uuid4().hex if _id is None else _id
         self.track_times  = {}
+
 
     @classmethod
     def _find(cls, query):
@@ -57,27 +59,28 @@ class Records(object):
         return cls(**data) if data is not None else None
 
     @classmethod
-    def find_by_job_title(cls, query):
+    def find_by_job_title(cls, query, user_id):
         """Retrieves the data using the job title"""
-        return cls._find(query={'job_title' : query.title()})
+        return cls._find(query={'job_title' : query.title(), 'user_id': user_id})
 
     @classmethod
-    def find_by_row_id(cls, row_id):
+    def find_by_row_id(cls, row_id, user_id):
         """Retreives the job data using the row id"""
-        return cls._find_one(query={'row_id':row_id})
+        row_id = '#' + str(row_id).strip('#')
+        return cls._find_one(query={'row_id':row_id, 'user_id':user_id})
 
     @classmethod
-    def find_by_date_or_day(cls, date, day):
+    def find_by_date_or_day(cls, date, day, user_id):
         """Retreives the job using the date or day"""
         if date and day:
-            return cls._find({'date':date, 'day':day.title()})
+            return cls._find({'date':date, 'day':day.title(), 'user_id':user_id})
         elif date and not day:
-            return cls._find(query={'date': date})
+            return cls._find(query={'date': date, 'user_id': user_id})
         elif day and not date:
-            return cls._find(query={'day': day.title()})
-        
+            return cls._find(query={'day': day.title(), 'user_id':user_id})
+
     @classmethod
-    def find_by_month(cls, month, month2):
+    def find_by_month(cls, month, month2, user_id):
         """find_by_month(str, str) -> return(None or obj)
 
         The method find_by_month receives a strings e.g. January from the User inteface.
@@ -95,62 +98,27 @@ class Records(object):
             month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
 
             # return days worked between the two months given including the starting and ending month
-            return cls._find(query={'month': {'$gte': month, "$lte":month2}})
+            return cls._find(query={'month': {'$gte': month, "$lte":month2}, 'user_id':user_id})
 
     @classmethod
-    def find_by_location(cls, loc):
-        return cls._find(query={'loc': loc.title()})
+    def find_by_location(cls, loc, user_id):
+        return cls._find(query={'loc': loc.title(), 'user_id':user_id})
 
     @classmethod
-    def find_by_user_id(cls, query):
+    def find_by_user_id(cls, user_id):
         """retreives the job using the user id"""
-        return cls._find(query)
+        return cls._find({'user_id':user_id})
 
-    # pay, bool_operation=None, amount=None, amount2=None, date=None, day=None
+    # wages, bool_operation=None, amount=None, amount2=None, date=None, day=None
     @classmethod
-    def find_by_amount(cls, pay, operand, amount, amount2, date, day):
+    def find_by_amount(cls, amount=None, operand=None, amount2=None, date=None, day=None):
         """finds the job records based on amount"""
-
-        boolean_values = {'>':'$gt', '<': '$lt', '<=': '$lte', '>=':'$gte', '=':'$eq'}
-
-        if pay and not( operand and amount and amount2 and date and day):
-            return cls._find(query={'daily_rate': pay})
-        elif pay and date and day:
-            return cls._find(query={'daily_rate':pay, 'date':date, 'day':day})
-        elif pay and date:
-            return cls._find(query={'daily_rate':pay, 'date':date})
-
-        # fourth elif statement perfoms a comparision
-        # Returns an amount if less than, greater than or equal to a certain
-        # value amount
-        # e.g  > 100 return all amount greater then 100
-        # e.g < 100 return all amounts less then 100
-        elif amount and operand:
-            operand = boolean_values[operand]
-            if day and date:
-                return cls._find(query={'daily_rate': {operand:amount}, 'date': date, 'day':day})
-            elif not day and date:
-                return cls._find(query={'daily_rate': {operand:amount}, 'date': date})
-            elif not date and day:
-                return cls._find(query={'daily_rate': {operand:amount}, 'day':day})
-            else:
-                return cls._find(query={'daily_rate': {operand:amount}})
-
-        # does a comparision operation between two amounts and returns all
-        # values that match the specific parameters
-        # e.g 400 <= 400 < 500 will return any amount between 400 and 499,
-        elif amount and amount2:
-            if amount > amount2:
-                return cls._find(query={'daily_rate': {'$gte': amount2, "$lte":amount}})
-            elif amount2 > amount:
-                return cls._find(query={'daily_rate': {'$gte': amount, "$lte":amount2}})
-            else:
-                return cls._find(query={'daily_rate': pay})
+        pass
 
     @staticmethod
-    def delete_row(row_id):
+    def delete_row(row_id, user_id):
         """deletes the row using the id"""
-        return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id)})
+        return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id), 'user_id':user_id})
 
     def save(self):
         """saves the data to the databases. It is saved in the form of json"""
@@ -166,11 +134,11 @@ class Records(object):
                  'finish_time': self.finish_time,
                  'hourly_rate': self.hourly_rate,
                  'total_hours': self.total_hours,
-                 '_hours'      : self._hours,
+                 '_hours'     : self._hours,
                  'user_id'    : self.user_id,
                  'daily_rate' : self.daily_rate,
                  'date'       : self.date,
                  'month'      : self.month,
                  'row_id'     : self.row_id,
                  'day'        : self.day,
-                 '_id'        : self._id}
+                 '_id'        : self._id }
