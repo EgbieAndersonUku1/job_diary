@@ -12,7 +12,7 @@ from translator import translate_to_month_num, get_daily_rate, time_to_str, get_
 
 class User(object):
     """User(class)
-    The User class has access to the job records. The allows the User class
+    The User class has access to the job records. This allows the User class
     to access the job details to either update, delete, view or add all
     via an easy interface.
     """
