@@ -40,8 +40,6 @@ class Records(object):
         self._id = uuid.uuid4().hex if _id is None else _id
         self.track_times  = {}
 
-
-
     @classmethod
     def _find(cls, query):
         """_find(str, str) -> return (obj or None)
