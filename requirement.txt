@@ -1,1 +1,5 @@
+flask
 pymongo
+py-bcrypt==0.4
+flask-wtf
+flask-script
