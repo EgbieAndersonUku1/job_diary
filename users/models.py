@@ -1,9 +1,7 @@
-##################################################################
-# Author : Egbie Uku
-# Creates the Login and Registration models
-##################################################################
 
 from job_diary.models.database import DataBase as db
+from datetime import datetime
+import time
 import bcrypt
 
 class Login(object):"
@@ -14,7 +12,8 @@ class Login(object):"
         self.full_name = full_name
         self.password  = password
         self.email     = email
-        self.is_logged_in = is_logged_in
+        self.is_logged_in   = is_logged_in
+        self.logged_in_time = datetime.utcnow() # the time the user logged in
 
     def _get_user_login_details(self):
         """func : _get_user_login_details(None) -> return(obj or None)
@@ -32,13 +31,13 @@ class Login(object):"
         """
         login_obj = self.get_user_login_details()
         if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
-            self.is_logged_in = True
-            # update the login database by calling _update
-            return True
-        return False
+            self.is_logged_in = True # set the login to true
+            return True              # users details check out
+        return False                 # users details did not check out
 
     def _update(self):
-        # change the is_login to true
+        # change the is_logged_in to true
+        # write the functionality here
         pass
 
 class Registration(object):
@@ -54,21 +53,23 @@ class Registration(object):
         """Checks whether the user alreay exists with the database """
 
         if db.find_one(collections='login_details', query={'email': self.email}):
-            return False # means the users with those details already exists
+            return False # False means the users with does details already exists
         else:
-
             # Takes the users name, email and the hashed password and stores in database
             salt = bcrypt.gensalt(log_rounds=14)
             hash_password = bcrypt.hashpw(self.password, salt)
             user_details = RegistrationForm(self.full_name, email, hash_password)
             user_details.save()
-            # redirect the user to the entry to the login page
+            return True # True Means that everything was created smoothly
 
     def save(self):
+        """Saves the registration details to the database"""
         db.insert(collection='login_details', self.json())
 
     def get_json():
-        return {'full_name': self.full_name,
-                'email'    : self.email
-                'password' : self.password
-                'is_logged_in' : True}
+        """Get the details of the registration in the form of a json format """
+        return {'full_name'     : self.full_name,
+                'email'         : self.email
+                'password'      : self.password
+                'is_logged_in'  : True,
+                'registration date': time.strftime("%d/%m/%Y")}
