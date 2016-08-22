@@ -2,7 +2,8 @@
 # Author : Egbie Uku
 # The Login and Registration Model
 ##################################################################
-from job_diary.src.models.database import DataBase as db
+
+from job_diary import db
 from datetime import datetime
 import time
 import bcrypt

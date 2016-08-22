@@ -1,6 +1,6 @@
 ###################################################################
 # Author   : Egbie Uku
-# Database 
+# Database
 ###################################################################
 
 import pymongo
@@ -66,4 +66,4 @@ class DataBase(object):
 
 
 
-DataBase.initialize()
+#DataBase.initialize()

@@ -8,7 +8,7 @@
 import time
 import uuid
 from records import Records
-from utils import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
+from job_diary import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
 from records import Records
 
 class User(object):
@@ -87,7 +87,6 @@ class User(object):
     def get_by_location(self, loc):
         """get_by_location(str) -> return(obj)
         Finds jobs based on the given location
-
         Returns: either a single job object or multiple user object or None.
         """
         return Records.find_by_location(self.id, loc)

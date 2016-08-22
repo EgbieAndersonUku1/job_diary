@@ -8,8 +8,8 @@
 # queries for the User class.
 ####################################################################################
 
-from database import DataBase as db
-from utils import translate_to_month_num, gen_row_id, get_hours_worked
+from job_diary import db
+from job_diary import translate_to_month_num, gen_row_id, get_hours_worked
 import random
 import time
 import uuid
