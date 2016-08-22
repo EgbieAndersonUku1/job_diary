@@ -1,3 +1,8 @@
+###################################################################
+# Author   : Egbie Uku
+# Database
+###################################################################
+
 import pymongo
 
 class DataBase(object):
@@ -10,7 +15,7 @@ class DataBase(object):
     def initialize():
         client = pymongo.MongoClient(DataBase.URI)
         DataBase.DATABASE = client['users']
-
+        
     @staticmethod
     def insert(collection, data):
         """insert(str) -> return(none)
