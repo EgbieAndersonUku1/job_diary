@@ -20,7 +20,7 @@ class Login(object):"
         Helper function: Checks whether the user details returns obj or False
         otherwise.
         """
-        login_data = db.find_one(collections='login_details', query={'email': self.email})
+        login_data = db.find_one(collections='user_credentials', query={'email': self.email})
         if login_data:
             return Login(**login_data)
 
@@ -64,7 +64,7 @@ class Registration(object):
 
     def save(self):
         """Saves the registration details to the database"""
-        db.insert(collection='login_details', self.json())
+        db.insert(collection='user_credentials', self.json())
 
     def get_json():
         """Get the details of the registration in the form of a json format """
