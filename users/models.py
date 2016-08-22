@@ -24,8 +24,7 @@ class Login(object):"
         otherwise.
         """
         login_data = db.find_one(collections='user_credentials', query={'email': self.email})
-        if login_data:
-            return Login(**login_data)
+        return Login(**login_data) if login_data else False # return users logging details as an obj if found false otherwise
 
     def check_user_details(self):
         """func : check_user_details(None) -> return(None)
@@ -35,7 +34,7 @@ class Login(object):"
         login_obj = self.get_user_login_details()
         if not login_obj:
             return False  # users details does not exist
-        
+
         # users details found verify login in details
         if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
             self.is_logged_in = True # set the login to true
