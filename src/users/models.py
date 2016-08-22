@@ -12,8 +12,8 @@ class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
     """
-    def __init__(self, email, password, is_logged_in=False):
-        self.username  = email
+    def __init__(self, username, password, is_logged_in=False):
+        self.username  = username
         self.password  = password
         self.is_logged_in   = is_logged_in
         self.logged_in_time = datetime.utcnow() # the time the user logged in
@@ -23,29 +23,32 @@ class Login(object):
         Helper function: Checks whether the user details returns obj or False
         otherwise.
         """
-        login_data = db.find_one(collections='login_credentials', query={'email': self.email})
-        return Login(**login_data) if login_data else False # return users logging details as an obj if found false otherwise
+        login_data = db.find_one(collections='login_credentials', query={'username': self.username})
+        if not login_data:
+            return False
+        del login_data['_id']
+        return Login(**login_data) # return users logging details as an obj if found false otherwise
 
     def check_user_details(self):
         """func : check_user_details(None) -> return(None)
         Checks whether the users details are correct. Returns True if it is
         and False otherwise
         """
-        login_obj = self.get_user_login_details()
+        login_obj = self._get_user_login_details()
         if not login_obj:
             return False  # users details does not exist
 
         # users details found verify login in details
         if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
             self.is_logged_in = True # set the login to true
-            return True              # users details check out
+            retvurn True              # users details check out
         return False                 # users details did not check out
 
     def save(self):
-        db.insert(collections='login_credentials', data=self._json())
+        db.insert(collection='login_credentials', data=self._json())
 
     def _json(self):
-        return {'username': self.email,
+        return {'username': self.username,
                 'password': self.password,
                 'is_logged_in': self.is_logged_in}
 
@@ -65,7 +68,7 @@ class Registration(object):
             return False # False means the users with that email already exists
         else:
             # Takes the users name, email and the hashed password and stores in database
-            salt = bcrypt.gensalt(log_rounds=14)
+            salt = bcrypt.gensalt(log_rounds=18)
             hash_password = bcrypt.hashpw(self.password, salt)
             self.password = hash_password
             self._save()
