@@ -9,7 +9,7 @@
 ####################################################################################
 
 from database import DataBase as db
-from translator import translate_to_month_num, gen_row_id, get_hours_worked
+from utils import translate_to_month_num, gen_row_id, get_hours_worked
 import random
 import time
 import uuid

@@ -8,7 +8,7 @@
 import time
 import uuid
 from records import Records
-from translator import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
+from utils import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
 from records import Records
 
 class User(object):
@@ -90,7 +90,7 @@ class User(object):
 
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_location(loc)
+        return Records.find_by_location(self.id, loc)
 
     def delete_row(self, row_id):
         """delete_row(str) -> return(None)

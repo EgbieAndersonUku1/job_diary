@@ -10,11 +10,6 @@ def translate_month(month_num):
 	'''translate_month(str) -> return(str)
 	Takes a string digit and returns the month equivalent of that
 	string.
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> 7fad21d129419127daf8f28b7f3fe4d2ccab94d2
 	>>> translate_month(01)
 	'January'
 	'''
@@ -38,7 +33,7 @@ def translate_to_month_num(month):
 		      'April':'04',   'May':'05', 'June':'06',
 		      'July':'07', 'August':'08',  'September':'09',
 	          'October':'10',  'November':'11', 'December':'12'}
-	return months[month.title()]
+	return months.get(month.title(), None)
 
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
 	"""get_hours_worked(str, str, str, str) -> return(tuple)
