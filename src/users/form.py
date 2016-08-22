@@ -15,7 +15,7 @@ class RegisterForm(Form):
     full_name = StringField('Full name', [validators.Required(), validators.Length(min=3, max=25)])
     email     = EmailField('Email', [validators.Required()])
     password  = PasswordField('New Password', [validators.Required(),
-                                               validators.Length(min=4,max=80)
+                                               validators.Length(min=4,max=80),
                                                validators.EqualTo('confirm', message='password does not match')])
     confirm   = PasswordField('Repeat Password')
 
@@ -25,4 +25,4 @@ class LoginForm(Form):
     Allows the user to gain access to the program via the login inteface.
     """
     username = EmailField('Username', [validators.Required()])
-    password = PasswordField('Password'[validators.Required(), validators.Length(min=4, max=80)])
+    password = PasswordField('Password', [validators.Required(), validators.Length(min=4, max=80)])
