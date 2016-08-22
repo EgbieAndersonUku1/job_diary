@@ -41,7 +41,7 @@ class Login(object):
         # users details found verify login in details
         if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
             self.is_logged_in = True # set the login to true
-            retvurn True              # users details check out
+            return True              # users details check out
         return False                 # users details did not check out
 
     def save(self):
