@@ -5,11 +5,11 @@ class Login(object):"
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
     """
-    def __init__(self, full_name, email, password, is_login=False):
+    def __init__(self, full_name, email, password, is_logged_in=False):
         self.full_name = full_name
         self.password  = password
         self.email     = email
-        self.is_login  = is_login
+        self.is_logged_in = is_logged_in
 
     def _get_user_login_details(self):
         """func : _get_user_login_details(None) -> return(obj or None)
@@ -27,7 +27,7 @@ class Login(object):"
         """
         login_obj = self.get_user_login_details()
         if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
-            self.is_login = True
+            self.is_logged_in = True
             # update the login database by calling _update
             return True
         return False
@@ -67,4 +67,4 @@ class Registration(object):
         return {'full_name': self.full_name,
                 'email'    : self.email
                 'password' : self.password
-                'is_login' : True}
+                'is_logged_in' : True}
