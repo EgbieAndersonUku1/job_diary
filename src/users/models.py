@@ -2,13 +2,12 @@
 # Author : Egbie Uku
 # The Login and Registration Model
 ##################################################################
-
+from job_diary.models.database import DataBase as db
 from datetime import datetime
-from job_diary import db
 import time
 import bcrypt
 
-class Login(object):
+class Login(object):"
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
     """
@@ -45,9 +44,9 @@ class Login(object):
         db.insert(collections='login_credentials', query=self.json())
 
     def json():
-        return {'username': self.email,
-                'password': self.password,
-               'is_logged_in': self.is_logged_in}
+        return 'username': self.email
+               'password': self.password
+               'is_logged_in' self.is_logged_in}
 
 class Registration(object):
     """Registration(class)
@@ -74,11 +73,11 @@ class Registration(object):
 
     def save(self):
         """Saves the registration details to the database"""
-        db.insert(collection='user_credentials', query=self.json())
+        db.insert(collection='user_credentials', self.json())
 
     def get_json():
         """Get the details of the registration in the form of a json format """
         return {'full_name'     : self.full_name,
                 'email'         : self.email,
-                'password'      : self.password,
+                'password'      : self.password
                 'registration_date': time.strftime("%d/%m/%Y")}

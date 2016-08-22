@@ -81,7 +81,7 @@ class Records(object):
 
     @classmethod
     def find_by_month(cls, month, month2, user_id):
-        """find_by_month(str, str) -> return(None or obj)
+        """find_by_month(str, str, str) -> return(None or obj)
 
         The method find_by_month receives a strings e.g. January from the User inteface.
         It then translates it into a month number since the months are stored in the database

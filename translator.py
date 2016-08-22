@@ -10,7 +10,11 @@ def translate_month(month_num):
 	'''translate_month(str) -> return(str)
 	Takes a string digit and returns the month equivalent of that
 	string.
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 7fad21d129419127daf8f28b7f3fe4d2ccab94d2
 	>>> translate_month(01)
 	'January'
 	'''
