@@ -7,9 +7,10 @@
 
 import time
 import uuid
+import sys
 from records import Records
-from job_diary import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
-from records import Records
+from utils import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
+
 
 class User(object):
     """User(class)

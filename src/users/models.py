@@ -3,7 +3,7 @@
 # The Login and Registration Model
 ##################################################################
 
-from job_diary import db
+from src.models.database import DataBase as db
 from datetime import datetime
 import time
 import bcrypt
@@ -42,9 +42,9 @@ class Login(object):
         return False                 # users details did not check out
 
     def save(self):
-        db.insert(collections='login_credentials', query=self.json())
+        db.insert(collections='login_credentials', data=self._json())
 
-    def json():
+    def _json(self):
         return {'username': self.email,
                 'password': self.password,
                 'is_logged_in': self.is_logged_in}
@@ -67,16 +67,15 @@ class Registration(object):
             # Takes the users name, email and the hashed password and stores in database
             salt = bcrypt.gensalt(log_rounds=14)
             hash_password = bcrypt.hashpw(self.password, salt)
-            user_details  = RegistrationForm(self.full_name, email, hash_password)
             self.password = hash_password
-            user_details.save()
+            self._save()
             return True # True Means that everything was created smoothly
 
-    def save(self):
+    def _save(self):
         """Saves the registration details to the database"""
-        db.insert(collection='user_credentials', query=self.json())
+        db.insert(collection='user_credentials', data=self._get_json())
 
-    def get_json():
+    def _get_json(self):
         """Get the details of the registration in the form of a json format """
         return {'full_name'     : self.full_name,
                 'email'         : self.email,

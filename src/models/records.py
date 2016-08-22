@@ -8,11 +8,12 @@
 # queries for the User class.
 ####################################################################################
 
-from job_diary import db
-from job_diary import translate_to_month_num, gen_row_id, get_hours_worked
+import sys
+import os
 import random
 import time
 import uuid
+from utils import translate_to_month_num, gen_row_id, get_hours_worked
 
 class Records(object):
     """Records (class)
@@ -45,6 +46,7 @@ class Records(object):
     @classmethod
     def _find(cls, query):
         """_find(str, str) -> return (obj or None)
+        data = db.find_one(collections='jobs_details', query=query)
         A private helper function that searches the database for a value
         and returns all values that matches the users values
         """
@@ -55,7 +57,6 @@ class Records(object):
         """A private helper function that searches the database for a value
         and returns a single value that matches the users values
         """
-        data = db.find_one(collections='jobs_details', query=query)
         return cls(**data) if data is not None else None
 
     @classmethod
