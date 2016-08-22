@@ -49,8 +49,7 @@ class Registration(object):
         """Checks whether the user alreay exists with the database """
 
         if db.find_one(collections='login_details', query={'email': self.email}):
-            # means the users with does details already exists
-            return False
+            return False # means the users with those details already exists
         else:
 
             # Takes the users name, email and the hashed password and stores in database
