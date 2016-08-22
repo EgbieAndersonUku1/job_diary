@@ -1,4 +1,7 @@
-
+##################################################################
+# Author : Egbie Uku
+# The Login and Registration Model
+##################################################################
 from job_diary.models.database import DataBase as db
 from datetime import datetime
 import time
@@ -30,6 +33,10 @@ class Login(object):"
         and False otherwise
         """
         login_obj = self.get_user_login_details()
+        if not login_obj:
+            return False  # users details does not exist
+        
+        # users details found verify login in details
         if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
             self.is_logged_in = True # set the login to true
             return True              # users details check out
