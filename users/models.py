@@ -11,10 +11,9 @@ class Login(object):"
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
     """
-    def __init__(self, full_name, email, password, is_logged_in=False):
-        self.full_name = full_name
+    def __init__(self, email, password, is_logged_in=False):
+        self.username  = email
         self.password  = password
-        self.email     = email
         self.is_logged_in   = is_logged_in
         self.logged_in_time = datetime.utcnow() # the time the user logged in
 
@@ -23,7 +22,7 @@ class Login(object):"
         Helper function: Checks whether the user details returns obj or False
         otherwise.
         """
-        login_data = db.find_one(collections='user_credentials', query={'email': self.email})
+        login_data = db.find_one(collections='login_credentials', query={'email': self.email})
         return Login(**login_data) if login_data else False # return users logging details as an obj if found false otherwise
 
     def check_user_details(self):
@@ -41,10 +40,13 @@ class Login(object):"
             return True              # users details check out
         return False                 # users details did not check out
 
-    def _update(self):
-        # change the is_logged_in to true
-        # write the functionality here
-        pass
+    def save(self):
+        db.insert(collections='login_credentials', query=self.json())
+
+    def json():
+        return 'username': self.email
+               'password': self.password
+               'is_logged_in' self.is_logged_in}
 
 class Registration(object):
     """Registration(class)
@@ -55,16 +57,17 @@ class Registration(object):
         self.email = email
         self.password = password
 
-    def does_user_exist(self):
-        """Checks whether the user alreay exists with the database """
+    def register(self):
+        """register the user"""
 
-        if db.find_one(collections='login_details', query={'email': self.email}):
-            return False # False means the users with does details already exists
+        if db.find_one(collections='login_credentials', query={'email': self.email}):
+            return False # False means the users with that email already exists
         else:
             # Takes the users name, email and the hashed password and stores in database
             salt = bcrypt.gensalt(log_rounds=14)
             hash_password = bcrypt.hashpw(self.password, salt)
-            user_details = RegistrationForm(self.full_name, email, hash_password)
+            user_details  = RegistrationForm(self.full_name, email, hash_password)
+            self.password = hash_password
             user_details.save()
             return True # True Means that everything was created smoothly
 
@@ -75,7 +78,6 @@ class Registration(object):
     def get_json():
         """Get the details of the registration in the form of a json format """
         return {'full_name'     : self.full_name,
-                'email'         : self.email
+                'email'         : self.email,
                 'password'      : self.password
-                'is_logged_in'  : True,
                 'registration_date': time.strftime("%d/%m/%Y")}
