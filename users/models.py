@@ -72,4 +72,4 @@ class Registration(object):
                 'email'         : self.email
                 'password'      : self.password
                 'is_logged_in'  : True,
-                'registration date': time.strftime("%d/%m/%Y")}
+                'registration_date': time.strftime("%d/%m/%Y")}
