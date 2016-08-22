@@ -1,3 +1,8 @@
+##################################################################
+# Author : Egbie Uku
+# Creates the Login and Registration models
+##################################################################
+
 from job_diary.models.database import DataBase as db
 import bcrypt
 
