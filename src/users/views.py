@@ -14,8 +14,9 @@ def login():
         if user.is_credentials_ok():
             session['username'] = user.username
             return redirect(url_for('success'))
-
-        error = 'Incorrect username and password'
+        else:
+            error = 'Incorrect username and password'
+    error = 'Incorrect username and password'
     return render_template('/user/login.html', form=form, error=error)
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -36,9 +37,11 @@ def register():
             user.save()                                # save username and encrypted password to the database
             session['username'] = user.username
             return redirect(url_for('success'))
+        else:
+            error = 'The username must be unique'
+            return render_template('/users/registration.html', form=form, error=error)
 
-        error = 'The username must be unique'
-        return render_template('/users/registration.html', form=form, error=error)
+    error = 'Check your details and try again.'
     return render_template('/users/registration.html', form=form, error=error)
 
 
