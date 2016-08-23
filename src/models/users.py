@@ -9,6 +9,7 @@ import time
 import uuid
 import sys
 from records import Records
+from database import DataBase as db
 from utils import translate_to_month_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
 
 

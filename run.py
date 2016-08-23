@@ -4,6 +4,9 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask_script import Manager, Server
 from job_diary import app
+#from src.unit_test import user_test
+
+
 
 
 

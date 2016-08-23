@@ -19,7 +19,6 @@ class RegisterForm(Form):
                                                validators.EqualTo('confirm', message='password does not match')])
     confirm   = PasswordField('Repeat Password')
 
-
 class LoginForm(Form):
     """LoginForm(class)
     Allows the user to gain access to the program via the login inteface.
