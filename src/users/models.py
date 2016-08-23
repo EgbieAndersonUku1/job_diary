@@ -29,7 +29,7 @@ class Login(object):
         del login_data['_id']
         return Login(**login_data) # return users logging details as an obj if found false otherwise
 
-    def check_user_details(self):
+    def is_credentials_ok(self):
         """func : check_user_details(None) -> return(None)
         Checks whether the users details are correct. Returns True if it is
         and False otherwise
@@ -61,18 +61,25 @@ class Registration(object):
         self.email = email
         self.password = password
 
-    def register(self):
-        """register the user"""
+    def _is_user_name_unique(self, email):
+        """check whether the username is unique"""
 
         if db.find_one(collections='login_credentials', query={'email': self.email}):
             return False # False means the users with that email already exists
-        else:
-            # Takes the users name, email and the hashed password and stores in database
-            salt = bcrypt.gensalt(log_rounds=18)
-            hash_password = bcrypt.hashpw(self.password, salt)
-            self.password = hash_password
-            self._save()
-            return True # True Means that everything was created smoothly
+        return True
+
+    def register(self):
+        """register the user"""
+
+        if not self._is_user_name_unique(self.email):
+            return False
+
+        # Takes the users name, email and the hashed password and stores in database
+        salt = bcrypt.gensalt(log_rounds=18)
+        hash_password = bcrypt.hashpw(self.password, salt)
+        self.password = hash_password
+        self._save()
+        return True # True Means that everything was created smoothly
 
     def _save(self):
         """Saves the registration details to the database"""
