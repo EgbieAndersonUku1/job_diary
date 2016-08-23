@@ -33,7 +33,7 @@ def register():
         # attempt to register the user
         if user.register():
             user = Login(user.username, user.password) # log the user into the application
-            user.save()                                # save
+            user.save()                                # save username and encrypted password to the database
             session['username'] = user.username
             return redirect(url_for('success'))
 
