@@ -3,6 +3,10 @@ from src.models.database import DataBase
 
 
 # AS AN ADMIN YOU BE ABLE TO SEE THE PEOPLE HOW MANY PEOPLE ARE LOGGED IN
+# DELETE USERS ACCOUNT
+# CREATE USER ACCOUNTS
+# MAKE CHANGES TO THE WHOLE
+# ADD A MESSAGE AND IT WOULD BE SEE BY ALL USERS
 
 class Admin(DataBase):
 
@@ -19,7 +23,7 @@ class Admin(DataBase):
         return self._get_all(collections='login_credentials', query={'is_logged_in': 'True'})
 
     def get_by_email(self, email):
-        """Return the details of user via email"""
+        """Return the details of a single user via email"""
         data = self.find_one(collections='user_credentials', query={'email': email})
         if data:
             return Registration(**data)
