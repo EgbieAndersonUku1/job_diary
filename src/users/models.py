@@ -4,6 +4,7 @@
 ##################################################################
 
 from src.models.database import DataBase as db
+import uuid
 from datetime import datetime
 import time
 import bcrypt
@@ -12,7 +13,8 @@ class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
     """
-    def __init__(self, username, password, is_logged_in=False):
+    def __init__(self, username, password, is_logged_in=False, _id=None):
+        self.login_id  = uuid.uuid4().hex if _id is None else _id
         self.username  = username
         self.password  = password
         self.is_logged_in   = is_logged_in
@@ -48,18 +50,21 @@ class Login(object):
         db.insert(collection='login_credentials', data=self._json())
 
     def _json(self):
-        return {'username': self.username,
-                'password': self.password,
-                'is_logged_in': self.is_logged_in}
+        return {'username'    : self.username,
+                'password'    : self.password,
+                'is_logged_in': self.is_logged_in,
+                'login_id'    : self.login_id}
 
 class Registration(object):
     """Registration(class)
     Allows the user to register their details.
     """
-    def __init__(self, full_name, email, password):
+    def __init__(self, full_name, email, password, registration_date=None, _id=None):
         self.full_name = full_name
-        self.email = email
-        self.password = password
+        self.email     = email
+        self.password  = password
+        self.registration_id = uuid.uuid4().hex if _id is None else _id
+        self.registration_date = registration_date
 
     def _is_user_name_unique(self, email):
         """check whether the username is unique"""
@@ -90,4 +95,6 @@ class Registration(object):
         return {'full_name'     : self.full_name,
                 'email'         : self.email,
                 'password'      : self.password,
-                'registration_date': time.strftime("%d/%m/%Y")}
+                'registration_date': time.strftime("%d/%m/%Y"),
+                'registration_id'  : self.registration_id
+                }

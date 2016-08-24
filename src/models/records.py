@@ -124,7 +124,7 @@ class Records(object):
 
     def save(self):
         """saves the data to the databases. It is saved in the form of json"""
-        db.insert('jobs_details', self.get_json())
+        db.insert_one('jobs_details', self.get_json())
 
     def get_json(self):
         """returns a json represent of the class"""

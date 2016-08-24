@@ -17,26 +17,31 @@ class DataBase(object):
         DataBase.DATABASE = client['users']
 
     @staticmethod
-    def insert(collection, data):
-        """insert(str) -> return(none)
+    def insert_one(collection, data):
+        """insert_one(str) -> return(none)
 
         collections: The name of the table(collections) to save to
         data : The data to insert into the database's collection
 
         Inserts data into a collection(table) for a given database.
         """
-        DataBase.DATABASE[collection].insert(data)
+        DataBase.DATABASE[collection].insert_one(data)
 
     @staticmethod
-    def search(collections, query):
+    def search(collections, query, key=None, limit_num=5):
         """search(str, value) -> return(cursor)
 
         collections: A table name from the database
-        query : The data to query from the database
-        return: returns a cursor
+        query      : The data to query from the database
+        key        : The key for the data to sort out
+        limit_num  :  Returns a default limit of 5 documents
+        return     : returns a cursor
 
         Takes a query and queries the database for information.
         """
+        if query == None:
+            return DataBase.DATABASE[collections].find().sort().key({key: -1}).limit(limit_num) # query all documents
+
         return DataBase.DATABASE[collections].find(query)
 
     @staticmethod
@@ -65,5 +70,10 @@ class DataBase(object):
         return DataBase.DATABASE[collections].count(query)
 
 
+    def get_count(self, collections, query):
+        """returns the number of documents inside a collection"""
+        if query == None:
+            return DataBase.DATABASE[collections].find().count()
+        return self.search(collections, query).count()
 
 DataBase.initialize()
