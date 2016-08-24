@@ -28,7 +28,7 @@ class DataBase(object):
         DataBase.DATABASE[collection].insert_one(data)
 
     @staticmethod
-    def search(collections, query, key=None, limit_num=5):
+    def search(collections, query, key, limit_num=5):
         """search(str, value) -> return(cursor)
 
         collections: A table name from the database
@@ -39,10 +39,10 @@ class DataBase(object):
 
         Takes a query and queries the database for information.
         """
+        field, value = key
         if query == None:
-            return DataBase.DATABASE[collections].find().sort().key({key: -1}).limit(limit_num) # query all documents
-
-        return DataBase.DATABASE[collections].find(query)
+            return DataBase.DATABASE[collections].find().sort(field, value).limit(limit_num) # query all documents
+        return DataBase.DATABASE[collections].find(query).sort(field, value).limit(limit_num)
 
     @staticmethod
     def find_one(collections, query):

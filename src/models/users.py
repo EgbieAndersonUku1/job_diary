@@ -70,28 +70,28 @@ class User(object):
         """
         return Records.find_by_row_id(num, self.id)
 
-    def get_by_job_title(self, job):
+    def get_by_job_title(self, job, limit=3):
         """get_by_job_title(str) -> return(obj)
         Finds jobs based on the users job title
 
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_job_title(job, self.id)
+        return Records.find_by_job_title(job, self.id, limit)
 
-    def get_by_date_or_day(self, date=None, day=None):
+    def get_by_date_or_day(self, date=None, day=None, limit=5):
         """get_by_date_and_day(str, str) -> return(str)
         Finds jobs based on the date and day
 
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_date_or_day(date, day, self.id)
+        return Records.find_by_date_or_day(date, day, self.id, limit=limit)
 
-    def get_by_location(self, loc):
+    def get_by_location(self, loc, limit=5):
         """get_by_location(str) -> return(obj)
         Finds jobs based on the given location
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_location(self.id, loc)
+        return Records.find_by_location(loc, self.id, limit)
 
     def delete_row(self, row_id):
         """delete_row(str) -> return(None)
