@@ -27,3 +27,17 @@ class Admin(DataBase):
         data = self.find_one(collections='user_credentials', query={'email': email})
         if data:
             return Registration(**data)
+
+    def create_account(self, full_name, email, password):
+        pass
+
+    def delete_account(self, email):
+        pass
+
+    def de_activate_account(self, email):
+        pass
+
+    def re_activate_account(self, email):
+        pass
+
+    
