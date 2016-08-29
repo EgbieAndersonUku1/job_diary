@@ -25,3 +25,6 @@ class LoginForm(Form):
     """
     username = EmailField('Username', [validators.Required()])
     password = PasswordField('Password', [validators.Required(), validators.Length(min=4, max=80)])
+
+class AdminForm(RegisterForm):
+    admin_name = StringField('Admin name', [validators.Required(), validators.Length(min=3, max=25)])

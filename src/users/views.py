@@ -1,48 +1,34 @@
-from src.users.form import RegisterForm, LoginForm
-from src.users.models import Login, Registration
+from src.users.form import RegisterForm, LoginForm, AdminForm
 from job_diary import app
-from flask import url_for, session, redirect, request, render_template
+from flask import render_template
+from user_form_helpers import login_helper, register_helper
 
+
+# use the _login_helper to log the user in
 @app.route('/login', methods=('GET', 'POST'))
 def login():
-    """Allows the user entry to the applicaton"""
-    form  = LoginForm()
-    error = ''
+    """Allows the user entry to the login applicaton"""
 
-    if form.validate_on_submit():
-        user = Login(form.username.data, form.password.data)
-        if user.is_credentials_ok():
-            session['username'] = user.username
-            return redirect(url_for('success'))
-        else:
-            error = 'Incorrect username and password'
     error = 'Incorrect username and password'
-    return render_template('user/login.html', form=form, error=error)
+    url   = 'user/login.html'
+    return login_helper(LoginForm, error, 'username', 'success', url)
+
+# use the login helper to help assist the user in logging into admin console
+@app.route('/admin', methods=('GET', 'POST'))
+def admin():
+    """Allows the user entry as admin"""
+
+    error = 'Incorrect username your ip will be logged'
+    url   = 'user/admin_login.html'
+    return login_helper(AdminForm, error, 'admin', 'success', url)
+
+@app.route('/admin/register', methods=('GET', 'POST'))
+def admin_register():
+    return register_helper(AdminForm, 'Incorrect admin name', 'user/admin_login.html', 'success')
 
 @app.route('/register', methods=('GET', 'POST'))
-def register():
-    """Register the users details to the application"""
-
-    form  = RegisterForm()
-    error = " "
-
-    # if form validates attempt to register users details.
-    # if registration is successful meaning username is unique log user in.
-    if form.validate_on_submit():
-        user = Registration(form.full_name.data, form.email.data, form.password.data)
-
-        # attempt to register the user
-        if user.register():
-            user = Login(user.email, user.password, True) # log the user into the application
-            user.save()                                # save username and encrypted password to the database
-            session['username'] = user.username
-            return redirect(url_for('success'))
-        else:
-            error = 'The username must be unique'
-            return render_template('user/registration.html', form=form, error=error)
-
-    error = 'Check your details and try again.'
-    return render_template('user/registration.html', form=form, error=error)
+def user_register():
+    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
 
 @app.route('/success', methods=('GET', 'POST'))
 def success():
