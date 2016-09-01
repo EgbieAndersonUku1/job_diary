@@ -17,7 +17,7 @@ def login():
 def admin():
     """Allows the user entry as admin"""
 
-    error = 'Incorrect username your ip will be logged'
+    error = 'Incorrect username your IP will be logged'
     return login_helper(AdminLoginForm, error, 'admin', 'success', 'admin/admin_login.html', 'index', True)
 
 # admin registration
@@ -28,7 +28,7 @@ def admin_register():
 # user registration
 @app.route('/register', methods=('GET', 'POST'))
 def user_register():
-    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success', False)
+    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
 
 @app.route('/success', methods=('GET', 'POST'))
 def success():

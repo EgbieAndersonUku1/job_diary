@@ -47,6 +47,12 @@ def register_helper(obj, msg, template, redirect_link):
     form  = obj()
     error = ''
 
+    if request.method == 'GET':
+        return render_template(template, form=form, error=error)
+    else:
+        error = 'Check your details and try again.'
+        return render_template(template, form=form, error=error)
+
     # if form validates attempt to register users details.
     # if registration is successful meaning username is unique log user in.
     if form.validate_on_submit():
@@ -61,8 +67,3 @@ def register_helper(obj, msg, template, redirect_link):
         else:
             error = msg
             return render_template(template, form=form, error=error)
-    if request.method == 'GET':
-        return render_template(template, form=form, error=error)
-    else:
-        error = 'Check your details and try again.'
-        return render_template(template, form=form, error=error)
