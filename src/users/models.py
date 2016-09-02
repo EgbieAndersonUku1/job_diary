@@ -112,3 +112,12 @@ class Registration(object):
                 'registration_date': time.strftime("%d/%m/%Y"),
                 'registration_id'  : self.registration_id
                 }
+
+
+class ProcessForm(object):
+
+    def __init__(self, job_title, job_loc, job_descr,
+                 hourly_rate, start_date, end_date, start_hours,
+                 start_mins, end_hours, end_mins, end_time):
+    pass
+    

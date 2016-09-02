@@ -1,6 +1,82 @@
 .navbar {
-
     font-size: 23px;
-    background-color: #666666;
+    background-color: #d9ecda;
+}
 
+input[type='date'] {
+  width: 202px;
+  padding-left: 101;
+  margin-left: auto;
+
+}
+
+input[type='number'] {
+  width: 202px;
+
+}
+
+#end_date_input {
+  margin-left: 400px;
+}
+
+button {
+  width: 100px;
+  font-size: 23px;
+  font-weight: bolder;
+}
+
+
+
+
+#start_label {
+
+  font-size: 20px;
+
+}
+
+#end_label {
+  padding-left: 50px;
+  font-size: 20px;
+}
+
+#mm {
+  font-size: 16px;
+  width: 202px;
+  text-align: center;
+  padding-left: 101px;
+
+}
+
+#hh {
+  font-size: 16px;
+  width: 202px;
+  text-align: center;
+  padding-left: 101px;
+}
+
+button {
+  width: 300px;
+  height 200px;
+
+  font-size: 19px;
+  padding-right:  400px;
+  font-weight: bolder;
+}
+
+#hourly_rate {
+  font-weight: bolder;
+  padding-bottom: 10px;
+  font-size: 20px;
+  color: blue;
+  text-align: center;
+}
+
+hr {
+  border-width: 10px;
+  color: black;
+
+}
+
+Label {
+  font-size: 19px;
 }

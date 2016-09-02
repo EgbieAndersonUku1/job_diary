@@ -1,6 +1,6 @@
 from src.users.form import RegisterForm, LoginForm, AdminRegisterForm, AdminLoginForm
 from job_diary import app
-from flask import render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for, flash
 from user_form_helpers import login_helper, register_helper
 
 # use the _login_helper to log the user in
@@ -30,7 +30,7 @@ def admin_register():
 def user_register():
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
 
-@app.route('/success', methods=('GET', 'POST'))
+@app.route('/job/entry', methods=('GET', 'POST'))
 def success():
     return render_template('user/entry_page.html')
 

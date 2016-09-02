@@ -133,7 +133,7 @@ class User(object):
 
     def de_activate_account(self):
         pass
-        
+
     def __repr__(self):
         return '{}'.format(self.full_name)
     # users has access Login
