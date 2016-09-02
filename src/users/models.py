@@ -4,10 +4,12 @@
 ##################################################################
 
 from src.models.database import DataBase as db
+from flask import request
 import uuid
 from datetime import datetime
 import time
 import bcrypt
+
 
 class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
@@ -119,5 +121,5 @@ class ProcessForm(object):
     def __init__(self, job_title, job_loc, job_descr,
                  hourly_rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, end_time):
-    pass
-    
+
+                 self.job_title = request.form.get('job_title')

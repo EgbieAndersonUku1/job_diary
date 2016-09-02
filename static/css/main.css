@@ -19,6 +19,20 @@ input[type='number'] {
   margin-left: 400px;
 }
 
+#start_date {
+
+  width: 220px;
+  height: 40px;
+
+}
+
+#end_date {
+
+  width: 231px;
+  height: 40px;
+
+}
+
 button {
   width: 100px;
   font-size: 23px;
@@ -40,24 +54,25 @@ button {
 }
 
 #mm {
-  font-size: 16px;
-  width: 202px;
-  text-align: center;
+  font-size: 17px;
+  width: 231px;
+  height: 40px;
+  text-align: justify;
   padding-left: 101px;
 
 }
 
 #hh {
-  font-size: 16px;
-  width: 202px;
-  text-align: center;
+  font-size: 17px;
+  width: 218px;
+  height: 40px;
+  text-align: justify;
   padding-left: 101px;
 }
 
 button {
-  width: 300px;
-  height 200px;
-
+  width: 450px;
+  height 300px;
   font-size: 19px;
   padding-right:  400px;
   font-weight: bolder;
@@ -65,15 +80,22 @@ button {
 
 #hourly_rate {
   font-weight: bolder;
+  width: 231px;
   padding-bottom: 10px;
   font-size: 20px;
   color: blue;
   text-align: center;
 }
 
+#hourly_rate_id {
+  color: green;
+  font-family: bolder;
+}
+
 hr {
   border-width: 10px;
-  color: black;
+  color: green;
+  border-color: #78b0e0;
 
 }
 
