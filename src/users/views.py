@@ -43,25 +43,27 @@ def success():
 def entry_page():
 
     start_date, end_date = curr_date, curr_date
+    title   = request.form.get('job_title', '')
+    descr   = request.form.get('description', '')
+    loc     = request.form.get('location', '')
+    hourly_rate = request.form.get('hourly_rate')
+    start_date  = request.form.get('start_date', curr_date)
+    end_date    = request.form.get('end_date', curr_date)
+    start_hours = request.form.get('start_hours')
+    start_mins  = request.form.get('start_mins')
+    end_hours   = request.form.get('end_hours')
+    end_mins    = request.form.get('end_mins')
 
     if request.method == 'GET':
-        return render_template('user/entry_page.html', start_date=start_date, end_date=end_date)
+        return render_template('user/entry_page.html',start_date=start_date, end_date=end_date,
+                               job_title=title, description=descr, location=loc, start_hours=start_hours,
+                               start_mins=start_mins, rate=hourly_rate,end_hours=end_hours,end_mins=end_mins)
     else:
-        job_title   = request.form.get('job_title')
-        job_descr   = request.form.get('description')
-        job_loc     = request.form.get('location')
-        hourly_rate = request.form.get('hourly_rate')
-        start_date  = request.form.get('start_date')
-        end_date    = request.form.get('end_date')
-        start_hours = request.form.get('start_hours')
-        start_mins  = request.form.get('start_mins')
-        end_hours   = request.form.get('end_hours')
-        end_mins    = request.form.get('end_mins')
-
-
-    return render_template('user/entry_page.html', start_date=start_date, end_date=end_date)
-
-
+        # CALLS A FUNCTION TO PROCESS THE FORM BEFPRE STORING IN THE database
+        # ADD A FLASHING MESSAGE TO TELL THE USERS THAT THEIR DATA HAS SUCCESS BEEN ADDED TO DATABASE
+        return render_template('user/entry_page.html',start_date=start_date, end_date=end_date,
+                               job_title=title, description=descr, location=loc, start_hours=start_hours,
+                               start_mins=start_mins, rate=hourly_rate,end_hours=end_hours,end_mins=end_mins)
 
 @app.route('/index', methods=('GET', 'POST'))
 def index():

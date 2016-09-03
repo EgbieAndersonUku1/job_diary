@@ -6,19 +6,19 @@
    <div class='border'>
     <div class="container">
       <div class="row">
-          <div class="col-md-offset-3 col-md-6">
+          <div class="col-md-offset-2 col-md-6">
 
         {{ error }}
         <form method="Post" action="{{ url_for('entry_page') }}">
           <div class="form-group">
-            <label for="job_title">Job Title</label>
+            <label id='title_id' for="job_title">Job Title</label>
             <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100" value={{job_title}} >
-            <label for="description">Job description</label>
-            <input type='text' id="description" class='form-control' name="description" maxlength="255"/>
-            <label for="location">Job location</label>
-            <input type='text' id="location" class='form-control' name="location" maxlength="100"/>
+            <label id='description_id' for="description">Job description</label>
+            <input type='text' id="description" class='form-control' name="description" maxlength="255" value={{description}}>
+            <label id='location_id' for="location">Job location</label>
+            <input type='text' id="location" class='form-control' name="location" maxlength="100" value={{location}}>
             <label id='hourly_rate_id' for="hourly_rate" >Hourly rate ($)</label>
-            <input type='number' id="hourly_rate" class='form-control' name="hourly_rate" min='1' step='0.01'/>
+            <input type='number' id="hourly_rate" class='form-control' name="hourly_rate" min='1' step='0.01' value={{rate}}>
             <div>
               <hr />
             </div>
@@ -56,7 +56,7 @@
                 </tr>
                 <tr>
                   <td>
-                 <select class="form-control" id="hh" name="start_hours">
+                 <select class="form-control" id="hh" name="start_hours" value={{start_hours}}>
                    <option>00</option>
                    <option>01</option>
                    <option>02</option>
@@ -83,7 +83,7 @@
                  </select>
                </td>
                <td>
-                 <select class="form-control" id="mm" name='start_mins'>
+                 <select class="form-control" id="mm" name='start_mins' value={{start_mins}}>
                       <option>00</option>
                       <option>01</option>
                       <option>02</option>
@@ -163,7 +163,7 @@
                 <tr>
                   <tr>
                     <td>
-                   <select class="form-control" id="hh" name='end_hours'>
+                   <select class="form-control" id="hh" name='end_hours' value={{end_hours}}>
                      <option>00</option>
                      <option>01</option>
                      <option>02</option>
@@ -192,7 +192,7 @@
                    </select>
                  </td>
                  <td>
-                   <select class="form-control" id="mm" name='end_mins'>
+                   <select class="form-control" id="mm" name='end_mins' value={{end_mins}}>
                         <option>00</option>
                         <option>01</option>
                         <option>02</option>
