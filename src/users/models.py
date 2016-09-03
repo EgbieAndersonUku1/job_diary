@@ -122,4 +122,4 @@ class ProcessForm(object):
                  hourly_rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, end_time):
 
-                 self.job_title = request.form.get('job_title')
+                 pass

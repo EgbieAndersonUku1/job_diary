@@ -59,7 +59,7 @@ def entry_page():
                                job_title=title, description=descr, location=loc, start_hours=start_hours,
                                start_mins=start_mins, rate=hourly_rate,end_hours=end_hours,end_mins=end_mins)
     else:
-        # CALLS A FUNCTION TO PROCESS THE FORM BEFPRE STORING IN THE database
+        # ADD A FUNCTION HERE TO PROCESS THE FORM BEFPRE STORING IN THE database
         # ADD A FLASHING MESSAGE TO TELL THE USERS THAT THEIR DATA HAS SUCCESS BEEN ADDED TO DATABASE
         return render_template('user/entry_page.html',start_date=start_date, end_date=end_date,
                                job_title=title, description=descr, location=loc, start_hours=start_hours,
