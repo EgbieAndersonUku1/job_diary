@@ -1,7 +1,11 @@
 from src.users.form import RegisterForm, LoginForm, AdminRegisterForm, AdminLoginForm
 from job_diary import app
-from flask import render_template, session, redirect, url_for, flash
+from flask import render_template, session, redirect, url_for, flash, request
 from user_form_helpers import login_helper, register_helper
+import datetime
+
+date = datetime.datetime.now()
+curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
 
 # use the _login_helper to log the user in
 @app.route('/', methods=('GET', 'POST'))
@@ -30,9 +34,33 @@ def admin_register():
 def user_register():
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
 
-@app.route('/job/entry', methods=('GET', 'POST'))
+
+@app.route('/success')
 def success():
-    return render_template('user/entry_page.html')
+    return 'hello'
+
+@app.route('/job/entry', methods=('GET', 'POST'))
+def entry_page():
+
+    start_date, end_date = curr_date, curr_date
+
+    if request.method == 'GET':
+        return render_template('user/entry_page.html', start_date=start_date, end_date=end_date)
+    else:
+        job_title   = request.form.get('job_title')
+        job_descr   = request.form.get('description')
+        job_loc     = request.form.get('location')
+        hourly_rate = request.form.get('hourly_rate')
+        start_date  = request.form.get('start_date')
+        end_date    = request.form.get('end_date')
+        start_hours = request.form.get('start_hours')
+        start_mins  = request.form.get('start_mins')
+        end_hours   = request.form.get('end_hours')
+        end_mins    = request.form.get('end_mins')
+
+
+    return render_template('user/entry_page.html', start_date=start_date, end_date=end_date)
+
 
 
 @app.route('/index', methods=('GET', 'POST'))
@@ -51,3 +79,7 @@ def logout():
     else:
         session['username'] = None
     return (redirect(url_for('login')))
+
+@app.route('/reset')
+def reset():
+    return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date)

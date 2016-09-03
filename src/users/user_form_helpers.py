@@ -1,4 +1,4 @@
-from flask import render_template, redirect, session, url_for, request
+from flask import render_template, redirect, session, url_for, request, abort
 from src.users.models import Login, Registration
 
 def login_helper(form_obj, msg, *args):
@@ -27,6 +27,10 @@ def login_helper(form_obj, msg, *args):
         if user.is_credentials_ok():
             session[session_name] = user.username
             return redirect(url_for(redirect_link))
+
+        elif admin:
+            abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
+                       # SOME FUNCTIONALITY TO LOG IP ADDRESSES
 
     if request.method == 'GET':
         return render_template(template, form=form, error=error)

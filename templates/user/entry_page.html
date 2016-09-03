@@ -3,39 +3,27 @@
 {% block title %} Job Entry Page {% endblock %}
 
 {% block content %}
+   <div class='border'>
     <div class="container">
       <div class="row">
-          <div class="col-md-offset-3 col-md-5">
-        <form>
+          <div class="col-md-offset-3 col-md-6">
+
+        {{ error }}
+        <form method="Post" action="{{ url_for('entry_page') }}">
           <div class="form-group">
             <label for="job_title">Job Title</label>
-            <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100"/>
+            <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100" value={{job_title}} >
             <label for="description">Job description</label>
             <input type='text' id="description" class='form-control' name="description" maxlength="255"/>
             <label for="location">Job location</label>
             <input type='text' id="location" class='form-control' name="location" maxlength="100"/>
+            <label id='hourly_rate_id' for="hourly_rate" >Hourly rate ($)</label>
+            <input type='number' id="hourly_rate" class='form-control' name="hourly_rate" min='1' step='0.01'/>
             <div>
               <hr />
             </div>
             <table>
-              <tr>
-                 <td>
-                  <label id='hourly_rate_id' for="hourly_rate" >Hourly rate ($)</label>
-                </td>
-               <td>
-                <input type='number' id="hourly_rate" class='form-control' name="hourly_rate" min='1' step='0.01'/>
-              </td>
-              <tr>
-                <td>
-                    <hr />
-                </td>
-                <td>
-                    <hr />
-                </td>
 
-              </tr>
-
-            </tr>
                <tr>
                   <td>
                     <label id='start_label' for="start_date">Start Date </label>
@@ -47,10 +35,14 @@
                 </tr>
                 <tr>
                   <td>
-                      <input type='date' id="start_date" class='form-control' name="start_date" min="2016-09-01" />
+                      <input type='text' placeholder="dd/mm/yyyy" id="start_date" class='form-control' name="start_date" value={{start_date}}>
                    </td>
                    <td>
-                     <input type='date' id="end_date" class='form-control' name="end_date" min="2016-09-01" />
+                     <input type='text' placeholder="dd/mm/yyyy" id="end_date" class='form-control' name="end_date" value={{end_date}} >
+                   </td>
+
+                   <td>
+                     <a href="#" data-toggle="tooltip" data-placement="left" title="Leave the start date and end date blank if you are entering  the current date. Tip the end date cannot be before the start date"> <button id='info' type="button" class="btn btn-info disabled">Info</button></a>
                    </td>
                 </tr>
                 <tr>
@@ -60,6 +52,7 @@
                     <td>
                       <label id='end_label' for="start_date">Start Mins (MM) </label>
                     </td>
+
                 </tr>
                 <tr>
                   <td>
@@ -72,7 +65,6 @@
                    <option>05</option>
                    <option>06</option>
                    <option>13</option>
-                   <option>07</option>
                    <option>08</option>
                    <option>09</option>
                    <option>10</option>
@@ -96,6 +88,7 @@
                       <option>01</option>
                       <option>02</option>
                       <option>03</option>
+                      <option>07</option>
                       <option>04</option>
                       <option>05</option>
                       <option>06</option>
@@ -137,6 +130,7 @@
                       <option>42</option>
                       <option>43</option>
                       <option>44</option>
+                      <label id='end_label' for="end_time" >End Time (MM)</label>
                       <option>45</option>
                       <option>46</option>
                       <option>47</option>
@@ -154,6 +148,9 @@
                       <option>59</option>
                  </select>
                </td>
+                <td>
+                  <a href="#" data-toggle="tooltip" data-placement="left" title="Enter the time you started work. HH: Hours and MM:Minutes"> <button id='info' type="button" class="btn btn-info disabled">Info</button></a>
+                </td>
                 </tr>
                 <tr>
                   <td>
@@ -258,11 +255,16 @@
                         <option>59</option>
                    </select>
                  </td>
+                   <td>
+                     <a href="#" data-toggle="tooltip" data-placement="left" title="Enter the time you finished work. HH: Hours and MM:Minutes. Tip, the end times cannot be before the start time nor can it be the same as the start time. "> <button id='info' type="button" class="btn btn-info disabled">Info</button></a>
+                   </td>
                 </tr>
               </table>
-              <br />
+                <hr />
               <button type="submit" class="btn btn-success">Save</button>
+              <a href="{{ url_for('reset') }}"><button type="button" class="btn btn-warning">Reset</button></a>
         </form>
     </div>
   </div>
+</div>
 {% endblock %}

@@ -3,17 +3,13 @@
     background-color: #d9ecda;
 }
 
-input[type='date'] {
-  width: 202px;
-  padding-left: 101;
-  margin-left: auto;
+input[type='text'] {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: Arial;
 
 }
 
-input[type='number'] {
-  width: 202px;
-
-}
 
 #end_date_input {
   margin-left: 400px;
@@ -21,56 +17,66 @@ input[type='number'] {
 
 #start_date {
 
-  width: 220px;
+  width: 258px;
   height: 40px;
+  font-size: 20px;
+  font-weight: bolder;
+  text-align:  center;
 
 }
 
 #end_date {
 
-  width: 231px;
+  width: 258px;
   height: 40px;
+  font-size: 20px;
+  font-weight: bolder;
+  text-align:  center;
 
 }
 
 button {
-  width: 100px;
-  font-size: 23px;
+  width: 260px;
+  font-size: 40px;
   font-weight: bolder;
 }
 
-
-
-
-#start_label {
-
-  font-size: 20px;
-
+#info {
+  width: 48px;
+  height: 40px;
 }
 
+
+
+
 #end_label {
-  padding-left: 50px;
+  padding-left: 50px
   font-size: 20px;
 }
 
 #mm {
   font-size: 17px;
-  width: 231px;
+  width: 255px;
   height: 40px;
   text-align: justify;
   padding-left: 101px;
+  font-size: 20px;
+  font-weight: bolder;
 
 }
 
 #hh {
   font-size: 17px;
-  width: 218px;
+  width: 258px;
   height: 40px;
   text-align: justify;
   padding-left: 101px;
+  font-size: 20px;
+  font-weight: bolder;
+
 }
 
-button {
+.button{
   width: 450px;
   height 300px;
   font-size: 19px;
@@ -80,8 +86,6 @@ button {
 
 #hourly_rate {
   font-weight: bolder;
-  width: 231px;
-  padding-bottom: 10px;
   font-size: 20px;
   color: blue;
   text-align: center;
@@ -93,7 +97,7 @@ button {
 }
 
 hr {
-  border-width: 10px;
+  border-width: 2px;
   color: green;
   border-color: #78b0e0;
 
