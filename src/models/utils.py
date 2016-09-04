@@ -6,6 +6,13 @@ from datetime import datetime
 from dateutil import relativedelta
 import random
 
+def translate_day(day):
+
+	days = {'mon': 'Monday',    'Tue' : 'Tuesday',
+	       'wed': 'Wednesday', 'thur': 'Thursday',
+		   'fri': 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
+	return days.get(str(day[0:3]).lower())
+
 def translate_month(month_num):
 	'''translate_month(str) -> return(str)
 	Takes a string digit and returns the month equivalent of that
@@ -17,7 +24,7 @@ def translate_month(month_num):
 		      '04': 'April',   '05':'May',      '06': 'June',
 		      '07':'July',     '08': 'August',  '09':'September',
 	          '10':'October',  '11':'November', '12': 'December'}
-	return months[month_num]
+	return months.get(month_num, None)
 
 def translate_to_month_num(month):
 	"""translate_to_month_num(int) -> return(str)

@@ -18,7 +18,7 @@ input[type='text'] {
 #start_date, #end_date{
 
   width: 258px;
-  height: 33px;
+  height: 33.5px;
   font-size: 20px;
   font-weight: bolder;
   text-align:  center;
@@ -47,10 +47,10 @@ button {
 #mm {
   font-size: 17px;
   width: 255px;
-  height: 33px;
+  height: 40px;
   text-align: justify;
   padding-left: 101px;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bolder;
 
 }
@@ -58,10 +58,10 @@ button {
 #hh {
   font-size: 17px;
   width: 258px;
-  height: 33px;
+  height: 40px;
   text-align: justify;
   padding-left: 101px;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bolder;
 
 }

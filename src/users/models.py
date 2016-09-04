@@ -4,6 +4,7 @@
 ##################################################################
 
 from src.models.database import DataBase as db
+from src.models.utils import translate_day
 import cgi
 from flask import request
 import uuid
@@ -121,9 +122,11 @@ class ProcessForm(object):
 
     def __init__(self, job_title, description, location,
                  rate, start_date, end_date, start_hours,
-                 start_mins, end_hours, end_mins):
+                 start_mins, end_hours, end_mins, day):
 
          self.errors = {}
+         if not day or translate_day(day) == None:
+             self.errors['day'] = 'Enter the correct working day or leave blank for current day'
          if not job_title:
              self.errors['job_title'] = 'The job title field must be not be empty'
          if not location:
@@ -151,6 +154,7 @@ class ProcessForm(object):
          self.start_mins = cgi.escape(start_mins).title()
          self.end_hours = cgi.escape(end_hours).title()
          self.end_mins = cgi.escape(end_mins).title()
+         self.day     = cgi.escape(day)
 
 
     def verify_form(self):
@@ -169,5 +173,6 @@ class ProcessForm(object):
             'start_hours' : self.start_hours,
             'start_mins'  : self.start_mins,
             'end_hours'   : self.end_hours,
-            'end_mins'    : self.end_mins
+            'end_mins'    : self.end_mins,
+            'day'         : self.day
             }

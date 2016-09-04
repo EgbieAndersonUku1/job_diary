@@ -37,7 +37,6 @@ def admin_register():
 def user_register():
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
 
-
 @app.route('/success')
 def success():
     return 'hello'
@@ -64,21 +63,23 @@ def entry_page():
                                start_mins=start_mins, rate=hourly_rate,end_hours=end_hours,end_mins=end_mins, errors='',
                                success='')
     else:
-        # ADD A FUNCTION HERE TO PROCESS THE FORM BEFPRE STORING IN THE database
-        user_form = ProcessForm(title, descr, loc, hourly_rate, start_date, end_date, start_hours, start_mins, end_hours, end_mins)
+        # process the user information
+        user_form = ProcessForm(title, descr, loc, hourly_rate,
+                                start_date, end_date, start_hours,
+                                start_mins, end_hours, end_mins, day)
+
+        # if the user details are sucessful add the details for the job to the database
         success, errors, form = user_form.verify_form()
         if success:
-            start_time = form.start_hours + ':' + form.start_mins
-            finish_time   = form.end_hours +   ":" + form.end_mins
-            user = User('', start_date, end_date, day)
+            start_time  = form.start_hours + ':' + form.start_mins # concatcenate the start hours and mins into hh:mm
+            finish_time = form.end_hours   + ":" + form.end_mins   # concatcenate the end hours and mins into hh:mm
+
+            user = User('', start_date, end_date, day)             # create a user object and add details to database
             user.add_job_details(form.job_title, form.description,
                                  form.location, start_time,
                                  finish_time, form.rate)
             success = 'Your data has been added to the database.'
-            #user_records = Records(form.job_title, form.description, form.location, start_time, finish_time, form.rate)
 
-        # ADD A FLASHING MESSAGE TO TELL THE USERS THAT THEIR DATA HAS SUCCESS BEEN ADDED TO DATABASE
-        # return render_template('user/entry_page.html', user_form=form)
         return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
                                job_title=form.job_title, description=form.description, location=form.location,
                                start_hours=form.start_hours, day=day,
