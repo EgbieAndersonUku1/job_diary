@@ -8,13 +8,27 @@
       <div class="row">
           <div class="col-md-offset-2 col-md-6">
 
-        {{ error }}
+        {% if success %}
+            <div class="alert alert-success">
+                <strong> {{ success }}</strong>
+            </div>
+        {% endif %}
+        {% for error in errors %}
+            <ul>
+              <div id='alert' class="alert alert-danger">
+                <strong> . {{ errors[error] }}</strong>
+              </div>
+
+            </ul>
+        {% endfor %}
         <form method="Post" action="{{ url_for('entry_page') }}">
           <div class="form-group">
             <label id='title_id' for="job_title">Job Title</label>
             <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100" value={{job_title}} >
             <label id='description_id' for="description">Job description</label>
             <input type='text' id="description" class='form-control' name="description" maxlength="255" value={{description}}>
+            <label id='day_id' for="day">Day of the week you working</label>
+            <input type='text' id="day" class='form-control' name="day" maxlength="255" value={{day}}>
             <label id='location_id' for="location">Job location</label>
             <input type='text' id="location" class='form-control' name="location" maxlength="100" value={{location}}>
             <label id='hourly_rate_id' for="hourly_rate" >Hourly rate ($)</label>
@@ -23,7 +37,6 @@
               <hr />
             </div>
             <table>
-
                <tr>
                   <td>
                     <label id='start_label' for="start_date">Start Date </label>
@@ -64,15 +77,16 @@
                    <option>04</option>
                    <option>05</option>
                    <option>06</option>
-                   <option>13</option>
+                   <option>07</option>
                    <option>08</option>
                    <option>09</option>
                    <option>10</option>
                    <option>11</option>
                    <option>12</option>
+                   <option>13</option>
                    <option>14</option>
-                   <option>15</option>
-                   <option>16</8option>
+                   <option>15</8option>
+                   <option>16</option>
                    <option>17</option>
                    <option>18</option>
                    <option>19</option>
@@ -88,7 +102,6 @@
                       <option>01</option>
                       <option>02</option>
                       <option>03</option>
-                      <option>07</option>
                       <option>04</option>
                       <option>05</option>
                       <option>06</option>
@@ -101,8 +114,8 @@
                       <option>13</option>
                       <option>14</option>
                       <option>15</option>
-                      <option>17</option>
                       <option>16</option>
+                      <option>17</option>
                       <option>18</option>
                       <option>19</option>
                       <option>20</option>
@@ -130,7 +143,6 @@
                       <option>42</option>
                       <option>43</option>
                       <option>44</option>
-                      <label id='end_label' for="end_time" >End Time (MM)</label>
                       <option>45</option>
                       <option>46</option>
                       <option>47</option>
@@ -146,6 +158,7 @@
                       <option>57</option>
                       <option>58</option>
                       <option>59</option>
+                      <label id='end_label' for="end_time" >End Time (MM)</label>
                  </select>
                </td>
                 <td>
@@ -171,16 +184,16 @@
                      <option>04</option>
                      <option>05</option>
                      <option>06</option>
-                     <option>13</option>
                      <option>07</option>
                      <option>08</option>
                      <option>09</option>
                      <option>10</option>
                      <option>11</option>
                      <option>12</option>
+                     <option>13</option>
                      <option>14</option>
-                     <option>15</option>
-                     <option>16</8option>
+                     <option>15</8option>
+                     <option>16</option>
                      <option>17</option>
                      <option>18</option>
                      <option>19</option>
@@ -188,7 +201,6 @@
                      <option>21</option>
                      <option>22</option>
                      <option>23</option>
-
                    </select>
                  </td>
                  <td>

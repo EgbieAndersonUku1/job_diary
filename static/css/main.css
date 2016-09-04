@@ -15,20 +15,10 @@ input[type='text'] {
   margin-left: 400px;
 }
 
-#start_date {
+#start_date, #end_date{
 
   width: 258px;
-  height: 40px;
-  font-size: 20px;
-  font-weight: bolder;
-  text-align:  center;
-
-}
-
-#end_date {
-
-  width: 258px;
-  height: 40px;
+  height: 33px;
   font-size: 20px;
   font-weight: bolder;
   text-align:  center;
@@ -43,7 +33,7 @@ button {
 
 #info {
   width: 48px;
-  height: 40px;
+  height: 33px;
 }
 
 
@@ -57,7 +47,7 @@ button {
 #mm {
   font-size: 17px;
   width: 255px;
-  height: 40px;
+  height: 33px;
   text-align: justify;
   padding-left: 101px;
   font-size: 20px;
@@ -68,12 +58,18 @@ button {
 #hh {
   font-size: 17px;
   width: 258px;
-  height: 40px;
+  height: 33px;
   text-align: justify;
   padding-left: 101px;
   font-size: 20px;
   font-weight: bolder;
 
+}
+
+#alert {
+  width: 500px;
+  height: 20px;
+  padding: inherit;
 }
 
 .button{
@@ -91,7 +87,7 @@ button {
   text-align: center;
 }
 
-#hourly_rate_id, #title_id, #description_id, #location_id {
+#hourly_rate_id, #title_id, #description_id, #location_id, #day_id {
   color: purple;
   font-family: bolder;
   font-style: italic;

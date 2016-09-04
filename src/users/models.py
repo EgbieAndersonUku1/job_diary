@@ -4,6 +4,7 @@
 ##################################################################
 
 from src.models.database import DataBase as db
+import cgi
 from flask import request
 import uuid
 from datetime import datetime
@@ -118,8 +119,55 @@ class Registration(object):
 
 class ProcessForm(object):
 
-    def __init__(self, job_title, job_loc, job_descr,
-                 hourly_rate, start_date, end_date, start_hours,
-                 start_mins, end_hours, end_mins, end_time):
+    def __init__(self, job_title, description, location,
+                 rate, start_date, end_date, start_hours,
+                 start_mins, end_hours, end_mins):
 
-                 pass
+         self.errors = {}
+         if not job_title:
+             self.errors['job_title'] = 'The job title field must be not be empty'
+         if not location:
+             self.errors['job_loc']   = 'The job location field must be not be empty'
+         if not description:
+             self.errors['job_descr'] = 'The job description field must be not be empty'
+         if not rate:
+             self.errors['hourly_rate'] = 'The hourly rate field must be not be empty'
+         if not start_date:
+             self.errors['start_date']  = 'The start date field must be not be empty'
+         if not end_date:
+             self.errors['end_date']   = 'The end date field must be not be empty'
+         if end_date < start_date:
+             self.errors['days_error'] = 'The end date cannot be less then the start date'
+         if start_hours == end_hours:
+             self.errors['start_hours'] = 'The start time and the end time cannot be the same'
+
+         self.job_title  = cgi.escape(job_title).title()
+         self.description = cgi.escape(description).title()
+         self.location    = cgi.escape(location).title()
+         self.rate = cgi.escape(rate)
+         self.start_date = cgi.escape(start_date).title()
+         self.end_date   = cgi.escape(end_date).title()
+         self.start_hours = cgi.escape(start_hours).title()
+         self.start_mins = cgi.escape(start_mins).title()
+         self.end_hours = cgi.escape(end_hours).title()
+         self.end_mins = cgi.escape(end_mins).title()
+
+
+    def verify_form(self):
+        if self.errors:
+            return False, self.errors, ProcessForm(**self._get_json())
+        return True, self.errors, ProcessForm(**self._get_json())
+
+    def _get_json(self):
+        return {
+            'job_title'   : self.job_title,
+            'location'    : self.location,
+            'description' : self.description,
+            'rate'        : self.rate,
+            'start_date'  : self.start_date,
+            'end_date'    : self.end_date,
+            'start_hours' : self.start_hours,
+            'start_mins'  : self.start_mins,
+            'end_hours'   : self.end_hours,
+            'end_mins'    : self.end_mins
+            }
