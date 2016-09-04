@@ -14,43 +14,25 @@
 </head>
 
 
-<body>
-  <nav class="navbar2">
-    <span class="icon-bar"></span>
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="{{ url_for('user_register') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-          <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-        </ul>
-      </div>
-
-    <div class="container">
+<div class="container">
+    <div>
       <div>
-        <div>
-          {% block content %}{% endblock %}
-        </div>
+        {% block content %}{% endblock %}
       </div>
-
     </div>
 
-    <!--jQuery for BootStrap-->
-      <script src="https://code.jquery.com/jquery-3.1.0.min.js"
-      integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
-      crossorigin="anonymous"></script>
+  </div>
 
-    <!--Bootstrap Js (JavaScript)-->
-    <script>
+  <!--jQuery for BootStrap-->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+    integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+    crossorigin="anonymous"></script>
 
-        src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
-    </script>
+  <!--Bootstrap Js (JavaScript)-->
+  <script>
+
+      src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
+  </script>
 
 </body>
 
