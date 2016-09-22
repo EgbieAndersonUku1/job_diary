@@ -21,6 +21,12 @@ table.center {
     font-size: 16px;
   }
 
+.flashes {
+  font-size: 17px;
+  text-align: center;
+  color: blue;
+  font-weight: bolder;
+}
 td {
   font-size: 17px;
 }
