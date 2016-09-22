@@ -1,0 +1,78 @@
+{% extends "secondary_base.html" %}
+
+{% block title %} Table {% endblock %}
+
+{% block content %}
+
+
+                           , start_time,
+                           finish_time, form.rate
+    <table class='table'>
+      <th>
+        Job Title
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        location
+      </th>
+      <th>
+        Hourly rate
+      </th>
+      <th>
+        Start date
+      </th>
+      <th>
+        Ending Date
+      </th>
+      <th>
+          Start time
+      </th>
+      <th>
+        Finish time
+      </th>
+      <th>
+        Day
+      </th>
+
+      <tr>
+        <td>
+          {{ form.job_title }}
+        </td>
+        <td>
+          {{ form.description }}
+        </td>
+
+        <td>
+          {{ form.location }}
+        </td>
+
+        <td>
+          {{ form.rate }}
+        </td>
+        <td>
+           {{ start_date }}
+        </td>
+
+        <td>
+          {{ end_date }}
+        </td>
+
+        <td>
+          {{ start_time }}
+        </td>
+
+        <td>
+          {{ finish_time }}
+        </td>
+
+        <td>
+           {{ day }}
+        </td>
+      </tr>
+
+
+    </table>
+
+{% endblock %}

@@ -8,8 +8,8 @@ import random
 
 def translate_day(day):
 
-	days = {'mon': 'Monday',    'Tue' : 'Tuesday',
-	       'wed': 'Wednesday', 'thur': 'Thursday',
+	days = {'mon': 'Monday',    'tue' : 'Tuesday',
+	       'wed': 'Wednesday', 'thu': 'Thursday',
 		   'fri': 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
 	return days.get(str(day[0:3]).lower())
 
@@ -65,8 +65,11 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
 	day2, month2, year2 = finish_date.split('/') # split the dates for the finish date by /
 	hours1, minutes1 = start_time.split(':')
 	hours2, minutes2 = finish_time.split(':')
+
 	first_date = datetime(int(year1), int(month1), int(day1), int(hours1), int(minutes1))
 	sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
+
+
 	difference = relativedelta.relativedelta(sec_date, first_date)
 
 	# if start date is not equal to the finish date it means that user

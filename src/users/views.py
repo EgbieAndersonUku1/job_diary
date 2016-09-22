@@ -5,6 +5,7 @@ from user_form_helpers import login_helper, register_helper
 import datetime
 from src.users.models import ProcessForm
 from src.models.users import User
+from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
@@ -23,8 +24,6 @@ def login():
 @app.route('/admin/login', methods=('GET', 'POST'))
 def admin():
     """Allows the user entry as admin"""
-
-    error = 'Incorrect username your IP will be logged'
     return login_helper(AdminLoginForm, error, 'admin', 'success', 'admin/admin_login.html', 'index', True)
 
 # admin registration
@@ -40,7 +39,6 @@ def user_register():
 @app.route('/success')
 def success():
     return 'hello'
-
 @app.route('/job/entry', methods=('GET', 'POST'))
 def entry_page():
 
@@ -74,23 +72,31 @@ def entry_page():
             start_time  = form.start_hours + ':' + form.start_mins # concatcenate the start hours and mins into hh:mm
             finish_time = form.end_hours   + ":" + form.end_mins   # concatcenate the end hours and mins into hh:mm
 
+
+            hours = get_hours_worked(start_date, start_time, end_date, finish_time)
+            total_hours = time_to_str(hours)
             user = User('', start_date, end_date, day)             # create a user object and add details to database
             user.add_job_details(form.job_title, form.description,
                                  form.location, start_time,
                                  finish_time, form.rate)
-            success = 'Your data has been added to the database.'
 
+            flash('The following data has been successful added to the database.')
+            return render_template('user/table.html', form=form, start_date=start_date,
+                                    end_date=end_date, start_time=start_time, finish_time=finish_time,
+                                    day=day, total_hours=total_hours, daily_rate=get_daily_rate(hours, hourly_rate))
+            
         return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
                                job_title=form.job_title, description=form.description, location=form.location,
                                start_hours=form.start_hours, day=day,
                                start_mins=form.start_mins, rate=form.rate,end_hours=form.end_hours,
-                               end_mins=form.end_mins, errors=errors, success=success)
+                               end_mins=form.end_mins, errors=errors)
 
 @app.route('/index', methods=('GET', 'POST'))
 def index():
     if session.get('username', None):
         return 'hello'
     elif session.get('admin', None):
+
         return 'hello, admin'
     else:
         return (redirect(url_for('login')))
@@ -106,3 +112,7 @@ def logout():
 @app.route('/reset')
 def reset():
     return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date, day=curr_day)
+
+@app.route('/successful/<string:value>')
+def success_page(value):
+   return '_added page. {}'.format(value)

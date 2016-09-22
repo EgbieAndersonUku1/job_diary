@@ -1,0 +1,130 @@
+{% extends "secondary_base.html" %}
+
+{% block title %} Table {% endblock %}
+
+{% block content %}
+
+    <div style="overflow-x:auto;">
+
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+              {{ message }}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+
+    <table class='center'>
+      <th id='label'>
+        Title
+      </th>
+      <th>
+        Description
+      </th>
+      <tr>
+        <td >
+          Day
+        </td>
+        <td>
+           {{ day }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Job Title
+        </td>
+        <td>
+          {{ form.job_title }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Description
+
+        </td>
+        <td>
+            {{ form.description }}
+        </td>
+
+      </tr>
+      <tr>
+        <td>
+          Location
+        </td>
+        <td>
+          {{ form.location }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+            Hourly rate
+        </td>
+        <td>
+          {{ form.rate }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Total hours
+        </td>
+        <td>
+          {{ total_hours }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Daily Rate
+        </td>
+        <td>
+          {{ daily_rate }}
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Start time
+        </td>
+        <td>
+            {{ start_time }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Finish time
+        </td>
+        <td>
+          {{ finish_time }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Start Date
+        </td>
+        <td>
+
+          {{ start_date }}
+
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Finish date
+        </td>
+        <td>
+          {{ end_date }}
+        </td>
+      </tr>
+
+    </table>
+
+
+
+  </div>
+
+{% endblock %}

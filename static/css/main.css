@@ -7,7 +7,57 @@ input[type='text'] {
 
 }
 
+table, td, th {
+    border: 1px solid black;
+    text-align: center;
+    font-size: 18px;
 
+
+}
+
+table.center {
+    margin-left:auto;
+    margin-right:auto;
+    font-size: 16px;
+  }
+
+td {
+  font-size: 17px;
+}
+
+table {
+    width: 50%;
+}
+
+tr {
+    height: 50px;
+
+}
+
+table { border-collapse: collapse;
+tr:nth-child(3);
+ border: solid thin;
+}
+
+th {
+ font-size: 16px;
+ font-family: Arial;
+ height: 50px;
+ background-color: #4CAF50;
+color: white;
+}
+
+
+td {
+
+    font-size: 17px;
+    font-size: 20px;
+    padding-left: 8px;
+}
+
+tr {
+  font-size:
+}
 #end_date_input {
   margin-left: 400px;
 }
