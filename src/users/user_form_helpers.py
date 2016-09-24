@@ -1,7 +1,7 @@
 from flask import render_template, redirect, session, url_for, request, abort
 from src.users.models import Login, Registration
 
-def login_helper(form_obj, msg, *args):
+def login_helper(form_obj, *args):
     """
     Helper function: that assists the user entry to the applicaton
     form_obj       : Takes either been a login form func or admin form func and renders it
@@ -15,29 +15,32 @@ def login_helper(form_obj, msg, *args):
     template       = args[2]     # the url for the template to render
     index_page     = args[3]
     admin          = args[4]
-    error          = ''
 
+
+    #return login_helper(LoginForm, 'username', 'success', 'user/login.html', 'index', False, error)
+
+    # if we can found a session it means that the user is already logged in
     if session.get(session_name, None):
         return redirect(url_for(index_page))
-    elif form.validate_on_submit():
-        if admin:
-            user = Login(form.admin_name.data, form.password.data)
-        else:
-            user = Login(form.username.data, form.password.data)
-        if user.is_credentials_ok():
-            session[session_name] = user.username
-            return redirect(url_for(redirect_link))
 
-        elif admin:
-            abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
-                       # SOME FUNCTIONALITY TO LOG IP ADDRESSES
-
-    if request.method == 'GET':
-        return render_template(template, form=form, error=error)
+    elif request.method == 'GET':
+        return render_template(template, form=form, error='')
     else:
-        error = msg
-        # SOME FUNCTION THAT LOGGES IN IP ONLY IF THE USER IS ADMIN
-        return render_template(template, form=form, error=error)
+
+        if form.validate_on_submit():
+            if admin:
+                user = Login(form.admin_name.data, form.password.data)
+            else:
+                user = Login(form.username.data, form.password.data)
+            if user.is_credentials_ok():
+                session[session_name] = user.username
+                return redirect(url_for(redirect_link))
+
+            elif admin:
+                abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
+                           # SOME FUNCTIONALITY TO LOG IP ADDRESSES
+        return render_template(template, form=form, error='Incorrect username and password')
+
 
 def register_helper(obj, msg, template, redirect_link):
     """
@@ -53,9 +56,9 @@ def register_helper(obj, msg, template, redirect_link):
 
     if request.method == 'GET':
         return render_template(template, form=form, error=error)
-    else:
-        error = 'Check your details and try again.'
-        return render_template(template, form=form, error=error)
+
+    if request.method == 'GET' and request.args.get('next'):
+        session['next'] = request.args.get('next')
 
     # if form validates attempt to register users details.
     # if registration is successful meaning username is unique log user in.
@@ -67,7 +70,10 @@ def register_helper(obj, msg, template, redirect_link):
             user = Login(user.email, user.password, True) # log the user into the application
             user.save()                                   # save username and encrypted password to the database
             session['username'] = user.username
-            return redirect(url_for(redirect_link))
+            if 'next' in session:
+                return session.pop('next')
+            else:
+                return redirect(url_for(redirect_link))
         else:
             error = msg
             return render_template(template, form=form, error=error)

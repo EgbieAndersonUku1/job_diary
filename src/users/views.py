@@ -16,15 +16,14 @@ curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     """Allows the user entry to the login applicaton"""
-    error = 'Incorrect username and password'
-    return login_helper(LoginForm, error, 'username', 'success', 'user/login.html', 'index', False)
+    return login_helper(LoginForm, 'username', 'entry_page', 'user/login.html', 'index', False)
 
 # use the login helper to help assist the user in logging into admin console
 @app.route('/admin/', methods=('GET', 'POST'))
 @app.route('/admin/login', methods=('GET', 'POST'))
 def admin():
     """Allows the user entry as admin"""
-    return login_helper(AdminLoginForm, error, 'admin', 'success', 'admin/admin_login.html', 'index', True)
+    return login_helper(AdminLoginForm, 'admin', 'success', 'admin/admin_login.html', 'index', True)
 
 # admin registration
 @app.route('/admin/register', methods=('GET', 'POST'))
@@ -38,7 +37,8 @@ def user_register():
 
 @app.route('/success')
 def success():
-    return 'hello'
+    return 'admin console will be here'
+
 @app.route('/job/entry', methods=('GET', 'POST'))
 def entry_page():
 
@@ -81,10 +81,11 @@ def entry_page():
                                  finish_time, form.rate)
 
             flash('The following data has been successful added to the database.')
+            flash('Hit the back button to go back preserving your details or hit the entry page to enter new details')
             return render_template('user/table.html', form=form, start_date=start_date,
                                     end_date=end_date, start_time=start_time, finish_time=finish_time,
                                     day=day, total_hours=total_hours, daily_rate=get_daily_rate(hours, hourly_rate))
-            
+
         return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
                                job_title=form.job_title, description=form.description, location=form.location,
                                start_hours=form.start_hours, day=day,
