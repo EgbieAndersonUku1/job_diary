@@ -19,7 +19,7 @@ from database import DataBase as db
 class Records(object):
     """Records (class)
     The Records class has directly access to the database. It can use that access
-    to either delete, retreive or update the record details of the user.
+)))    to either delete, retreive or update the record details of the user.
     """
 
     def __init__(self, job_title, descr, loc, start_time, finish_time,
@@ -43,7 +43,6 @@ class Records(object):
         self._id = uuid.uuid4().hex if _id is None else _id
         self.track_times  = {}
 
-
     @classmethod
     def _find(cls, query, key, limit):
         """_find(str, str) -> return (obj or None)
@@ -58,7 +57,10 @@ class Records(object):
         """A private helper function that searches the database for a value
         and returns a single value that matches the users values
         """
+        data = db.find_one('jobs_details', query)
         return cls(**data) if data is not None else None
+
+
 
     @classmethod
     def find_by_job_title(cls, query, user_id, limit=None):
@@ -133,6 +135,7 @@ class Records(object):
     def save(self):
         """saves the data to the databases. It is saved in the form of json"""
         db.insert_one('jobs_details', self.get_json())
+        return self.row_id
 
     def get_json(self):
         """returns a json represent of the class"""

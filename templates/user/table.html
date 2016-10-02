@@ -6,8 +6,6 @@
 
     <div style="overflow-x:auto;">
 
-
-
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           <ul class=flashes>
@@ -29,8 +27,8 @@
         <td >
           Day
         </td>
-        <td>
-           {{ day }}
+        <td id="description">
+           {{ rows.day }}
         </td>
       </tr>
       <tr>
@@ -38,7 +36,7 @@
           Job Title
         </td>
         <td>
-          {{ form.job_title }}
+          {{ rows.job_title }}
         </td>
       </tr>
       <tr>
@@ -47,7 +45,7 @@
 
         </td>
         <td>
-            {{ form.description }}
+            {{ rows.descr }}
         </td>
 
       </tr>
@@ -56,15 +54,15 @@
           Location
         </td>
         <td>
-          {{ form.location }}
+          {{ rows.loc }}
         </td>
       </tr>
       <tr>
         <td>
-            Hourly rate
+            Hourly rate ($)
         </td>
         <td>
-          {{ form.rate }}
+          ${{ rows.hourly_rate }}
         </td>
       </tr>
       <tr>
@@ -72,7 +70,8 @@
           Daily Rate
         </td>
         <td>
-          {{ daily_rate }}
+
+          ${{ rows.daily_rate }}
 
         </td>
       </tr>
@@ -81,7 +80,7 @@
           Start time
         </td>
         <td>
-            {{ start_time }}
+            {{ rows.start_time }}
         </td>
       </tr>
 
@@ -90,15 +89,15 @@
           Finish time
         </td>
         <td>
-          {{ finish_time }}
+          {{ rows.finish_time }}
         </td>
       </tr>
       <tr>
         <td>
-          Total hours
+          Total hours worked
         </td>
         <td>
-          {{ total_hours }}
+          {{ rows.total_hours }}
         </td>
       </tr>
 
@@ -108,20 +107,12 @@
         </td>
         <td>
 
-          {{ start_date }}
+          {{ rows.date }}
         </td>
       </tr>
-      <tr>
-        <td>
-          Finish date
-        </td>
-        <td>
-          {{ end_date }}
-        </td>
-      </tr>
-
+      
     </table>
-    
+
 
   </div>
 

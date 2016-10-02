@@ -50,7 +50,7 @@ class User(object):
                          date=self.start_date,
                          day=self.day,
                          month=self.start_date.split('/')[1])
-        record.save()
+        return record.save()
 
     def get_by_hour(self, hours, date1=None, date2=None, month1=None,
                     month2=None, year1=None, year2=None):
