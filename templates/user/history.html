@@ -1,0 +1,82 @@
+{% extends 'secondary_base.html' %}
+
+{% block title %} History {% endblock%}
+
+{% block content %}
+
+    <table class="table table-striped">
+      <tr>
+        <th>
+          Date worked
+        </th>
+        <th>
+          Day worked
+        </th>
+        <th>
+          Title
+        </th>
+        <th>
+          Description
+        </th>
+        <th>
+          Location
+        </th>
+        <th>
+          Hourly rate
+        </th>
+        <th>
+          Total hours worked
+        </th>
+
+        <th>
+          Daily rate
+        </th>
+        <th>
+          Start time
+        </th>
+        <th>
+          Finish time
+        </th>
+
+      </tr>
+      {% for job in jobs %}
+
+
+         <tr>
+           <td>
+             {{ job.date }}
+           </td>
+           <td>
+             {{ job.day }}
+           </td>
+           <td>
+             {{ job.job_title }}
+           </td>
+           <td>
+              {{ job.descr }}
+           </td>
+           <td>
+             {{ job.loc }}
+           </td>
+           <td>
+             {{ job.hourly_rate}}
+           </td>
+           <td>
+             {{ job.total_hours}}
+           </td>
+           <td>
+             {{ job.daily_rate }}
+           </td>
+           <td>
+             {{ job.start_time }}
+           </td>
+           <td>
+             {{ job.finish_time }}
+           </td>
+
+         </tr>
+
+      {% endfor %}
+  </table>
+
+{% endblock %}

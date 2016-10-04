@@ -34,11 +34,14 @@ def login_helper(form_obj, *args):
                 user = Login(form.username.data, form.password.data)
             if user.is_credentials_ok():
                 session[session_name] = user.username
+                session['user_id'] = user._id
                 return redirect(url_for(redirect_link))
 
             elif admin:
                 abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
                            # SOME FUNCTIONALITY TO LOG IP ADDRESSES
+            session[session_name] = user.username
+            session['user_id'] = user._id
         return render_template(template, form=form, error='Incorrect username and password')
 
 
@@ -70,6 +73,7 @@ def register_helper(obj, msg, template, redirect_link):
             user = Login(user.email, user.password, True) # log the user into the application
             user.save()                                   # save username and encrypted password to the database
             session['username'] = user.username
+            session['user_id'] = user._id
             if 'next' in session:
                 return session.pop('next')
             else:

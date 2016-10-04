@@ -7,6 +7,7 @@ from src.users.models import ProcessForm
 from src.models.users import User, Records
 from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float
 import uuid
+from src.users.decorators import login_required, admin_required
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
@@ -37,10 +38,12 @@ def user_register():
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
 
 @app.route('/success')
+@login_required
 def success():
     return 'admin console will be here'
 
 @app.route('/job/entry', methods=('GET', 'POST'))
+@login_required
 def entry_page():
 
     start_date, end_date = curr_date, curr_date
@@ -75,9 +78,8 @@ def entry_page():
             hours = get_hours_worked(start_date, start_time, end_date, finish_time)
             total_hours = time_to_str(hours)
             user = User('', start_date, end_date, day)             # create a user object and add details to database
-            user_id = user.id
+            user.id = session['user_id']
             row = user.add_job_details(form.job_title, form.description,form.location, start_time, finish_time, form.rate)
-            row = '{}#{}'.format(row[1:], user_id+str(uuid.uuid4().hex))
             return redirect(url_for('success_page', row=row))
 
         return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
@@ -96,11 +98,13 @@ def index():
         return (redirect(url_for('login')))
 
 @app.route('/logout')
+@login_required
 def logout():
     if session.get('admin'):
         session['admin'] = None
     else:
         session['username'] = None
+    session['user_id'] = None
     return (redirect(url_for('login')))
 
 @app.route('/reset')
@@ -108,11 +112,19 @@ def reset():
     return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date, day=curr_day)
 
 @app.route('/successful/<row>')
+@login_required
 def success_page(row):
 
-   row_id, user_id = row.split('#')
-   user = User('',_id=user_id[:32])
-   rows = user.get_by_row_id(row_id)
+   user = User('',_id=session['user_id'])
+   rows = user.get_by_row_id(row)
 
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=rows)
+
+
+@app.route('/history')
+@login_required
+def get_dates():
+    user = User(session['username'], _id=session['user_id'])
+    jobs = user.get_by_user_id()
+    return render_template('user/history.html', jobs=jobs)
