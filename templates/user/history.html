@@ -9,34 +9,33 @@
         Nothing to see
       {% else %}
         <div>
-          <h2>Dates of days and time worked </h2>
+          <h2>Dates of days and time worked or working </h2>
         </div>
-
         <tr>
           <th>
-            Date worked
+            Dates
           </th>
           <th>
-            Day worked
+            Days
           </th>
           <th>
-            Title
+            Job title
           </th>
           <th>
-            Description
+            Job description
           </th>
           <th>
-            Location
+            Job location
           </th>
           <th>
-            Hourly rate
+            Hourly rate (£)
           </th>
           <th>
             Total hours worked
           </th>
 
           <th>
-            Daily rate
+            Daily rate (£)
           </th>
           <th>
             Start time
@@ -66,13 +65,13 @@
                {{ job.loc }}
              </td>
              <td>
-               {{ job.hourly_rate}}
+               £{{ job.hourly_rate}}
              </td>
              <td>
                {{ job.total_hours}}
              </td>
              <td>
-               {{ job.daily_rate }}
+               £{{ job.daily_rate }}
              </td>
              <td>
                {{ job.start_time }}
