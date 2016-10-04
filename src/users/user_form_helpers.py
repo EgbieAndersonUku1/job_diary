@@ -32,9 +32,11 @@ def login_helper(form_obj, *args):
                 user = Login(form.admin_name.data, form.password.data)
             else:
                 user = Login(form.username.data, form.password.data)
-            if user.is_credentials_ok():
-                session[session_name] = user.username
-                session['user_id'] = user._id
+                login_obj  = user.is_credentials_ok()
+            if login_obj:
+
+                session[session_name] = login_obj.username
+                session['user_id'] = login_obj._id
                 return redirect(url_for(redirect_link))
 
             elif admin:

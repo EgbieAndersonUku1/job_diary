@@ -35,12 +35,12 @@ def admin_register():
 # user registration
 @app.route('/register', methods=('GET', 'POST'))
 def user_register():
-    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'success')
+    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'entry_page')
 
 @app.route('/success')
 @login_required
 def success():
-    return 'admin console will be here'
+    return 'some text will be here'
 
 @app.route('/job/entry', methods=('GET', 'POST'))
 @login_required

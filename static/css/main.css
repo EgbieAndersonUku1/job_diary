@@ -15,6 +15,10 @@ table, td, th {
 
 }
 
+h2 {
+  text-align: center;
+}
+
 td {
   font-size: 30px;
 }
