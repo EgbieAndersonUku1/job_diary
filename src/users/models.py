@@ -178,6 +178,11 @@ class ProcessForm(object):
     def process_form(self, start_date, end_date, day):
 
         if self._obj != None:
+            date = start_date.split('/')
+            if len(date[0]) == 1:
+                dd = '0' + str(date[0])
+                start_date = dd + '/' + date[1] + '/' + date[2]
+
             start_time, finish_time = self._concatcenate_time_str()
     	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
     	    user = User('', start_date, end_date, day, _id=session['user_id']) # create a user object and add details to database

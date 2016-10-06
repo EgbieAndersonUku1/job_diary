@@ -65,6 +65,7 @@ def entry_page():
                                success='')
     else:
         # process the user information
+        
         user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date,
                                 start_hours, start_mins, end_hours, end_mins, day)
         # if the user details are sucessful add the details for the job to the database
