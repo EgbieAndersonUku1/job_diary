@@ -7,6 +7,7 @@ from src.users.models import ProcessForm
 from src.models.users import User, Records
 import uuid
 from src.users.decorators import login_required, admin_required
+from time import sleep
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
@@ -65,7 +66,6 @@ def entry_page():
                                success='')
     else:
         # process the user information
-        
         user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date,
                                 start_hours, start_mins, end_hours, end_mins, day)
         # if the user details are sucessful add the details for the job to the database
@@ -124,6 +124,11 @@ def get_dates():
 def edit(value):
     user = User(session['username'], _id=session['user_id'])
     form = user.get_by_row_id(str(value))
-    print form.descr
-    print form.loc
     return render_template('user/edit.html', form=form)
+
+@app.route('/delete/<row>')
+@login_required
+def delete(row):
+    user = User(session['username'], _id=session['user_id'])
+    print user.delete_row(row)
+    return redirect(url_for('get_dates'))

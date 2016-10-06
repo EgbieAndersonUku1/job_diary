@@ -1,8 +1,10 @@
 {% extends 'secondary_base.html' %}
 
-{% block title %} Job Entry Page {% endblock %}
+{% block title %} Edit/Delete page {% endblock %}
 
 {% block content %}
+
+<h2>Update/delete job entries</h2>
 <div class='border'>
  <div class="container">
    <div class="row">
@@ -56,6 +58,7 @@
                   <option value="23">23</option>
                 </select>
               </div>
+              <option value="42">42</option>
             </div>
             </fieldset>
 
@@ -107,7 +110,6 @@
                     <option value="39">39</option>
                     <option value="40">40</option>
                     <option value="41">41</option>
-                    <option value="42">42</option>
                     <option value="43">43</option>
                     <option value="44">44</option>
                     <option value="45">45</option>
@@ -237,6 +239,8 @@
 
 
       </div>
+      <button type="submit" class="btn btn-success">Update</button>
+      <a href="/delete/{{form.row_id[1:]}}" ><button type="button" class="btn btn-warning">Delete</button></a>
     </form>
     FINISH THE REST OF THE PAGE FOR THE UPDATING HERE
   </div>
