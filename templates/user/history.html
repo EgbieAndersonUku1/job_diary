@@ -5,6 +5,7 @@
 {% block content %}
 
     <table class="table table-striped">
+
       {% if not jobs %}
         Nothing to see
       {% else %}
@@ -43,6 +44,9 @@
           <th>
             Finish time
           </th>
+          <th>
+            Update/Delete
+          </th>
 
         </tr>
         {% for job in jobs %}
@@ -77,13 +81,24 @@
                {{ job.start_time }}
              </td>
              <td>
+
                {{ job.finish_time }}
              </td>
 
+             <td>
+               {% if dt(job.date, "%d/%m/%Y") >= dt(date, "%d/%m/%Y")  %}
+                <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a>
+               {% else %}
+                  N/A
+               {% endif %}
+             </td>
            </tr>
 
         {% endfor %}
         {% endif %}
+
   </table>
+  <caption class="text-center">Only dates that are active can be edited</caption>
+
 
 {% endblock %}

@@ -16,17 +16,14 @@ def login_helper(form_obj, *args):
     index_page     = args[3]
     admin          = args[4]
 
-
-    #return login_helper(LoginForm, 'username', 'success', 'user/login.html', 'index', False, error)
-
     # if we can found a session it means that the user is already logged in
-    if session.get(session_name, None):
+    if session.get(session_name, None) != None:
         return redirect(url_for(index_page))
-
+    if request.method == 'GET' and request.args.get('next'):
+        session['next'] = request.args.get('next')
     elif request.method == 'GET':
         return render_template(template, form=form, error='')
     else:
-
         if form.validate_on_submit():
             if admin:
                 user = Login(form.admin_name.data, form.password.data)
@@ -34,11 +31,11 @@ def login_helper(form_obj, *args):
                 user = Login(form.username.data, form.password.data)
                 login_obj  = user.is_credentials_ok()
             if login_obj:
-
                 session[session_name] = login_obj.username
                 session['user_id'] = login_obj._id
+                if 'next' in session:
+                    return url
                 return redirect(url_for(redirect_link))
-
             elif admin:
                 abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
                            # SOME FUNCTIONALITY TO LOG IP ADDRESSES
@@ -77,7 +74,7 @@ def register_helper(obj, msg, template, redirect_link):
             session['username'] = user.username
             session['user_id'] = user._id
             if 'next' in session:
-                return session.pop('next')
+                return redirect(session.pop('next'))
             else:
                 return redirect(url_for(redirect_link))
         else:

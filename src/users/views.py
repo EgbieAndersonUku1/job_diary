@@ -126,5 +126,11 @@ def success_page(row):
 @login_required
 def get_dates():
     user = User(session['username'], _id=session['user_id'])
-    jobs = user.get_by_user_id()
-    return render_template('user/history.html', jobs=jobs)
+    # some varialbe to contr
+    jobs = user.get_by_user_id(100) # some code here to limit how much is display in history
+    return render_template('user/history.html', jobs=jobs, date=str(curr_date), dt=datetime.datetime.strptime)
+
+
+@app.route('/job/edit/<value>')
+def edit(value):
+    return 'A page will be here to edit and delete page'
