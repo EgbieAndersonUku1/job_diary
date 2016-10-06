@@ -5,7 +5,6 @@ from user_form_helpers import login_helper, register_helper
 import datetime
 from src.users.models import ProcessForm
 from src.models.users import User, Records
-from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float
 import uuid
 from src.users.decorators import login_required, admin_required
 
@@ -66,20 +65,12 @@ def entry_page():
                                success='')
     else:
         # process the user information
-        user_form = ProcessForm(title, descr, loc, hourly_rate,
-                                start_date, end_date, start_hours,
-                                start_mins, end_hours, end_mins, day)
-
+        user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date,
+                                start_hours, start_mins, end_hours, end_mins, day)
         # if the user details are sucessful add the details for the job to the database
         success, errors, form = user_form.verify_form()
         if success:
-            start_time  = form.start_hours + ':' + form.start_mins # concatcenate the start hours and mins into hh:mm
-            finish_time = form.end_hours   + ":" + form.end_mins   # concatcenate the end hours and mins into hh:mm
-            hours = get_hours_worked(start_date, start_time, end_date, finish_time)
-            total_hours = time_to_str(hours)
-            user = User('', start_date, end_date, day)             # create a user object and add details to database
-            user.id = session['user_id']
-            row = user.add_job_details(form.job_title, form.description,form.location, start_time, finish_time, form.rate)
+            row = user_form.process_form(start_date, end_date, day)
             return redirect(url_for('success_page', row=row))
 
         return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
@@ -117,10 +108,8 @@ def success_page(row):
 
    user = User('',_id=session['user_id'])
    rows = user.get_by_row_id(row)
-
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=rows)
-
 
 @app.route('/history')
 @login_required
@@ -128,9 +117,12 @@ def get_dates():
     user = User(session['username'], _id=session['user_id'])
     # some varialbe to contr
     jobs = user.get_by_user_id(100) # some code here to limit how much is display in history
-    return render_template('user/history.html', jobs=jobs, date=str(curr_date), dt=datetime.datetime.strptime)
-
+    return render_template('user/history.html', jobs=jobs, date=curr_date, dt=datetime.datetime.strptime)
 
 @app.route('/job/edit/<value>')
 def edit(value):
-    return 'A page will be here to edit and delete page'
+    user = User(session['username'], _id=session['user_id'])
+    form = user.get_by_row_id(str(value))
+    print form.descr
+    print form.loc
+    return render_template('user/edit.html', form=form)

@@ -1,0 +1,245 @@
+{% extends 'secondary_base.html' %}
+
+{% block title %} Job Entry Page {% endblock %}
+
+{% block content %}
+<div class='border'>
+ <div class="container">
+   <div class="row">
+       <div class="col-md-offset-2 col-md-6">
+
+    <form method="Post" action="{{ url_for('entry_page') }}">
+        <div class="form-group">
+          <label id='title_id' for="job_title">Job Title</label>
+          <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100" value='{{form.job_title}}' >
+          <label id='description_id' for="description">Job description</label>
+          <input type='text' id="description" class='form-control' name="description" maxlength="255" value='{{form.descr}}'>
+          <label id='day_id' for="day">Day of the week you working</label>
+          <input type='text' id="day" class='form-control' name="day" maxlength="255" value='{{form.day}}'>
+          <label id='location_id' for="location">Job location</label>
+          <input type='text' id="location" class='form-control' name="location" maxlength="100" value='{{form.loc}}'>
+          <label id='hourly_rate_id' for="hourly_rate" >Hourly rate ($)</label>
+          <input type='number' id="hourly_rate" class='form-control' name="hourly_rate" min='1' step='0.01' value={{form.hourly_rate}}>
+          <div>
+
+            <hr />
+          </div>
+          <form class="form-inline">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="start_hours">Start hours (HH)</label>
+              <div class="col-md-4">
+                <select id="start_hours" class="form-control" name="start_hours" value={{start_hours}}>
+                  <option value="0">00</option>
+                  <option value="1">01</option>
+                  <option value="2">02</option>
+                  <option value="3">03</option>
+                  <option value="4">04</option>
+                  <option value="5">05</option>
+                  <option value="6">06</option>
+                  <option value="7">07</option>
+                  <option value="8">08</option>
+                  <option value="9">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                </select>
+              </div>
+            </div>
+            </fieldset>
+
+            <form class="form-inline">
+            <fieldset>
+              <div class="form-group">
+                <label id="start_mins_id" class="col-md-4 control-label" for="start_mins">Start Mins (MM)</label>
+                <div class="col-md-4">
+                  <select id="start_mins" class="form-control" name="start_mins" value={{start_mins}}>
+                    <option value="0">00</option>
+                    <option value="1">01</option>
+                    <option value="2">02</option>
+                    <option value="3">03</option>
+                    <option value="4">04</option>
+                    <option value="5">05</option>
+                    <option value="6">06</option>
+                    <option value="7">07</option>
+                    <option value="8">08</option>
+                    <option value="9">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                  </select>
+                </div>
+              </fieldset>
+
+              <form class="form-inline">
+              <fieldset>
+                <div class="form-group">
+                  <label id="end_hours_id" class="col-md-4 control-label" for="end_hours">End hours (HH)</label>
+                  <div class="col-md-4">
+                    <select id="end_hours" class="form-control" name="end_hours" value={{end_hours}}>
+                      <option value="0">00</option>
+                      <option value="1">01</option>
+                      <option value="2">02</option>
+                      <option value="3">03</option>
+                      <option value="4">04</option>
+                      <option value="5">05</option>
+                      <option value="6">06</option>
+                      <option value="7">07</option>
+                      <option value="8">08</option>
+                      <option value="9">09</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                      <option value="13">13</option>
+                      <option value="14">14</option>
+                      <option value="15">15</option>
+                      <option value="16">16</option>
+                      <option value="17">17</option>
+                      <option value="18">18</option>
+                      <option value="19">19</option>
+                      <option value="20">20</option>
+                      <option value="21">21</option>
+                      <option value="22">22</option>
+                      <option value="23">23</option>
+                    </select>
+                  </div>
+                </div>
+                </fieldset>
+
+                <form class="form-inline">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-4 control-label" for="end_mins">End Mins (MM)</label>
+                    <div class="col-md-4">
+                      <select id="end_mins" class="form-control" name="end_mins" value={{end_mins}}>
+                        <option value="0">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                        <option value="51">51</option>
+                        <option value="52">52</option>
+                        <option value="53">53</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="56">56</option>
+                        <option value="57">57</option>
+                        <option value="58">58</option>
+                        <option value="59">59</option>
+                      </select>
+                    </div>
+                  </fieldset>
+        </br>
+
+
+      </div>
+    </form>
+    FINISH THE REST OF THE PAGE FOR THE UPDATING HERE
+  </div>
+</div>
+</div>
+{% endblock %}

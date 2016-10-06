@@ -5,6 +5,9 @@
 
 from src.models.database import DataBase as db
 from src.models.utils import translate_day
+from src.models.utils import get_hours_worked, time_to_str
+from flask import session
+from src.models.users import User
 import cgi
 from flask import request
 import uuid
@@ -125,7 +128,7 @@ class ProcessForm(object):
                  rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, day):
 
-         self.errors = {}
+         self.errors = {} # pass to the user so they can see there errors
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'Enter the correct working day or leave blank for current day'
          if not job_title:
@@ -157,12 +160,30 @@ class ProcessForm(object):
          self.end_hours = cgi.escape(end_hours).title()
          self.end_mins = cgi.escape(end_mins).title()
          self.day     = cgi.escape(day)
-
+         self._obj = None
 
     def verify_form(self):
+        self._obj = ProcessForm(**self._get_json())
         if self.errors:
-            return False, self.errors, ProcessForm(**self._get_json())
-        return True, self.errors, ProcessForm(**self._get_json())
+            return False, self.errors, self._obj
+
+        return True, self.errors, self._obj
+
+    def _concatcenate_time_str(self):
+    	""" """
+    	start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
+    	finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
+    	return start_time, finish_time
+
+    def process_form(self, start_date, end_date, day):
+
+        if self._obj != None:
+            start_time, finish_time = self._concatcenate_time_str()
+    	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
+    	    user = User('', start_date, end_date, day, _id=session['user_id']) # create a user object and add details to database
+    	    return (user.add_job_details(self._obj.job_title, self._obj.description,
+                                         self._obj.location, start_time, finish_time,
+                                         self._obj.rate))
 
     def _get_json(self):
         return {

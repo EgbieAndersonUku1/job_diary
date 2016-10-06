@@ -60,8 +60,6 @@ class Records(object):
         data = db.find_one('jobs_details', query)
         return cls(**data) if data is not None else None
 
-
-
     @classmethod
     def find_by_job_title(cls, query, user_id, limit=None):
         """Retrieves the data using the job title"""
@@ -114,12 +112,12 @@ class Records(object):
     def find_by_location(cls, loc, user_id, limit):
         return cls._find(query={'loc': loc.title(),
                                 'user_id':user_id},
-                                key=('dates', -1), limit=limit)
+                                key=('date', -1), limit=limit)
 
     @classmethod
     def find_by_user_id(cls, user_id, limit):
         """retreives the job using the user id"""
-        return cls._find({'user_id':user_id}, key=('dates', -1), limit=limit)
+        return cls._find({'user_id':user_id}, key=('date', -1), limit=limit)
 
     # wages, bool_operation=None, amount=None, amount2=None, date=None, day=None
     @classmethod
