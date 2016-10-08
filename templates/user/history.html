@@ -11,7 +11,10 @@
       {% else %}
         <div>
           <h2>Dates of days and time worked or working </h2>
+          <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
         </div>
+        <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
+
         <tr>
           <th>
             Dates
@@ -97,8 +100,10 @@
         {% endfor %}
         {% endif %}
 
-  </table>
-  <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
 
+  </table>
+  <div id='total_pay'>
+
+  </div>
 
 {% endblock %}

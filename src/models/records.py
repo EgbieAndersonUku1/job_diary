@@ -19,7 +19,7 @@ from database import DataBase as db
 class Records(object):
     """Records (class)
     The Records class has directly access to the database. It can use that access
-)))    to either delete, retreive or update the record details of the user.
+    to either delete, retreive or update the record details of the user.
     """
 
     def __init__(self, job_title, descr, loc, start_time, finish_time,
@@ -102,17 +102,12 @@ class Records(object):
             month  = translate_to_month_num(month)  # translate month to number
             month2 = translate_to_month_num(month2) # translate month2 to number
             month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
-
-            # return days worked between the two months given including the starting and ending month
-            return cls._find(query={'month': {'$gte': month, "$lte":month2},
-                                    'user_id':user_id},
-                                     key=key, limit=limit)
+            # return days worked between the two months given including the starting and ending mont
+            return cls._find(query={'month': {'$gte': month, "$lte":month2},'user_id':user_id}, key=key, limit=limit)
 
     @classmethod
     def find_by_location(cls, loc, user_id, limit):
-        return cls._find(query={'loc': loc.title(),
-                                'user_id':user_id},
-                                key=('date', -1), limit=limit)
+        return cls._find(query={'loc': loc.title(),'user_id':user_id}, key=('date', -1), limit=limit)
 
     @classmethod
     def find_by_user_id(cls, user_id, limit):

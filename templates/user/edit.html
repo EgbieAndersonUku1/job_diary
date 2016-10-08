@@ -31,7 +31,7 @@
             <div class="form-group">
               <label class="col-md-4 control-label" for="start_hours">Start hours (HH)</label>
               <div class="col-md-4">
-                <select id="start_hours" class="form-control" name="start_hours" value={{start_hours}}>
+                <select id="start_hours" class="form-control" name="start_hours" value='{{form.start_hours}}'>
                   <option value="0">00</option>
                   <option value="1">01</option>
                   <option value="2">02</option>
@@ -58,8 +58,8 @@
                   <option value="23">23</option>
                 </select>
               </div>
-              <option value="42">42</option>
-            </div>
+
+
             </fieldset>
 
             <form class="form-inline">
@@ -236,6 +236,25 @@
                     </div>
                   </fieldset>
         </br>
+        <div class="form-group">
+          <div class="col-md-14">
+            <div class="input-group">
+              <span class="input-group-addon">Starting work date</span>
+              <input type='text' id="prependedtext" name="start_date" class="form-control" placeholder="start date-dd/mm/yyyy" required="" value='{{form.start_date}}'>
+            </div>
+
+          </div>
+          <div class="col-md-14">
+            <div class="input-group">
+              <span class="input-group-addon">Ending work date </span>
+
+              <input type='text' id="prependedtext" name="end_date" class="form-control" placeholder="start date" required="" value='{{form.start_date}}'>
+            </div>
+
+          </div>
+        </div>
+        <hr />
+
 
 
       </div>

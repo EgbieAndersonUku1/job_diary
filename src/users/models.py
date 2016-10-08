@@ -15,7 +15,6 @@ from datetime import datetime
 import time
 import bcrypt
 
-
 class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
@@ -38,10 +37,7 @@ class Login(object):
         otherwise.
         """
         login_data = db.find_one(collections='login_credentials', query={'username': self.username})
-        if not login_data:
-            return False
-        #del login_data['_id']
-        return Login(**login_data) # return users logging details as an obj if found false otherwise
+        return False if not login_data else Login(**login_data)
 
     def is_credentials_ok(self):
         """func : check_user_details(None) -> return(None)
@@ -63,14 +59,15 @@ class Login(object):
             return login_obj # users details check out
         return False                 # users details did not check out
 
-
     def de_activate_login(self):
         pass
 
     def save(self):
+        """Saves the form to the database in json format"""
         db.insert_one(collection='login_credentials', data=self._json())
 
     def _json(self):
+        """returns a json representation of the form"""
         return {'username'              : self.username,
                 'password'              : self.password,
                 'is_logged_in'          : self.is_logged_in,
@@ -100,7 +97,6 @@ class Registration(object):
 
         if not self._is_user_name_unique(self.email):
             return False
-
         # Takes the users name, email and the hashed password and stores in database
         salt = bcrypt.gensalt(log_rounds=14)
         hash_password = bcrypt.hashpw(self.password, salt)
@@ -109,7 +105,7 @@ class Registration(object):
         return True # True Means that everything was created smoothly
 
     def _save(self):
-        """Saves the registration details to the database"""
+        """Saves the registration details to the database in json format"""
         db.insert_one(collection='user_credentials', data=self._get_json())
 
     def _get_json(self):
@@ -121,9 +117,8 @@ class Registration(object):
                 'registration_id'  : self.registration_id
                 }
 
-
 class ProcessForm(object):
-
+    """Process the form and checks whether the details are correct"""
     def __init__(self, job_title, description, location,
                  rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, day):
@@ -149,48 +144,65 @@ class ProcessForm(object):
              self.errors['start_hours'] = 'The start time and the end time cannot be the same'
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
-         self.job_title  = cgi.escape(job_title).title()
+         self.job_title   = cgi.escape(job_title).title()
          self.description = cgi.escape(description).title()
          self.location    = cgi.escape(location).title()
          self.rate = cgi.escape(rate)
          self.start_date = cgi.escape(start_date).title()
          self.end_date   = cgi.escape(end_date).title()
          self.start_hours = cgi.escape(start_hours).title()
-         self.start_mins = cgi.escape(start_mins).title()
-         self.end_hours = cgi.escape(end_hours).title()
+         self.start_mins  = cgi.escape(start_mins).title()
+         self.end_hours   = cgi.escape(end_hours).title()
          self.end_mins = cgi.escape(end_mins).title()
-         self.day     = cgi.escape(day)
+         self.day      = cgi.escape(day)
          self._obj = None
 
     def verify_form(self):
-        self._obj = ProcessForm(**self._get_json())
+        """Verify whether the form has any errors """
+        self._obj = ProcessForm(**self._get_json()) # set the obj to the ProcessForm
         if self.errors:
             return False, self.errors, self._obj
-
         return True, self.errors, self._obj
 
     def _concatcenate_time_str(self):
-    	""" """
+    	""" Takes two strings and concatcenates them together"""
     	start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
     	finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
     	return start_time, finish_time
 
     def process_form(self, start_date, end_date, day):
+        """process_form(str, str, str) -> return(str)
 
+        params start_date: A start date string
+        params end_date  : The end date string
+        params day       : The day string
+        params return    : returns a row id in the form a string
+
+        Process the form and adds the user details to the database.
+        """
+        # to be use with pymongo sorting for the database. Pymongo seems to have
+        # trouble sorting dates if 0 is not in front of a single digits. For example
+        # when sorting in smallest first it would place 19/09/2016 before 9/09/2016
         if self._obj != None:
             date = start_date.split('/')
             if len(date[0]) == 1:
                 dd = '0' + str(date[0])
-                start_date = dd + '/' + date[1] + '/' + date[2]
+            else:
+                dd = str(date[0])
+            if len(date[1]) == 1:
+                mm = '0' + str(date[1])
+            else:
+                mm = date[1]
+            start_date = dd + '/' + mm + '/' + date[2]
 
             start_time, finish_time = self._concatcenate_time_str()
     	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
-    	    user = User('', start_date, end_date, day, _id=session['user_id']) # create a user object and add details to database
+    	    user = User(session['username'], start_date, end_date, day, _id=session['user_id']) # create a user object and add details to database
     	    return (user.add_job_details(self._obj.job_title, self._obj.description,
                                          self._obj.location, start_time, finish_time,
                                          self._obj.rate))
-
     def _get_json(self):
+        """Returns the details of the form in json"""
         return {
             'job_title'   : self.job_title,
             'location'    : self.location,

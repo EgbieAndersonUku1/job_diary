@@ -32,17 +32,17 @@ def login_helper(form_obj, *args):
                 login_obj  = user.is_credentials_ok()
             if login_obj:
                 session[session_name] = login_obj.username
-                session['user_id'] = login_obj._id
+                session['user_id']    = login_obj._id
                 if 'next' in session:
-                    return url
+                    url = session.pop('next')
+                    return redirect(url)
                 return redirect(url_for(redirect_link))
             elif admin:
                 abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
                            # SOME FUNCTIONALITY TO LOG IP ADDRESSES
-            session[session_name] = user.username
-            session['user_id'] = user._id
+            #session[session_name] = user.username
+            #session['user_id'] = user._id
         return render_template(template, form=form, error='Incorrect username and password')
-
 
 def register_helper(obj, msg, template, redirect_link):
     """
@@ -58,7 +58,6 @@ def register_helper(obj, msg, template, redirect_link):
 
     if request.method == 'GET':
         return render_template(template, form=form, error=error)
-
     if request.method == 'GET' and request.args.get('next'):
         session['next'] = request.args.get('next')
 
@@ -75,8 +74,7 @@ def register_helper(obj, msg, template, redirect_link):
             session['user_id'] = user._id
             if 'next' in session:
                 return redirect(session.pop('next'))
-            else:
-                return redirect(url_for(redirect_link))
+            return redirect(url_for(redirect_link))
         else:
             error = msg
             return render_template(template, form=form, error=error)

@@ -7,7 +7,6 @@ from src.users.models import ProcessForm
 from src.models.users import User, Records
 import uuid
 from src.users.decorators import login_required, admin_required
-from time import sleep
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
@@ -66,14 +65,10 @@ def entry_page():
                                success='')
     else:
         # process the user information
-        user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date,
-                                start_hours, start_mins, end_hours, end_mins, day)
-        # if the user details are sucessful add the details for the job to the database
-        success, errors, form = user_form.verify_form()
+        user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date, start_hours, start_mins, end_hours, end_mins, day)
+        success, errors, form = user_form.verify_form() # if job details are sucessful add to the database
         if success:
-            row = user_form.process_form(start_date, end_date, day)
-            return redirect(url_for('success_page', row=row))
-
+            return redirect(url_for('success_page', row=user_form.process_form(start_date, end_date, day)))
         return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
                                job_title=form.job_title, description=form.description, location=form.location,
                                start_hours=form.start_hours, day=day,
@@ -86,8 +81,7 @@ def index():
         return 'hello'
     elif session.get('admin', None):
         return 'hello, admin'
-    else:
-        return (redirect(url_for('login')))
+    return (redirect(url_for('login')))
 
 @app.route('/logout')
 @login_required
@@ -108,27 +102,37 @@ def reset():
 def success_page(row):
 
    user = User('',_id=session['user_id'])
-   rows = user.get_by_row_id(row)
    flash('The following data has been successful added to the database.')
-   return render_template('user/table.html', rows=rows)
+   return render_template('user/table.html', rows=user.get_by_row_id(row))
 
 @app.route('/history')
 @login_required
-def get_dates():
+def history():
     user = User(session['username'], _id=session['user_id'])
-    # some varialbe to contr
-    jobs = user.get_by_user_id(100) # some code here to limit how much is display in history
-    return render_template('user/history.html', jobs=jobs, date=curr_date, dt=datetime.datetime.strptime)
+    # some code here to limit how much is display in history
+    jobs, total_pay, total_hrs =  user.get_by_user_id(100), [], []
+
+    for job in jobs:
+        total_pay.append(float(job.daily_rate))
+        total_hrs.append(float(job._hours))
+
+    return render_template('user/history.html', jobs=jobs, date=curr_date,
+                            dt=datetime.datetime.strptime, total_pay=sum(total_pay),
+                            total_hrs=round(sum(total_hrs)))
 
 @app.route('/job/edit/<value>')
 def edit(value):
     user = User(session['username'], _id=session['user_id'])
-    form = user.get_by_row_id(str(value))
-    return render_template('user/edit.html', form=form)
+    return render_template('user/edit.html', form=user.get_by_row_id(str(value)))
 
 @app.route('/delete/<row>')
 @login_required
 def delete(row):
     user = User(session['username'], _id=session['user_id'])
-    print user.delete_row(row)
-    return redirect(url_for('get_dates'))
+    user.delete_row(row)
+    return redirect(url_for('history'))
+
+@app.route('/update/<row>')
+@login_required
+def update(row):
+    pass
