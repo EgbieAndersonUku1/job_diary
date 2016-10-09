@@ -7,7 +7,23 @@
     <table class="table table-striped">
 
       {% if not jobs %}
-        Nothing to see
+        <div id='error_msg'>
+             This is not an error this page has loaded correct.
+             <src img='static/css/error.png' alt=''></src>
+             <div id='error_msg2'>
+               You have no job history
+             </div>
+             <div id='error_msg3'>
+               <ul>
+                 <li>
+                   Add some jobs in the job entry page and try again
+                 </li>
+               </ul>
+
+
+             </div>
+        </div>
+
       {% else %}
         <div>
           <h2>Dates of days and time worked or working </h2>
