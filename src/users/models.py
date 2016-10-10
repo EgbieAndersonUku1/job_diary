@@ -125,7 +125,7 @@ class ProcessForm(object):
 
          self.errors = {} # pass to the user so they can see there errors
          if not day or translate_day(day[:3]) == None:
-             self.errors['day'] = 'Enter the correct working day or leave blank for current day'
+             self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:
              self.errors['job_title'] = 'The job title field must be not be empty'
          if not location:
@@ -140,8 +140,8 @@ class ProcessForm(object):
              self.errors['end_date']   = 'The end date field must be not be empty'
          if end_date < start_date:
              self.errors['days_error'] = 'The end date cannot be less then the start date'
-         if start_hours == end_hours:
-             self.errors['start_hours'] = 'The start time and the end time cannot be the same'
+         if start_hours == end_hours and start_date == end_date:
+             self.errors['start_hours'] = "Start & end time can't be the same if the start & end date are equal"
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()

@@ -5,7 +5,6 @@
 {% block content %}
 
     <table class="table table-striped">
-
       {% if not jobs %}
         <div id='error_msg'>
              This is not an error this page has loaded correct.
@@ -19,11 +18,8 @@
                    Add some jobs in the job entry page and try again
                  </li>
                </ul>
-
-
              </div>
         </div>
-
       {% else %}
         <div>
           <h2>Dates of days and time worked or working </h2>
@@ -69,8 +65,6 @@
 
         </tr>
         {% for job in jobs %}
-
-
            <tr>
              <td>
                {{ job.date }}
@@ -112,11 +106,8 @@
                {% endif %}
              </td>
            </tr>
-
         {% endfor %}
         {% endif %}
-
-
   </table>
   <div id='total_pay'>
 
