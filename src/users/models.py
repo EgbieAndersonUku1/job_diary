@@ -5,7 +5,7 @@
 
 from src.models.database import DataBase as db
 from src.models.utils import translate_day
-from src.models.utils import get_hours_worked, time_to_str
+from src.models.utils import get_hours_worked, time_to_str, translate_day
 from flask import session
 from src.models.users import User
 import cgi
@@ -197,7 +197,7 @@ class ProcessForm(object):
 
             start_time, finish_time = self._concatcenate_time_str()
     	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
-    	    user = User(session['username'], start_date, end_date, day, _id=session['user_id']) # create a user object and add details to database
+    	    user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
     	    return (user.add_job_details(self._obj.job_title, self._obj.description,
                                          self._obj.location, start_time, finish_time,
                                          self._obj.rate))
