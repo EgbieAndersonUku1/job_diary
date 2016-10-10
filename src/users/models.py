@@ -141,7 +141,7 @@ class ProcessForm(object):
          if end_date < start_date:
              self.errors['days_error'] = 'The end date cannot be less then the start date'
          if start_hours == end_hours and start_date == end_date:
-             self.errors['start_hours'] = "Start & end time can't be the same if the start & end date are equal"
+             self.errors['start_hours'] = "Start & end time can't be the same if the start & end dates are equal"
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()
