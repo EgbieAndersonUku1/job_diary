@@ -124,6 +124,17 @@ class ProcessForm(object):
                  start_mins, end_hours, end_mins, day):
 
          self.errors = {} # pass to the user so they can see there errors
+         # check whether the dates are in the format dd/mm/yyyy
+         if start_date and end_date:
+             st_date = start_date.split('/')
+             en_date = end_date.split('/')
+             if len(st_date) and len(en_date) == 3: # check whether dates are numbers
+                 if not(str(st_date[0]).isdigit() and str(st_date[1]).isdigit() and str(st_date[2]).isdigit()):
+                     self.errors['start_date'] = 'The start date has an incorrect format. Format(dd/mm/yyyy)'
+                 if not(str(en_date[0]).isdigit() and str(en_date[1]).isdigit() and str(en_date[2]).isdigit()):
+                     self.errors['end_date'] = 'The end date has an incorrect format. Format (dd/mm/yyyy)'
+             else:
+                self.errors['date'] = 'One or more of dates has an incorrect format'
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:
