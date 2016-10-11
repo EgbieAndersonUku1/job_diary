@@ -102,7 +102,7 @@ class Registration(object):
         salt = bcrypt.gensalt(log_rounds=14)
         hash_password = bcrypt.hashpw(self.password, salt)
         self.password = hash_password
-        self._save()
+        self._save()  # save the encrypted password and username to database
         return True # True Means that everything was created smoothly
 
     def _save(self):
@@ -136,6 +136,8 @@ class ProcessForm(object):
                      self.errors['end_date'] = 'The end date has an incorrect format. Format (dd/mm/yyyy)'
              else:
                 self.errors['date'] = 'One or more of dates has an incorrect format'
+         if (start_hours > end_hours or start_mins > end_mins) and (start_date > end_date) or (start_date==end_date):
+             self.errors['time'] = 'The end time cannot be less or equal to the start time if start date < end dates or start date equal to end date'
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:

@@ -1,15 +1,14 @@
 {% extends 'secondary_base.html' %}
 
-{% block title %} Edit/Delete page {% endblock %}
+{% block title %} Edit page {% endblock %}
 
 {% block content %}
 
-<h2>Update/delete job entries</h2>
+<h2>Update job entries</h2>
 <div class='border'>
  <div class="container">
    <div class="row">
        <div class="col-md-offset-2 col-md-6">
-
     <form method="Post" action="{{ url_for('entry_page') }}">
         <div class="form-group">
           <label id='title_id' for="job_title">Job Title</label>
@@ -23,7 +22,6 @@
           <label id='hourly_rate_id' for="hourly_rate" >Hourly rate ($)</label>
           <input type='number' id="hourly_rate" class='form-control' name="hourly_rate" min='1' step='0.01' value={{form.hourly_rate}}>
           <div>
-
             <hr />
           </div>
           <form class="form-inline">
@@ -58,10 +56,7 @@
                   <option value="23">23</option>
                 </select>
               </div>
-
-
             </fieldset>
-
             <form class="form-inline">
             <fieldset>
               <div class="form-group">
@@ -130,7 +125,6 @@
                   </select>
                 </div>
               </fieldset>
-
               <form class="form-inline">
               <fieldset>
                 <div class="form-group">
@@ -165,7 +159,6 @@
                   </div>
                 </div>
                 </fieldset>
-
                 <form class="form-inline">
                 <fieldset>
                   <div class="form-group">
@@ -242,22 +235,18 @@
               <span class="input-group-addon">Starting work date</span>
               <input type='text' id="prependedtext" name="start_date" class="form-control" placeholder="start date-dd/mm/yyyy" required="" value='{{form.start_date}}'>
             </div>
-
           </div>
           <div class="col-md-14">
             <div class="input-group">
               <span class="input-group-addon">Ending work date </span>
-
               <input type='text' id="prependedtext" name="end_date" class="form-control" placeholder="start date" required="" value='{{form.start_date}}'>
             </div>
-
           </div>
         </div>
         <hr />
       </div>
       <button type="submit" class="btn btn-success">Update</button>
     </form>
-
   </div>
 </div>
 </div>

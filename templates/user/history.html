@@ -100,10 +100,9 @@
 
              <td>
                {% if dt(job.date, "%d/%m/%Y") >= dt(date, "%d/%m/%Y")  %}
-                <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a>
-                <div>
-                    <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-                </div>
+                <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
+                <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
+
 
                {% else %}
                   N/A

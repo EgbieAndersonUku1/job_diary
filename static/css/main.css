@@ -10,7 +10,9 @@ input[type='text'] {
 .mybutton {
   width: 10px;
 }
-
+a:link {
+  
+}
 a:hover {
   color:green;
 }
