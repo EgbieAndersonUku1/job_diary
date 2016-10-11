@@ -11,6 +11,17 @@ input[type='text'] {
   width: 10px;
 }
 
+a:hover {
+  color:green;
+}
+
+a:link {
+  text-decoration: None;
+}
+
+a:visited {
+     color: red;
+}
 #error_msg {
   padding-top: 80px;
   font-size: 55px;
