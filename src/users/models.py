@@ -15,6 +15,7 @@ from datetime import datetime
 import time
 import bcrypt
 
+
 class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
