@@ -136,8 +136,8 @@ class ProcessForm(object):
                      self.errors['end_date'] = 'The end date has an incorrect format. Format (dd/mm/yyyy)'
              else:
                 self.errors['date'] = 'One or more of dates has an incorrect format'
-         if (start_hours > end_hours or start_mins > end_mins) and (start_date > end_date) or (start_date==end_date):
-             self.errors['time'] = 'The end time cannot be less or equal to the start time if start date < end dates or start date equal to end date'
+        #  if (start_hours > end_hours or start_mins > end_mins) and (start_date > end_date):
+        #      self.errors['time'] = 'The end time cannot be less or equal to the start time if start date < end dates or start date equal to end date'
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:
@@ -152,8 +152,8 @@ class ProcessForm(object):
              self.errors['start_date']  = 'The start date field must be not be empty'
          if not end_date:
              self.errors['end_date']   = 'The end date field must be not be empty'
-         if end_date < start_date:
-             self.errors['days_error'] = 'The end date cannot be less then the start date'
+        #  if end_date < start_date:
+        #      self.errors['days_error'] = 'The end date cannot be less then the start date'
          if start_hours == end_hours and start_date == end_date:
              self.errors['start_hours'] = "Start & end time can't be the same if the start & end dates are equal"
 
@@ -197,24 +197,13 @@ class ProcessForm(object):
         # to be use with pymongo sorting for the database. Pymongo seems to have
         # trouble sorting dates if 0 is not in front of a single digits. For example
         # when sorting in smallest first it would place 19/09/2016 before 9/09/2016
-        if self._obj != None:
-            date = start_date.split('/')
-            if len(date[0]) == 1:
-                dd = '0' + str(date[0])
-            else:
-                dd = str(date[0])
-            if len(date[1]) == 1:
-                mm = '0' + str(date[1])
-            else:
-                mm = date[1]
-            start_date = dd + '/' + mm + '/' + date[2]
 
-            start_time, finish_time = self._concatcenate_time_str()
-    	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
-    	    user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
-    	    return (user.add_job_details(self._obj.job_title, self._obj.description,
-                                         self._obj.location, start_time, finish_time,
-                                         self._obj.rate))
+        start_time, finish_time = self._concatcenate_time_str()
+	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
+	    user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
+	    return (user.add_job_details(self._obj.job_title, self._obj.description,
+                                     self._obj.location, start_time, finish_time,
+                                     self._obj.rate))
     def _get_json(self):
         """Returns the details of the form in json"""
         return {
