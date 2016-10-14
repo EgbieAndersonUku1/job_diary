@@ -69,4 +69,4 @@ def register_helper(obj, msg, template, redirect_link):
             return redirect(url_for(redirect_link))
         else:
             error = msg
-            return render_template(template, form=form, error=error)
+    return render_template(template, form=form, error=error)
