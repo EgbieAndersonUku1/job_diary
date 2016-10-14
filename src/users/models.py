@@ -15,22 +15,18 @@ from datetime import datetime
 import time
 import bcrypt
 
-
 class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
     """
-    def __init__(self, username, password, is_logged_in=False, _id=None,
-                users_deactivate_login=False, admin_deactivate_login=False,
-                logged_in_time=datetime.utcnow()):
+    def __init__(self, username, password, _id=None,
+                 is_admin=False, logged_in_time=datetime.utcnow()):
 
-        self._id  = uuid.uuid4().hex if _id is None else _id
         self.username  = username
         self.password  = password
-        self.is_logged_in   = is_logged_in
+        self._id  = uuid.uuid4().hex if _id is None else _id
+        self.is_admin  = is_admin
         self.logged_in_time = logged_in_time                  # the time the user logged in
-        self.users_deactivate_login  = users_deactivate_login # User can de_activate user login
-        self.admin_deactivate_login  = admin_deactivate_login # Admin can de_activate their own account
 
     def _get_user_login_details(self):
         """func : _get_user_login_details(None) -> return(obj or None)
@@ -47,18 +43,12 @@ class Login(object):
         """
         login_obj = self._get_user_login_details()
         if not login_obj:
-            return False  # users details does not exist
-
-        # check if the account has been disable by ADMIN
-        if login_obj.admin_deactivate_login:
-            msg = 'Your account has been de-activate by admin. Contact admin to re-activate'
-            return False, msg
+            return False, False  # users details does not exist
 
         # users details found verify login in details
-        elif bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
-            self.is_logged_in = True # set the login to true
-            return login_obj # users details check out
-        return False                 # users details did not check out
+        if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
+            return login_obj, True # users details check out
+        return False, False                # users details did not check out
 
     def de_activate_login(self):
         pass
@@ -69,22 +59,20 @@ class Login(object):
 
     def _json(self):
         """returns a json representation of the form"""
-        return {'username'              : self.username,
+        return {
+                'username'              : self.username,
                 'password'              : self.password,
-                'is_logged_in'          : self.is_logged_in,
+                'is_admin'              : self.is_admin,
                 '_id'                   : self._id,
-                'logged_in_time'        : self.logged_in_time,
-                'users_deactivate_login': self.users_deactivate_login,
-                'admin_deactivate_login': self.admin_deactivate_login }
+                'logged_in_time'        : self.logged_in_time }
 
 class Registration(object):
     """Registration(class)
     Allows the user to register their details.
     """
-    def __init__(self, full_name, email, password, registration_date=None, _id=None):
-        self.full_name = full_name
-        self.email     = email
-        self.password  = password
+    def __init__(self, email, password, registration_date=None, _id=None):
+        self.email      = email
+        self.password   = password
         self.registration_id = uuid.uuid4().hex if _id is None else _id
         self.registration_date = registration_date
 
@@ -111,12 +99,10 @@ class Registration(object):
 
     def _get_json(self):
         """Get the details of the registration in the form of a json format """
-        return {'full_name'        : self.full_name,
-                'email'            : self.email,
+        return {'email'            : self.email,
                 'password'         : self.password,
                 'registration_date': time.strftime("%d/%m/%Y"),
-                'registration_id'  : self.registration_id
-                }
+                'registration_id'  : self.registration_id }
 
 class ProcessForm(object):
     """Process the form and checks whether the details are correct"""
@@ -171,6 +157,9 @@ class ProcessForm(object):
          self.day      = cgi.escape(day)
          self._obj = None
 
+    def verify_email(self, email):
+        pass
+
     def verify_form(self):
         """Verify whether the form has any errors """
         self._obj = ProcessForm(**self._get_json()) # set the obj to the ProcessForm
@@ -199,9 +188,9 @@ class ProcessForm(object):
         # when sorting in smallest first it would place 19/09/2016 before 9/09/2016
 
         start_time, finish_time = self._concatcenate_time_str()
-	    hours = get_hours_worked(start_date, start_time, end_date, finish_time)
-	    user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
-	    return (user.add_job_details(self._obj.job_title, self._obj.description,
+        hours = get_hours_worked(start_date, start_time, end_date, finish_time)
+        user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
+        return (user.add_job_details(self._obj.job_title, self._obj.description,
                                      self._obj.location, start_time, finish_time,
                                      self._obj.rate))
     def _get_json(self):

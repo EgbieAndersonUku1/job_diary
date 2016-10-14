@@ -15,6 +15,20 @@
 
 
 <div class="container">
+
+    {% if session['username'] != 'admin' %}
+      <div id='icon'>
+        <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>You are logged in as the user (<a href='{{ url_for("entry_page") }}'>{{ session['username'].split('@')[0].strip('0123456789').title() }}</a>) | (<a href="{{ url_for('admin_login') }}">Admin</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
+      </div>
+    {% else %}
+        <div id='icon'>
+          <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>You are logged in as (<a href="{{ url_for('entry_page') }}">Admin</a>) | (<a href='{{url_for("user_login")}}'>Normal user</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
+        </div>
+    {% endif %}
+
+    <br />
+    <br />
+
     <div>
       <div>
         {% block content %}{% endblock %}

@@ -1,4 +1,4 @@
-from src.users.form import RegisterForm, LoginForm, AdminRegisterForm, AdminLoginForm
+from src.users.form import RegisterForm, LoginForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
 from user_form_helpers import login_helper, register_helper
@@ -17,14 +17,7 @@ curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     """Allows the user entry to the login applicaton"""
-    return login_helper(LoginForm, 'username', 'entry_page', 'user/login.html', 'index', False)
-
-# use the login helper to help assist the user in logging into admin console
-@app.route('/admin/', methods=('GET', 'POST'))
-@app.route('/admin/login', methods=('GET', 'POST'))
-def admin():
-    """Allows the user entry as admin"""
-    return login_helper(AdminLoginForm, 'admin', 'success', 'admin/admin_login.html', 'index', True)
+    return login_helper(LoginForm, 'username', 'entry_page', 'user/login.html', 'index')
 
 # admin registration
 @app.route('/admin/register', methods=('GET', 'POST'))
@@ -91,6 +84,7 @@ def logout():
     else:
         session['username'] = None
     session['user_id'] = None
+    session['session_name'] = None
     return (redirect(url_for('login')))
 
 @app.route('/reset')
@@ -131,6 +125,20 @@ def delete(row):
     user = User(session['username'], _id=session['user_id'])
     user.delete_row(row)
     return redirect(url_for('history'))
+
+@app.route('/admin')
+@login_required
+def admin_login():
+    session['username'] = 'admin'
+    return redirect(url_for('history'))
+
+@app.route('/user')
+@login_required
+def user_login():
+    session['username'] = session['session_name']
+    return redirect(url_for('history'))
+
+
 
 @app.route('/update/<row>')
 @login_required

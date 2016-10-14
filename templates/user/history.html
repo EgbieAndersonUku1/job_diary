@@ -1,8 +1,15 @@
 {% extends 'secondary_base.html' %}
 
+<div class="container">
+<a href="#" class="btn btn-info btn-lg">
+  <span class="glyphicon glyphicon-user"></span> {{ session['username']}}
+  </a>
+</div>
+
 {% block title %} History {% endblock%}
 
 {% block content %}
+
 
     <table class="table table-striped">
       {% if not jobs %}
@@ -25,8 +32,12 @@
           <h2>Dates of days and time worked or working </h2>
           <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
         </div>
-        <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
 
+        {% if session['username'] == 'admin' %}
+            <caption class="text-center">As an admin you can edit the job details regardless whether they are equal to current date or after the current date </caption>
+        {% else %}
+            <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
+        {% endif %}
         <tr>
           <th>
             Dates
@@ -99,14 +110,20 @@
              </td>
 
              <td>
-               {% if dt(job.date, "%d/%m/%Y") >= dt(date, "%d/%m/%Y")  %}
-                <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
-                <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-
-
+               {% if session['username'] == 'admin' %}
+                  <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
+                  <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
                {% else %}
-                  N/A
-               {% endif %}
+                  {% if dt(job.date, "%d/%m/%Y") >= dt(date, "%d/%m/%Y")  %}
+                  <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
+                  <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
+                  {% else %}
+                    N/A
+                    {% endif %}
+                {% endif %}
+
+
+
              </td>
            </tr>
         {% endfor %}

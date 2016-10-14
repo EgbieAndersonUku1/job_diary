@@ -1,6 +1,7 @@
 from flask import render_template, redirect, session, url_for, request, abort
 from src.users.models import Login, Registration
 
+
 def login_helper(form_obj, *args):
     """
     Helper function: that assists the user entry to the applicaton
@@ -14,7 +15,6 @@ def login_helper(form_obj, *args):
     redirect_link  = args[1]     # the redirect url for any successful login
     template       = args[2]     # the url for the template to render
     index_page     = args[3]
-    admin          = args[4]
 
     # if we can found a session it means that the user is already logged in
     if session.get(session_name, None) != None:
@@ -25,23 +25,19 @@ def login_helper(form_obj, *args):
         return render_template(template, form=form, error='')
     else:
         if form.validate_on_submit():
-            if admin:
-                user = Login(form.admin_name.data, form.password.data)
-            else:
-                user = Login(form.username.data, form.password.data)
-                login_obj  = user.is_credentials_ok()
+            user = Login(form.username.data, form.password.data)
+            login_obj, is_admin  = user.is_credentials_ok()
             if login_obj:
-                session[session_name] = login_obj.username
+                if is_admin:
+                    session[session_name] = 'admin'
+                else:
+                    session[session_name] = login_obj.username
                 session['user_id']    = login_obj._id
+                session['session_name'] = login_obj.username
                 if 'next' in session:
                     url = session.pop('next')
                     return redirect(url)
                 return redirect(url_for(redirect_link))
-            elif admin:
-                abort(403) # ABORT SINCE OBVIOUSLY THAT USER IS NOT ADMIN.
-                           # SOME FUNCTIONALITY TO LOG IP ADDRESSES
-            #session[session_name] = user.username
-            #session['user_id'] = user._id
         return render_template(template, form=form, error='Incorrect username and password')
 
 def register_helper(obj, msg, template, redirect_link):
@@ -64,14 +60,14 @@ def register_helper(obj, msg, template, redirect_link):
     # if form validates attempt to register users details.
     # if registration is successful meaning username is unique log user in.
     if form.validate_on_submit():
-        user = Registration(form.full_name.data.title(), form.email.data, form.password.data)
-
+        user = Registration(form.email.data, form.password.data)
         # attempt to register the user
         if user.register():
-            user = Login(user.email, user.password, True) # log the user into the application
+            user = Login(user.email, user.password) # log the user into the application
             user.save()                                   # save username and encrypted password to the database
             session['username'] = user.username
-            session['user_id'] = user._id
+            session['user_id']  = user._id
+            session['session_name'] = user.username
             if 'next' in session:
                 return redirect(session.pop('next'))
             return redirect(url_for(redirect_link))
