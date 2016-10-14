@@ -1,7 +1,6 @@
 from flask import render_template, redirect, session, url_for, request, abort
 from src.users.models import Login, Registration
 
-
 def login_helper(form_obj, *args):
     """
     Helper function: that assists the user entry to the applicaton
@@ -26,14 +25,11 @@ def login_helper(form_obj, *args):
     else:
         if form.validate_on_submit():
             user = Login(form.username.data, form.password.data)
-            login_obj, is_admin  = user.is_credentials_ok()
+            login_obj = user.is_credentials_ok()
             if login_obj:
-                if is_admin:
-                    session[session_name] = 'admin'
-                else:
-                    session[session_name] = login_obj.username
+                session[session_name] = login_obj.username
                 session['user_id']    = login_obj._id
-                session['session_name'] = login_obj.username
+                session['session_name'] = login_obj.username # holds the current user session name
                 if 'next' in session:
                     url = session.pop('next')
                     return redirect(url)
@@ -64,10 +60,10 @@ def register_helper(obj, msg, template, redirect_link):
         # attempt to register the user
         if user.register():
             user = Login(user.email, user.password) # log the user into the application
-            user.save()                                   # save username and encrypted password to the database
+            user.save()                             # save username and encrypted password to the database
             session['username'] = user.username
             session['user_id']  = user._id
-            session['session_name'] = user.username
+            session['session_name'] = user.username # holds the current user session name
             if 'next' in session:
                 return redirect(session.pop('next'))
             return redirect(url_for(redirect_link))

@@ -43,12 +43,8 @@ class Login(object):
         """
         login_obj = self._get_user_login_details()
         if not login_obj:
-            return False, False  # users details does not exist
-
-        # users details found verify login in details
-        if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
-            return login_obj, True # users details check out
-        return False, False                # users details did not check out
+            return False # users details does not exist
+        return (login_obj if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password else False) # users details found verify login in details
 
     def de_activate_login(self):
         pass
@@ -59,12 +55,11 @@ class Login(object):
 
     def _json(self):
         """returns a json representation of the form"""
-        return {
-                'username'              : self.username,
-                'password'              : self.password,
-                'is_admin'              : self.is_admin,
-                '_id'                   : self._id,
-                'logged_in_time'        : self.logged_in_time }
+        return {'username'      : self.username,
+                'password'      : self.password,
+                'is_admin'      : self.is_admin,
+                '_id'           : self._id,
+                'logged_in_time': self.logged_in_time }
 
 class Registration(object):
     """Registration(class)
