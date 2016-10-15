@@ -23,23 +23,16 @@ class User(object):
     def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
         self.full_name  = full_name
         self.start_date = start_date
-        self.end_date   = end_date
+        self.end_date   = end_date  # end date needed to calculate the hours worked between start_date and end date
         self.day = day
         self.id  = uuid.uuid4().hex if _id is None else _id
-
-        date = time.strftime("%d/%m/%Y")
-        if self.start_date == None:
-           self.start_date = date
-        if self.end_date == None:
-           self.end_date = date
-        if self.day == None:
-           self.day = time.strftime('%A')
 
     # add the job details to database
     def add_job_details(self, job_title, descr, loc, start_time, finish_time, hourly_rate):
 
         hours = get_hours_worked(self.start_date, start_time, self.end_date, finish_time)
-        # create a new record obj add the details to it and save
+        day, month, year = self.start_date.split('/')
+        #self.start_date = '{}/{}/{}'.format(year, month, day) # store date in yyyy/mm/dd so that pymongo can sort data 
         record = Records(job_title=job_title, descr=descr,
                          loc=loc,start_time=start_time,
                          finish_time=finish_time,
@@ -47,7 +40,7 @@ class User(object):
                          total_hours=time_to_str(hours),
                          _hours = time_to_float(hours),
                          user_id=self.id, daily_rate=get_daily_rate(hours, hourly_rate),
-                         date=self.start_date,
+                         date=self.start_date, # change this line
                          day=self.day,
                          month=self.start_date.split('/')[1])
         return record.save()

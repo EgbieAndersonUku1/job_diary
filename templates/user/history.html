@@ -76,13 +76,13 @@
         {% for job in jobs %}
            <tr>
              <td>
-               {{ translate(job.month )}}
+               {{ translate(job.month )[:3]}}
              </td>
              <td>
                {{ job.date }}
              </td>
              <td>
-               {{ job.day }}
+               {{ job.day[:3] }}
              </td>
 
              <td>

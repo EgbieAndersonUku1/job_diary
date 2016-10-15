@@ -104,7 +104,7 @@ def success_page(row):
 def history():
     user = User(session['username'], _id=session['user_id'])
     # some code here to limit how much is display in history
-    jobs, total_pay, total_hrs =  user.get_by_user_id(100), [], []
+    jobs, total_pay, total_hrs =  user.get_by_user_id(6), [], []
 
     for job in jobs:
         total_pay.append(float(job.daily_rate))
@@ -139,7 +139,11 @@ def user_login():
     return redirect(url_for('history'))
 
 
-
+@app.route('/search')
+def search():
+    date = request.form.get('start_date')
+    print date
+    return render_template('user/search.html')
 @app.route('/update/<row>')
 @login_required
 def update(row):

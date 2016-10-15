@@ -62,7 +62,7 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
 	>>> get_hours_worked('1/1/2016', '1/4/2016', '9:23', '21:26')
 	(83, 43)
 	"""
-
+	print start_date
 	day1, month1, year1 = start_date.split('/')  # split the dates for the start date by  /
 	day2, month2, year2 = finish_date.split('/') # split the dates for the finish date by /
 	hours1, minutes1 = start_time.split(':')
