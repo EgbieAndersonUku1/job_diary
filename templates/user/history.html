@@ -9,8 +9,6 @@
 {% block title %} History {% endblock%}
 
 {% block content %}
-
-
     <table class="table table-striped">
       {% if not jobs %}
         <div id='error_msg'>
@@ -32,7 +30,6 @@
           <h2>Dates of days and time worked or working </h2>
           <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
         </div>
-
         {% if session['username'] == 'admin' %}
             <caption class="text-center">As an admin you can edit the job details regardless whether they are equal to current date or after the current date </caption>
         {% else %}
@@ -40,10 +37,13 @@
         {% endif %}
         <tr>
           <th>
-            Dates
+            Month
           </th>
           <th>
-            Days
+            Date
+          </th>
+          <th>
+            Day
           </th>
           <th>
             Job title
@@ -60,7 +60,6 @@
           <th>
             Total hours worked
           </th>
-
           <th>
             Daily rate (£)
           </th>
@@ -73,16 +72,19 @@
           <th>
             Update/Delete
           </th>
-
         </tr>
         {% for job in jobs %}
            <tr>
+             <td>
+               {{ translate(job.month )}}
+             </td>
              <td>
                {{ job.date }}
              </td>
              <td>
                {{ job.day }}
              </td>
+
              <td>
                {{ job.job_title }}
              </td>
@@ -105,10 +107,8 @@
                {{ job.start_time }}
              </td>
              <td>
-
                {{ job.finish_time }}
              </td>
-
              <td>
                {% if session['username'] == 'admin' %}
                   <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
@@ -121,9 +121,6 @@
                     N/A
                     {% endif %}
                 {% endif %}
-
-
-
              </td>
            </tr>
         {% endfor %}

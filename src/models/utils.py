@@ -20,6 +20,8 @@ def translate_month(month_num):
 	>>> translate_month(1)
 	'January'
 	'''
+	if len(month_num) == 1:
+		month_num = '0' + str(month_num)
 	months = {'01': 'January', '02':'February', '03':'March',
 		      '04': 'April',   '05':'May',      '06': 'June',
 		      '07':'July',     '08': 'August',  '09':'September',

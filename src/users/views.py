@@ -7,6 +7,7 @@ from src.users.models import ProcessForm
 from src.models.users import User, Records
 import uuid
 from src.users.decorators import login_required, admin_required
+from src.models.utils import translate_month
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
@@ -79,12 +80,11 @@ def index():
 @app.route('/logout')
 @login_required
 def logout():
-    if session.get('admin'):
-        session['admin'] = None
-    else:
-        session['username'] = None
-    session['user_id'] = None
-    session['session_name'] = None
+    if session.get('admin', None):
+        session.pop('admin')
+    session.pop('username')
+    session.pop('user_id')
+    session.pop('session_name')
     return (redirect(url_for('login')))
 
 @app.route('/reset')
@@ -110,7 +110,7 @@ def history():
         total_pay.append(float(job.daily_rate))
         total_hrs.append(float(job._hours))
 
-    return render_template('user/history.html', jobs=jobs, date=curr_date,
+    return render_template('user/history.html', jobs=jobs, date=curr_date, translate=translate_month,
                             dt=datetime.datetime.strptime, total_pay=sum(total_pay),
                             total_hrs=round(sum(total_hrs)))
 

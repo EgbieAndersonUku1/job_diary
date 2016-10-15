@@ -117,6 +117,7 @@ class ProcessForm(object):
                      self.errors['end_date'] = 'The end date has an incorrect format. Format (dd/mm/yyyy)'
              else:
                 self.errors['date'] = 'One or more of dates has an incorrect format'
+         
          if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%d/%m/%Y") == datetime.strptime(str(start_date), "%d/%m/%Y")):
             self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
          if not day or translate_day(day[:3]) == None:
