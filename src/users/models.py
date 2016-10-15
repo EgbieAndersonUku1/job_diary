@@ -117,7 +117,7 @@ class ProcessForm(object):
                      self.errors['end_date'] = 'The end date has an incorrect format. Format (dd/mm/yyyy)'
              else:
                 self.errors['date'] = 'One or more of dates has an incorrect format'
-         
+
          if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%d/%m/%Y") == datetime.strptime(str(start_date), "%d/%m/%Y")):
             self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
          if not day or translate_day(day[:3]) == None:
@@ -136,8 +136,8 @@ class ProcessForm(object):
              self.errors['end_date']   = 'The end date field must be not be empty'
          if datetime.strptime(str(end_date), "%d/%m/%Y") < datetime.strptime(str(start_date), "%d/%m/%Y"):
               self.errors['days_error'] = 'The end date cannot be less then the start date'
-         if start_hours != '0' and int(end_hours) >= 0 and  datetime.strptime(str(end_date), "%d/%m/%Y") == datetime.strptime(str(start_date), "%d/%m/%Y"):
-             self.errors['day_change'] = 'The start & end times you entered shows that you finished the next day increment the end date by one'
+         #if int(start_hours) != '0' and int(end_hours) >= 0 and  datetime.strptime(str(end_date), "%d/%m/%Y") == datetime.strptime(str(start_date), "%d/%m/%Y"):
+         #  self.errors['day_change'] = 'The start & end times you entered shows that you finished the next day increment the end date by one'
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()
