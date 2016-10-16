@@ -12,6 +12,8 @@ img {
 
 h2 {
   color: green;
+  font-family: fantasy;
+  font-size: 40px;
 }
 .mybutton {
   width: 10px;

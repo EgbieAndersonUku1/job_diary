@@ -98,20 +98,49 @@ def success_page(row):
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=user.get_by_row_id(row))
 
-@app.route('/history')
-@login_required
-def history():
+
+
+def _helper(active_jobs=False, row_num=100):
     user = User(session['username'], _id=session['user_id'])
     # some code here to limit how much is display in history
-    jobs, total_pay, total_hrs =  user.get_by_user_id(6), [], []
+    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(row_num), [], [], []
 
+    # get the jobs that we have already worked
     for job in jobs:
-        total_pay.append(float(job.daily_rate))
-        total_hrs.append(float(job._hours))
+        if not active_jobs:
+            if datetime.datetime.strptime(job.date, "%d/%m/%Y") < datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
+                total_pay.append(float(job.daily_rate))
+                total_hrs.append(float(job._hours))
+                worked_jobs.append(job)
+        elif active_jobs and datetime.datetime.strptime(job.date, "%d/%m/%Y") >= \
+                              datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
+             total_pay.append(float(job.daily_rate))
+             total_hrs.append(float(job._hours))
+             worked_jobs.append(job)
 
-    return render_template('user/history.html', jobs=jobs, date=curr_date, translate=translate_month,
-                            dt=datetime.datetime.strptime, total_pay=sum(total_pay),
+    return jobs, total_pay, total_hrs, worked_jobs
+
+@app.route('/history/jobs')
+@app.route('/history/<int:row_num>')
+@login_required
+def history():
+    jobs, total_pay, total_hrs, worked_jobs = _helper()
+    return render_template('user/history.html', jobs=worked_jobs, date=curr_date,
+                            translate=translate_month,
+                            dt=datetime.datetime.strptime,
+                            total_pay=sum(total_pay),
                             total_hrs=round(sum(total_hrs)))
+
+@app.route('/active/jobs')
+@login_required
+def active_jobs():
+    jobs, total_pay, total_hrs, worked_jobs = _helper(active_jobs=True)
+    return render_template('user/active_jobs.html', jobs=worked_jobs, date=curr_date,
+                            translate=translate_month,
+                            dt=datetime.datetime.strptime,
+                            total_pay=sum(total_pay),
+                            total_hrs=round(sum(total_hrs)), active=True)
+
 
 @app.route('/job/edit/<value>')
 def edit(value):
@@ -123,7 +152,7 @@ def edit(value):
 def delete(row):
     user = User(session['username'], _id=session['user_id'])
     user.delete_row(row)
-    return redirect(url_for('history'))
+    return redirect(request.referrer)
 
 @app.route('/admin')
 @login_required
@@ -154,3 +183,5 @@ def update(row):
 @login_required
 def home():
     return render_template('user/home_page.html')
+
+#@app.route('/active/jobs')

@@ -6,7 +6,7 @@
   </a>
 </div>
 
-{% block title %} History {% endblock%}
+{% block title %} Jobs history page {% endblock %}
 
 {% block content %}
     <table class="table table-striped">
@@ -15,119 +15,119 @@
              This is not an error this page has loaded correct.
              <src img='static/css/error.png' alt=''></src>
              <div id='error_msg2'>
-               You have no job history
+                  Your job history is totally empty
              </div>
-             <div id='error_msg3'>
-               <ul>
-                 <li>
-                   Add some jobs in the job entry page and try again
-                 </li>
-               </ul>
-             </div>
+             <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
+
         </div>
       {% else %}
-        <div>
-          <h2>Dates of days and time worked or working </h2>
-          <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
-        </div>
-        {% if session['username'] == 'admin' %}
-            <caption class="text-center">As an admin you can edit the job details regardless whether they are equal to current date or after the current date </caption>
-        {% else %}
-            <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
-        {% endif %}
-        <tr>
-          <th>
-            Month
-          </th>
-          <th>
-            Date
-          </th>
-          <th>
-            Day
-          </th>
-          <th>
-            Job title
-          </th>
-          <th>
-            Job description
-          </th>
-          <th>
-            Job location
-          </th>
-          <th>
-            Hourly rate (£)
-          </th>
-          <th>
-            Total hours worked
-          </th>
-          <th>
-            Daily rate (£)
-          </th>
-          <th>
-            Start time
-          </th>
-          <th>
-            Finish time
-          </th>
-          <th>
-            Update/Delete
-          </th>
-        </tr>
-        {% for job in jobs %}
-           <tr>
-             <td>
-               {{ translate(job.month )[:3]}}
-             </td>
-             <td>
-               {{ job.date }}
-             </td>
-             <td>
-               {{ job.day[:3] }}
-             </td>
 
-             <td>
-               {{ job.job_title }}
-             </td>
-             <td>
-                {{ job.descr }}
-             </td>
-             <td>
-               {{ job.loc }}
-             </td>
-             <td>
-               £{{ job.hourly_rate}}
-             </td>
-             <td>
-               {{ job.total_hours}}
-             </td>
-             <td>
-               £{{ job.daily_rate }}
-             </td>
-             <td>
-               {{ job.start_time }}
-             </td>
-             <td>
-               {{ job.finish_time }}
-             </td>
-             <td>
-               {% if session['username'] == 'admin' %}
-                  <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
-                  <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-               {% else %}
-                  {% if dt(job.date, "%d/%m/%Y") >= dt(date, "%d/%m/%Y")  %}
-                  <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
-                  <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-                  {% else %}
-                    N/A
-                    {% endif %}
-                {% endif %}
-             </td>
-           </tr>
-        {% endfor %}
-        {% endif %}
-  </table>
-  <div id='total_pay'>
+              <h2>Dates of days and times worked </h2>
+              <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
 
-  </div>
+              {% if session['username'] == 'admin' %}
+                  <caption class="text-center">As an admin you can edit the job details regardless whether they are equal to current date or after the current date </caption>
+              {% else %}
+                    <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
+              {% endif %}
+            <tr>
+              <th>
+                Month
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Day
+              </th>
+              <th>
+                Job title
+              </th>
+              <th>
+                Job description
+              </th>
+              <th>
+                Job location
+              </th>
+              <th>
+                Hourly rate (£)
+              </th>
+              <th>
+                Total hours worked
+              </th>
+              <th>
+                Daily rate (£)
+              </th>
+              <th>
+                Start time
+              </th>
+              <th>
+                Finish time
+              </th>
+              <th>
+                Update/Delete
+              </th>
+            </tr>
+            {% for job in jobs %}
+                 <tr>
+                   <td>
+                     {{ translate(job.month )[:3]}}
+                   </td>
+                   <td>
+                     {{ job.date }}
+                   </td>
+                   <td>
+                     {{ job.day[:3] }}
+                   </td>
+
+                   <td>
+                     {{ job.job_title }}
+                   </td>
+                   <td>
+                      {{ job.descr }}
+                   </td>
+                   <td>
+                     {{ job.loc }}
+                   </td>
+                   <td>
+                     £{{ job.hourly_rate}}
+                   </td>
+                   <td>
+                     {{ job.total_hours}}
+                   </td>
+                   <td>
+                     £{{ job.daily_rate }}
+                   </td>
+                   <td>
+                     {{ job.start_time }}
+                   </td>
+                   <td>
+                     {{ job.finish_time }}
+                   </td>
+                   <td>
+                     <!--As an admin you can edit jobs that are active and non-active -->
+                     {% if session['username'] == 'admin' %}
+                        <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
+                        <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
+                     {% else %}
+                        <!-- Only jobs that are active can be edited, e.g jobs that are have not worked yet -->
+                        {% if dt(job.date, "%d/%m/%Y") >= dt(date, "%d/%m/%Y")  %}
+                        <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
+                        <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
+                        {% else %}
+                          N/A
+                          {% endif %}
+                      {% endif %}
+                   </td>
+
+            {% endfor %}
+            {% endif %}
+      </table>
 
 {% endblock %}
+
+
+
+
+
+</tr>
