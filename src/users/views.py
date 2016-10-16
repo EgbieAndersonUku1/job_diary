@@ -5,30 +5,31 @@ from user_form_helpers import login_helper, register_helper
 import datetime
 from src.users.models import ProcessForm
 from src.models.users import User, Records
+from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, translate_month
 import uuid
 from src.users.decorators import login_required, admin_required
-from src.models.utils import translate_month
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
+
 
 # use the _login_helper to log the user in
 @app.route('/', methods=('GET', 'POST'))
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     """Allows the user entry to the login applicaton"""
-    return login_helper(LoginForm, 'username', 'entry_page', 'user/login.html', 'index')
+    return login_helper(LoginForm, 'username', 'home', 'user/login.html', 'index')
 
 # admin registration
 @app.route('/admin/register', methods=('GET', 'POST'))
 def admin_register():
-    return register_helper(AdminRegisterForm, 'Incorrect admin name', 'admin/admin.html', 'success')
+    return register_helper(AdminRegisterForm, 'Incorrect admin name', 'admin/admin.html', 'home')
 
 # user registration
 @app.route('/register', methods=('GET', 'POST'))
 def user_register():
-    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'entry_page')
+    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'home')
 
 @app.route('/success')
 @login_required
@@ -71,10 +72,8 @@ def entry_page():
 
 @app.route('/index', methods=('GET', 'POST'))
 def index():
-    if session.get('username', None):
-        return 'hello'
-    elif session.get('admin', None):
-        return 'hello, admin'
+    if session.get('username', None) or session.get('admin', None):
+        return redirect(url_for('home'))
     return (redirect(url_for('login')))
 
 @app.route('/logout')
@@ -138,13 +137,20 @@ def user_login():
     session['username'] = session['session_name']
     return redirect(url_for('history'))
 
-
+@app.route('/index', methods=('GET', 'POST'))
 @app.route('/search')
 def search():
-    date = request.form.get('start_date')
-    print date
+    # ADD SOME CODE HERE
     return render_template('user/search.html')
+
+
+
 @app.route('/update/<row>')
 @login_required
 def update(row):
     pass
+
+@app.route('/home')
+@login_required
+def home():
+    return render_template('user/home_page.html')

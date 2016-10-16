@@ -30,6 +30,8 @@
 				<li class="active"><a href="{{ url_for('entry_page') }}">Job entry page<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
 				<li ><a href="{{ url_for('history') }}">Job history<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
         <li><a href='{{ url_for("search") }}'><span class="glyphicon glyphicon-search" style="font-size:16px;">Search</span></a></li>
+        <li class="active"><a href="{{ url_for('home') }}">Home page<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+
 
 		</div>
 	</div>
@@ -40,11 +42,11 @@
 <div class="container">
     {% if session['username'] != 'admin' %}
       <div id='icon'>
-        <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>logged in as the user (<a href='{{ url_for("entry_page") }}'>{{ session['username'].split('@')[0].strip('0123456789').title() }}</a>) | (<a href="{{ url_for('admin_login') }}">Admin</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
+        <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>logged in as the user (<a href='{{ url_for("home") }}'>{{ session['username'].split('@')[0].strip('0123456789').title() }}</a>) | (<a href="{{ url_for('admin_login') }}">Admin</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
       </div>
     {% else %}
         <div id='icon'>
-          <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>logged in as (<a href="{{ url_for('entry_page') }}">Admin</a>) | (<a href='{{url_for("user_login")}}'>Normal user</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
+          <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>logged in as (<a href="{{ url_for('home') }}">Admin</a>) | (<a href='{{url_for("user_login")}}'>Normal user</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
         </div>
     {% endif %}
 
