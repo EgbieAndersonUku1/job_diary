@@ -124,20 +124,25 @@ def _helper(active_jobs=False, row_num=100):
 
     return jobs, total_pay, total_hrs, worked_jobs
 
-@app.route('/history/jobs')
-@app.route('/history/<int:row_num>')
+
+@app.route('/history/jobs',  methods=('GET', 'POST'))
 @login_required
 def history():
-    jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=100)
-    page = 1
-    pagination = Pagination(page=page, per_page=POST_PER_PAGE, total=len(jobs), record_name='jobs')
+    row_num = request.form.get('row_num')
+    if not row_num:
+        row_num = 6
+    elif row_num and row_num.isdigit():
+        row_num = int(row_num)
+
+    jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=row_num)
+
     return render_template('user/history.html', jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
                             total_pay=sum(total_pay),
-                            total_hrs=int(round(sum(total_hrs))), pagination=pagination, total=len(jobs))
+                            total_hrs=int(round(sum(total_hrs))))
 
-@app.route('/active/jobs')
+@app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
     jobs, total_pay, total_hrs, worked_jobs = _helper(active_jobs=True)

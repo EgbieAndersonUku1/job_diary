@@ -9,6 +9,8 @@
 {% block title %} Jobs history page {% endblock %}
 
 {% block content %}
+
+
     <table class="table table-striped">
       {% if not jobs %}
         <div id='error_msg'>
@@ -21,7 +23,6 @@
 
         </div>
       {% else %}
-
               <h2>Dates of days and times worked </h2>
               <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
 
@@ -123,7 +124,19 @@
             {% endfor %}
             {% endif %}
       </table>
-      {{ pagination.info }}
+      <div id='searcher'>
+      <form method="Post" action="{{ url_for('history') }}"
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">#</div>
+              <input type="text" class="form-control" name='row_num' id="rows" placeholder="rows to show per page..">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary default">display</button>
+      </form>
+    </div>
+
 
 {% endblock %}
 

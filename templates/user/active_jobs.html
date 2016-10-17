@@ -8,7 +8,9 @@
 
 {% block title %}Active jobs {% endblock %}
 
+
 {% block content %}
+
     <table class="table table-striped">
       {% if not jobs %}
         <div id='error_msg'>
@@ -107,6 +109,20 @@
         {% endfor %}
         {% endif %}
   </table>
+
+    <div id='searcher'>
+    <form method="Post" action="{{ url_for('active_jobs') }}"
+      <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon">#</div>
+            <input type="text" class="form-control" name='row_num' id="rows" placeholder="rows to show per page..">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary default">display</button>
+    </form>
+  </div>
+
 
 {% endblock %}
 
