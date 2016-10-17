@@ -23,7 +23,7 @@
 
       {% else %}
               <h2>Days and times of jobs yet to work </h2>
-              <h3>The total pay you will earn if you work is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
+              <h3>The total pay you will earn if you work an approximated period of {{ total_hrs }} hours is £{{ total_pay }}  hours</h3>
           <tr>
             <th>
               Month
@@ -35,7 +35,7 @@
               Day
             </th>
             <th>
-              Job title
+              Job role
             </th>
             <th>
               Job description
@@ -47,10 +47,10 @@
               Hourly rate (£)
             </th>
             <th>
-              Total hours worked
+              Hours to work
             </th>
             <th>
-              Daily rate (£)
+              Expected daily rate (£)
             </th>
             <th>
               Start time
@@ -109,9 +109,5 @@
   </table>
 
 {% endblock %}
-
-
-
-
 
 </tr>

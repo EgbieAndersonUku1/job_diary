@@ -3,7 +3,8 @@
 # Database
 ###################################################################
 
-import pymongo
+from flask.ext.pymongo import pymongo
+
 
 class DataBase(object):
     """Database stores the entire records of the users"""

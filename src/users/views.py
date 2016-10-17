@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 from src.users.form import RegisterForm, LoginForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
@@ -8,11 +10,12 @@ from src.models.users import User, Records
 from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, translate_month
 import uuid
 from src.users.decorators import login_required, admin_required
+from flask_paginate import Pagination
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
-
+POST_PER_PAGE = 5
 
 # use the _login_helper to log the user in
 @app.route('/', methods=('GET', 'POST'))
@@ -102,6 +105,7 @@ def success_page(row):
 
 def _helper(active_jobs=False, row_num=100):
     user = User(session['username'], _id=session['user_id'])
+
     # some code here to limit how much is display in history
     jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(row_num), [], [], []
 
@@ -124,22 +128,25 @@ def _helper(active_jobs=False, row_num=100):
 @app.route('/history/<int:row_num>')
 @login_required
 def history():
-    jobs, total_pay, total_hrs, worked_jobs = _helper()
+    jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=100)
+    page = 1
+    pagination = Pagination(page=page, per_page=POST_PER_PAGE, total=len(jobs), record_name='jobs')
     return render_template('user/history.html', jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
                             total_pay=sum(total_pay),
-                            total_hrs=round(sum(total_hrs)))
+                            total_hrs=int(round(sum(total_hrs))), pagination=pagination, total=len(jobs))
 
 @app.route('/active/jobs')
 @login_required
 def active_jobs():
     jobs, total_pay, total_hrs, worked_jobs = _helper(active_jobs=True)
+
     return render_template('user/active_jobs.html', jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
                             total_pay=sum(total_pay),
-                            total_hrs=round(sum(total_hrs)), active=True)
+                            total_hrs=int(round(sum(total_hrs))), active=True)
 
 
 @app.route('/job/edit/<value>')
@@ -182,6 +189,8 @@ def update(row):
 @app.route('/home')
 @login_required
 def home():
+    print request.args.get('page', 5)
+    print request.args.get('per_page', 6)
     return render_template('user/home_page.html')
 
 #@app.route('/active/jobs')

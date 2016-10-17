@@ -3,3 +3,5 @@ pymongo
 py-bcrypt==0.4
 flask-wtf
 flask-script
+flask-paginate
+Flask-PyMongo
