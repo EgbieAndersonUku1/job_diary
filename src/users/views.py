@@ -130,13 +130,15 @@ def _display_row(html_link, active=False):
     row_num = request.form.get('row_num')
     if row_num == None:
         row_num = 6
-    elif not int(row_num):
-        row_num = 0
-    elif row_num and row_num.isdigit():
-        row_num = int(row_num) + 1
+    else:
+        try:
+            row_num = int(row_num)
+        except ValueError:
+            row_num = 0
+        else:
+            row_num = int(row_num) + 1
+
     jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=row_num, active_jobs=active)
-
-
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,

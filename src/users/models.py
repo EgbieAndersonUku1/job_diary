@@ -161,9 +161,21 @@ class ProcessForm(object):
         return True, self.errors, self._obj
 
     def _concatcenate_time_str(self):
-    	""" Takes two strings and concatcenates them together"""
-    	start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
-    	finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
+    	""" Takes two strings and concatcenates them together creating a time string"""
+
+        # guarantees that time is expressed as hh:mm
+        if len(self._obj.start_mins) == 1 and 1 <= int(self._obj.start_mins) < 10:
+    	       start_time  = self._obj.start_hours + ':0' + self._obj.start_mins
+        if len(self._obj.end_mins) == 1 and 1 <= int(self._obj.end_mins) < 10:
+    	      finish_time = self._obj.end_hours   + ":0" + self._obj.end_mins
+        if len(self._obj.start_mins) == 1 and not int(self._obj.start_mins):
+            start_time  = self._obj.start_hours + ':00'
+        if len(self._obj.end_mins) == 1 and not int(self._obj.end_mins):
+    	      finish_time = self._obj.end_hours   + ":00"
+        else:
+            start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
+            finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
+
     	return start_time, finish_time
 
     def process_form(self, start_date, end_date, day):
