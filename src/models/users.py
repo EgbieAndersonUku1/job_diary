@@ -32,7 +32,7 @@ class User(object):
 
         hours = get_hours_worked(self.start_date, start_time, self.end_date, finish_time)
         day, month, year = self.start_date.split('/')
-        #self.start_date = '{}/{}/{}'.format(year, month, day) # store date in yyyy/mm/dd so that pymongo can sort data 
+        #self.start_date = '{}/{}/{}'.format(year, month, day) # store date in yyyy/mm/dd so that pymongo can sort data
         record = Records(job_title=job_title, descr=descr,
                          loc=loc,start_time=start_time,
                          finish_time=finish_time,
@@ -42,7 +42,9 @@ class User(object):
                          user_id=self.id, daily_rate=get_daily_rate(hours, hourly_rate),
                          date=self.start_date, # change this line
                          day=self.day,
-                         month=self.start_date.split('/')[1])
+                         end_date=self.end_date,
+                         month=self.start_date.split('/')[1],
+                         )
         return record.save()
 
     def get_by_hour(self, hours, date1=None, date2=None, month1=None,

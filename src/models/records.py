@@ -24,7 +24,7 @@ class Records(object):
 
     def __init__(self, job_title, descr, loc, start_time, finish_time,
                            hourly_rate, total_hours, _hours, user_id, daily_rate,
-                          date, day, month, row_id=None, _id=None):
+                          date, day, end_date, month, row_id=None, _id=None):
 
         self.job_title  = job_title
         self.descr = descr
@@ -37,6 +37,7 @@ class Records(object):
         self.user_id = user_id
         self.date =  date
         self.day  =  day
+        self.end_date = end_date
         self.loc  = loc
         self.row_id = gen_row_id() if row_id is None else row_id
         self.month = month
@@ -144,6 +145,7 @@ class Records(object):
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
                  'date'       : str(self.date),
+                 'end_date'   : str(self.end_date),
                  'month'      : self.month,
                  'row_id'     : self.row_id,
                  'day'        : self.day,

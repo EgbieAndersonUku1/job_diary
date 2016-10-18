@@ -24,9 +24,9 @@
     		<!-- Collect the nav links, forms, and other content for toggling -->
     		<div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
     			<ul class="nav navbar-nav">
-    				<li class="active"><a href="{{ url_for('entry_page') }}">Job entry page<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
-    				<li ><a href="{{ url_for('history') }}">Job history<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
-            <li class="active"><a href="{{ url_for('active_jobs') }}">Active jobs<span class="glyphicon glyphicon-check"></a></li>
+    				<li class="active"><a href="{{ url_for('entry_page') }}">Job detail's entry page<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+    				<li ><a href="{{ url_for('history') }}">Job history page<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
+            <li class="active"><a href="{{ url_for('active_jobs') }}">Active jobs page<span class="glyphicon glyphicon-check"></a></li>
             <li><a href='{{ url_for("search") }}'><span class="glyphicon glyphicon-search" style="font-size:16px;">Search</span></a></li>
             <li class="active"><a href="{{ url_for('home') }}">Home page<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
     		</div>
@@ -40,7 +40,7 @@
       </div>
     {% else %}
         <div id='icon'>
-          <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>Hello, you are logged in as (<a href="{{ url_for('home') }}">Admin</a>) | (<a href='{{url_for("user_login")}}'>Normal user</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
+          <span class="glyphicon glyphicon-user"></span> <span id='logged_in'>Hello, you are logged in as (<a href="{{ url_for('home') }}">Super user</a>) | (<a href='{{url_for("user_login")}}'>Normal user</a> | <a href='{{ url_for("logout") }}')>logout</a>)</span>
         </div>
     {% endif %}
 
