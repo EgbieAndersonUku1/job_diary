@@ -131,11 +131,10 @@
               <form class="form-inline">
                 <fieldset>
                   <div class="form-group">
-                    <label class="col-md-5 control-label" for="finish_hours">Finish hours (HH)</label>
+                    <label class="col-md-5 control-label" for="end_hours">Finish hours (HH)</label>
                     <div class="col-md-4">
-                      <select id="start_hours" class="form-control" name="finish_time">
+                      <select id="end_hours" class="form-control" name="end_hours" >
                         <option selected="">{{form.finish_time.split(":")[0]}}</option>
-
                         <option value="0">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
@@ -166,9 +165,9 @@
                 <form class="form-inline">
                   <fieldset>
                     <div class="form-group">
-                      <label id="start_mins_id" class="col-md-5 control-label" for="finish_mins">Finish mins (MM)</label>
+                      <label id="start_mins_id" class="col-md-5 control-label" for="end_mins">Finish mins (MM)</label>
                       <div class="col-md-4">
-                        <select id="start_mins" class="form-control" name="start_mins">
+                        <select id="start_mins" class="form-control" name="end_mins">
                           <option selected="">{{form.finish_time.split(":")[1]}}</option>
                           <option value="0">00</option>
                           <option value="1">01</option>

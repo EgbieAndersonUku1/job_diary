@@ -103,7 +103,7 @@ def success_page(row):
 
 
 
-def _helper(active_jobs=False, row_num=100):
+def _helper(active_jobs, row_num):
     user = User(session['username'], _id=session['user_id'])
 
     # some code here to limit how much is display in history
@@ -125,34 +125,34 @@ def _helper(active_jobs=False, row_num=100):
     return jobs, total_pay, total_hrs, worked_jobs
 
 
-@app.route('/history/jobs',  methods=('GET', 'POST'))
-@login_required
-def history():
+
+def _display_row(html_link, active=False):
     row_num = request.form.get('row_num')
-    if not row_num:
+    if row_num == None:
         row_num = 6
+    elif not int(row_num):
+        row_num = 0
     elif row_num and row_num.isdigit():
-        row_num = int(row_num)
+        row_num = int(row_num) + 1
+    jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=row_num, active_jobs=active)
 
-    jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=row_num)
 
-    return render_template('user/history.html', jobs=worked_jobs, date=curr_date,
+    return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
                             total_pay=sum(total_pay),
-                            total_hrs=int(round(sum(total_hrs))))
+                            total_hrs=int(round(sum(total_hrs))), active=active)
+
+
+@app.route('/history/jobs',  methods=('GET', 'POST'))
+@login_required
+def history():
+    return _display_row('user/history.html')
 
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
-    jobs, total_pay, total_hrs, worked_jobs = _helper(active_jobs=True)
-
-    return render_template('user/active_jobs.html', jobs=worked_jobs, date=curr_date,
-                            translate=translate_month,
-                            dt=datetime.datetime.strptime,
-                            total_pay=sum(total_pay),
-                            total_hrs=int(round(sum(total_hrs))), active=True)
-
+    return _display_row('user/active_jobs.html', True)
 
 @app.route('/job/edit/<value>')
 def edit(value):
