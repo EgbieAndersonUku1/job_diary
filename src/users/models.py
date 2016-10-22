@@ -172,6 +172,10 @@ class ProcessForm(object):
             start_time  = self._obj.start_hours + ':00'
         if len(self._obj.end_mins) == 1 and not int(self._obj.end_mins):
     	      finish_time = self._obj.end_hours   + ":00"
+        if len(self._obj.start_hours) == 2 and len(self._obj.end_hours) == 2:
+            start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
+            finish_time = self._obj.end_hours   + ":" + self._obj.end_mins 
+
         else:
             start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
             finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
