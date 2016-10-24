@@ -16,8 +16,11 @@ This is my primary reason for creating this web application and when finished an
 Along with an easy web interface, search parameter that will all be built using HTML, CSS and Bootstrap. Giving the application a nice look and feel and thus enable me to query jobs by either months, days, hours, pay, dates, etc.
 
 It will also send me an email to remind when the day gets close to a place I am going to work at.
+Although the program is run on your local computer. It still needs the internet to fully utilise the Bootstrap
+module as it uses CDN which requires internet access.
+
 
 Run program
 
-Terminal 1 : python run.py runserver
-Terminal 2 : sudo mongod
+Terminal 1  python run.py runserver
+Terminal 2  sudo mongod
