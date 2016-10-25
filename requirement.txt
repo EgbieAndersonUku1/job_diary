@@ -5,3 +5,4 @@ flask-wtf
 flask-script
 flask-paginate
 Flask-PyMongo
+Flask-Upload

@@ -4,8 +4,10 @@
 ##################################################################
 
 from flask_wtf import Form
-from wtforms import validators, StringField, PasswordField
+from wtforms import validators, StringField, PasswordField, DateField
 from wtforms.fields.html5 import EmailField
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+from flask_wtf.file import FileField, FileAllowed
 
 class RegisterForm(Form):
     """RegisterForm(class)

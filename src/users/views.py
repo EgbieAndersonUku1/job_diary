@@ -186,6 +186,16 @@ def search():
     # ADD SOME CODE HERE
     return render_template('user/search.html')
 
+@app.route('/.json')
+@app.route('/home.json')
+@app.route('/history/jobs.json')
+@app.route('/active/jobs.json')
+@app.route('/job/entry.json')
+@login_required
+def get_json():
+    user = User(session['username'], _id=session['user_id'])
+    return render_template('user/json.html', records=user.get_records())
+
 
 
 @app.route('/update/<row>')

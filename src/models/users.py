@@ -126,6 +126,9 @@ class User(object):
         return Records.find_by_month(month1, month2, self.id, limit)
 
 
+    def get_records(self):
+        return Records.get_records_in_json(self.id)
+
     def de_activate_account(self):
         pass
 

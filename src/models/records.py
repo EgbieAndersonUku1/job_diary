@@ -131,6 +131,21 @@ class Records(object):
         db.insert_one('jobs_details', self.get_json())
         return self.row_id
 
+    @staticmethod
+    def get_records_in_json(user_id):
+        """ """
+        query = {'user_id':user_id}
+        key=('date', -1)
+        records = db.search('jobs_details', query=query, key=key, limit_num=0)
+        user_records = {}
+
+        for record in records:
+            if record[u'date'] in user_records:
+                user_records[record[u'date']].append(record)
+            else:
+                user_records[record[u'date']] = [record]
+        return user_records
+
     def get_json(self):
         """returns a json represent of the class"""
 
