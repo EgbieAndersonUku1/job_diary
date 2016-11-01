@@ -71,10 +71,4 @@ class DataBase(object):
         return DataBase.DATABASE[collections].count(query)
 
 
-    def get_count(self, collections, query):
-        """returns the number of documents inside a collection"""
-        if query == None:
-            return DataBase.DATABASE[collections].find().count()
-        return self.search(collections, query).count()
-
 DataBase.initialize()

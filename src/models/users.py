@@ -51,11 +51,11 @@ class User(object):
                     month2=None, year1=None, year2=None):
         pass
 
-    def get_by_user_id(self, limit):
+    def get_by_user_id(self, no_of_rows):
         """get_by_user_id(None) -> return(obj)
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_user_id(self.id, limit)
+        return Records.find_by_user_id(self.id, no_of_rows)
 
     def get_by_row_id(self, num):
         """get_by_row_id(None) -> return(obj)

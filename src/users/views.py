@@ -101,44 +101,36 @@ def success_page(row):
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=user.get_by_row_id(row))
 
-
-
-def _helper(active_jobs, row_num):
+def _get_jobs(active_jobs, rows):
     user = User(session['username'], _id=session['user_id'])
+    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(rows), [], [], []
 
-    # some code here to limit how much is display in history
-    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(row_num), [], [], []
+    def get_jobs_helper(daily_rate, hrs, job):
+        total_pay.append(float(job.daily_rate))
+        total_hrs.append(float(job._hours))
+        worked_jobs.append(job)
 
     # get the jobs that we have already worked
     for job in jobs:
         if not active_jobs:
             if datetime.datetime.strptime(job.date, "%d/%m/%Y") < datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
-                total_pay.append(float(job.daily_rate))
-                total_hrs.append(float(job._hours))
-                worked_jobs.append(job)
-        elif active_jobs and datetime.datetime.strptime(job.date, "%d/%m/%Y") >= \
-                              datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
-             total_pay.append(float(job.daily_rate))
-             total_hrs.append(float(job._hours))
-             worked_jobs.append(job)
+                get_jobs_helper(job.daily_rate, job._hours, job)
+        elif active_jobs and datetime.datetime.strptime(job.date, "%d/%m/%Y") >= datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
+                get_jobs_helper(job.daily_rate, job._hours, job)
 
     return jobs, total_pay, total_hrs, worked_jobs
 
 
 
 def _display_row(html_link, active=False):
-    row_num = request.form.get('row_num')
+    row_num = request.form.get('row_num', None)
+
     if row_num == None:
         row_num = 6
     else:
-        try:
-            row_num = int(row_num)
-        except ValueError:
-            row_num = 0
-        else:
-            row_num = int(row_num) + 1
+        row_num = int(row_num)
 
-    jobs, total_pay, total_hrs, worked_jobs = _helper(row_num=row_num, active_jobs=active)
+    jobs, total_pay, total_hrs, worked_jobs = _get_jobs(rows=row_num, active_jobs=active)
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
