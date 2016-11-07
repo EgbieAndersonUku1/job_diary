@@ -4,8 +4,37 @@
 
 {% block content %}
 
+<div row='row' >
+
+  <div class="col-md-offset-1 col-md-5">
 
 
-WILL ADD SOME CODE SO JOBS CAN BE SEARCHED BY DATES, LOCATION, START TIMES, HOURS
+    {% if error %}
+        <div class="error text-danger">{{error}}</div>
+    {% endif %}
+
+    {% from '_formhelper.html' import render_field %}
+
+    <form method='Post' action="{{ url_for('search') }}" role='form'>
+      {{ form.hidden_tag() }}
+
+    
+      {{ render_field(form.job_title, class='form-control') }}
+      {{ render_field(form.location, class='form-control') }}
+      {{ render_field(form.month, class='form-control') }}
+      {{ render_field(form.date, class='form-control') }}
+      {{ render_field(form.day, class='form-control') }}
+      {{ render_field(form.start_time, class='form-control') }}
+      {{ render_field(form.finish_time, class='form-control') }}
+      {{ render_field(form.daily_rate, class='form-control') }}
+
+      <button type='submit'class='btn btn-primary'>Search</button>
+
+    </form>
+
+  </div>
+</div>
+
+
 
 {% endblock %}

@@ -4,6 +4,7 @@
 ##################################################################
 
 from src.models.database import DataBase as db
+from src.models.users import User
 from src.models.utils import translate_day
 from src.models.utils import get_hours_worked, time_to_str, translate_day
 from flask import session
@@ -174,7 +175,7 @@ class ProcessForm(object):
     	      finish_time = self._obj.end_hours   + ":00"
         if len(self._obj.start_hours) == 2 and len(self._obj.end_hours) == 2:
             start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
-            finish_time = self._obj.end_hours   + ":" + self._obj.end_mins 
+            finish_time = self._obj.end_hours   + ":" + self._obj.end_mins
 
         else:
             start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
@@ -217,3 +218,46 @@ class ProcessForm(object):
             'end_mins'    : self.end_mins,
             'day'         : self.day
             }
+
+
+
+#{{ render_field(form.job_title, class='form-control') }}
+#{{ render_field(form.location, class='form-control') }}
+#{{ render_field(form.date, class='form-control') }}
+#{{ render_field(form.day, class='form-control') }}
+#{{ render_field(form.start_time, class='form-control') }}
+#{{ render_field(form.finish_time, class='form-control') }}
+#{{ render_field(form.daily_rate, class='form-control') }}
+
+class ProcessSearchForm(object):
+
+    def __init__(self, form):
+        self.job_title = form.job_title.data
+        self.location  = form.location.data
+        self.month     = form.month.data
+        self.date = form.date.data
+        self.day  = form.day.data
+        self.start_time = form.start_time.data
+        self.finish_time = form.finish_time.data
+        self.daily_rate  = form.daily_rate.data
+
+    def get_data(self):
+        if self.job_title:
+            user = User(session['username'], _id=session['user_id'])
+            return user.get_by_job_title(self.job_title.title())
+        elif self.location:
+            user = User(session['username'], _id=session['user_id'])
+            return user.get_by_location(self.location)
+        elif self.date:
+            user = User(session['username'], _id=session['user_id'])
+            return user.get_by_date_or_day(date=self.date)
+        elif self.day:
+
+            days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
+                    'Thur':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday', 'Sun': 'Sunday'}
+            user = User(session['username'], _id=session['user_id'])
+            return user.get_by_date_or_day(day=days.get(self.day.title()[:3], None))
+        elif self.start_time:
+            pass
+        elif self.month:
+            return

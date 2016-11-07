@@ -1,11 +1,11 @@
 #-*- coding: utf-8 -*-
 
-from src.users.form import RegisterForm, LoginForm
+from src.users.form import RegisterForm, LoginForm, SearchForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
 from user_form_helpers import login_helper, register_helper
 import datetime
-from src.users.models import ProcessForm
+from src.users.models import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
 from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, translate_month
 import uuid
@@ -173,10 +173,34 @@ def user_login():
     return redirect(url_for('history'))
 
 @app.route('/index', methods=('GET', 'POST'))
-@app.route('/search')
+@app.route('/search', methods=('GET', 'POST'))
 def search():
-    # ADD SOME CODE HERE
-    return render_template('user/search.html')
+    form = SearchForm()
+    error = ''
+    if request.method == 'POST':
+        if form.validate_on_submit:
+            search_form = ProcessSearchForm(form)
+            jobs = search_form.get_data()
+
+            if jobs:
+                total_hrs, total_pay = [], []
+                for job in jobs:
+                    total_pay.append(float(job.daily_rate))
+                    total_hrs.append(float(job._hours))
+                #return redirect(url_for('permalink_jobs_history', string=str(jobs) ))
+                return render_template("user/permalink_jobs_history.html", jobs=jobs,
+                                        translate=translate_month, total_pay=sum(total_pay),
+                                        total_hrs=sum(total_hrs))
+            else:
+                error = 'No records find by that entry'
+                return render_template('user/search.html', form=form, error=error)
+    else:
+        return render_template('user/search.html', form=form)
+
+
+@app.route('/permalink_jobs_history/<string>')
+def permalink_jobs_history(string):
+    return string
 
 @app.route('/.json')
 @app.route('/home.json')
@@ -198,8 +222,6 @@ def update(row):
 @app.route('/home')
 @login_required
 def home():
-    print request.args.get('page', 5)
-    print request.args.get('per_page', 6)
     return render_template('user/home_page.html')
 
 #@app.route('/active/jobs')

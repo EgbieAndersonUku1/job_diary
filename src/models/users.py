@@ -65,15 +65,15 @@ class User(object):
         """
         return Records.find_by_row_id(num, self.id)
 
-    def get_by_job_title(self, job, limit=3):
+    def get_by_job_title(self, job_title, limit=0):
         """get_by_job_title(str) -> return(obj)
         Finds jobs based on the users job title
 
         Returns: either a single job object or multiple user object or None.
         """
-        return Records.find_by_job_title(job, self.id, limit)
+        return Records.find_by_job_title(job_title, self.id, limit)
 
-    def get_by_date_or_day(self, date=None, day=None, limit=5):
+    def get_by_date_or_day(self, date=None, day=None, limit=6):
         """get_by_date_and_day(str, str) -> return(str)
         Finds jobs based on the date and day
 

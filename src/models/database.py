@@ -29,7 +29,7 @@ class DataBase(object):
         DataBase.DATABASE[collection].insert_one(data)
 
     @staticmethod
-    def search(collections, query, key, limit_num=5):
+    def search(collections, query, key, limit_num):
         """search(str, value) -> return(cursor)
 
         collections: A table name from the database
