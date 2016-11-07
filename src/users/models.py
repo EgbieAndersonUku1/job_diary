@@ -47,9 +47,6 @@ class Login(object):
             return False # users details does not exist
         return (login_obj if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password else False) # users details found verify login in details
 
-    def de_activate_login(self):
-        pass
-
     def save(self):
         """Saves the form to the database in json format"""
         db.insert_one(collection='login_credentials', data=self._json())
@@ -176,11 +173,9 @@ class ProcessForm(object):
         if len(self._obj.start_hours) == 2 and len(self._obj.end_hours) == 2:
             start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
             finish_time = self._obj.end_hours   + ":" + self._obj.end_mins
-
         else:
             start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
             finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
-
     	return start_time, finish_time
 
     def process_form(self, start_date, end_date, day):
@@ -196,7 +191,6 @@ class ProcessForm(object):
         # to be use with pymongo sorting for the database. Pymongo seems to have
         # trouble sorting dates if 0 is not in front of a single digits. For example
         # when sorting in smallest first it would place 19/09/2016 before 9/09/2016
-
         start_time, finish_time = self._concatcenate_time_str()
         hours = get_hours_worked(start_date, start_time, end_date, finish_time)
         user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
@@ -258,6 +252,6 @@ class ProcessSearchForm(object):
         elif self.hrs_worked:
             return self._user.get_by_hours(hours=self.hrs_worked)
         elif self.month:
-            return self._user.get_by_month(month1=str(self.month[0:3].title()))
+            return self._user.get_by_month(month=str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)

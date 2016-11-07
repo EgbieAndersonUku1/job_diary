@@ -115,7 +115,7 @@ class User(object):
         """
         return Records.find_by_daily_rate(float(daily_rate), limit=limit, user_id=self.id)
 
-    def get_by_month(self, month1, month2=None, limit=0):
+    def get_by_month(self, month, limit=0):
         """get_by_month(str, str(optional)) -> return(None or obj)
 
         month1: The month to query by.
@@ -135,7 +135,7 @@ class User(object):
         e.g if Jan and june is given but the user did not work the entire of mar
         and Apr then the days worked in Jan, Feb, May, Jun would be returned.
         """
-        return Records.find_by_month(month1, month2, self.id, limit)
+        return Records.find_by_month(month, self.id, limit)
 
 
     def get_records(self):
