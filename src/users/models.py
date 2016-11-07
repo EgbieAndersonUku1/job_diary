@@ -240,23 +240,19 @@ class ProcessSearchForm(object):
         self.start_time = form.start_time.data
         self.finish_time = form.finish_time.data
         self.daily_rate  = form.daily_rate.data
+        self._user = user = User(session['username'], _id=session['user_id'])
 
     def get_data(self):
         if self.job_title:
-            user = User(session['username'], _id=session['user_id'])
-            return user.get_by_job_title(self.job_title.title())
+            return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
-            user = User(session['username'], _id=session['user_id'])
-            return user.get_by_location(self.location)
+            return self._user.get_by_location(self.location)
         elif self.date:
-            user = User(session['username'], _id=session['user_id'])
-            return user.get_by_date_or_day(date=self.date)
+            return self._user.get_by_date_or_day(date=self.date)
         elif self.day:
-
             days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
                     'Thur':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday', 'Sun': 'Sunday'}
-            user = User(session['username'], _id=session['user_id'])
-            return user.get_by_date_or_day(day=days.get(self.day.title()[:3], None))
+            return self._user.get_by_date_or_day(day=days.get(self.day.title()[:3], None))
         elif self.start_time:
             pass
         elif self.month:
