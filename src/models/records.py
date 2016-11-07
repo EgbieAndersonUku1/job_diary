@@ -68,6 +68,27 @@ class Records(object):
         return cls._find(query=query, key=('dates', -1), limit=limit)
 
     @classmethod
+    def find_by_hours_worked(cls, hours, user_id, limit):
+        query = {'_hours' : hours, 'user_id': user_id}
+        return cls._find(query=query, key=('dates', -1), limit=limit)
+
+    @classmethod
+    def get_by_time(cls, start_time, finish_time, user_id, limit=0):
+        """Retreive the data base on time"""
+        if start_time == None and finish_time == None:
+            return None
+        elif start_time and finish_time==None:
+            query = {'start_time': start_time, 'user_id': user_id}
+            return cls._find(query=query, key=('dates', -1), limit=limit)
+        elif finish_time and start_time==None:
+            query = {'finish_time': finish_time, 'user_id': user_id}
+            return cls._find(query=query, key=('dates', -1), limit=limit)
+        else:
+            return None
+
+
+
+    @classmethod
     def find_by_row_id(cls, row_id, user_id):
         """Retreives the job data using the row id"""
         row_id = '#' + str(row_id).strip('#')
@@ -97,7 +118,7 @@ class Records(object):
         """
         key = ('month', -1)
         if month and not month2:
-            return cls._find(query={'month':translate_to_month_num(month)}) # user wants information for a single month
+            return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}) # user wants information for a single month
         elif month and month2: # user wants information between two given months
 
             month  = translate_to_month_num(month)  # translate month to number

@@ -234,6 +234,7 @@ class ProcessSearchForm(object):
     def __init__(self, form):
         self.job_title = form.job_title.data
         self.location  = form.location.data
+        self.hrs_worked = form.hrs_worked.data
         self.month     = form.month.data
         self.date = form.date.data
         self.day  = form.day.data
@@ -241,6 +242,15 @@ class ProcessSearchForm(object):
         self.finish_time = form.finish_time.data
         self.daily_rate  = form.daily_rate.data
         self._user = user = User(session['username'], _id=session['user_id'])
+        print self.start_time,
+        print type(self.start_time)
+        print self.finish_time
+
+    def _fix_time_str(self, time):
+        # Temporay solution until I fix it: Databases stores values that end in 00 as 0
+        # e.g 17:00 is stored as 17:0 will
+        return str((time[:-1] if time[2] == '0' else time))
+
 
     def get_data(self):
         if self.job_title:
@@ -254,6 +264,8 @@ class ProcessSearchForm(object):
                     'Thur':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday', 'Sun': 'Sunday'}
             return self._user.get_by_date_or_day(day=days.get(self.day.title()[:3], None))
         elif self.start_time:
-            pass
-        elif self.month:
-            return
+            return self._user.get_by_time(start_time=self._fix_time_str(self.start_time))
+        elif self.finish_time:
+            return self._user.get_by_time(end_time=self._fix_time_str(self.finish_time))
+        elif self.hrs_worked:
+            return self._user.get_by_hours(hours=self.hrs_worked)

@@ -35,6 +35,7 @@ class SearchForm(Form):
 
     job_title = StringField('Job title (Optional)',[validators.Length(max=255)])
     location  = StringField('Location (Optional)', [validators.Length(max=255)])
+    hrs_worked = StringField('Hours worked (Optional : Enter as decimal. e.g 3 hrs and 15 mins enter as 3.15, 4 hrs as 4.0)', [validators.Length(max=4)])
     month  = StringField('Month (Optional)', [validators.Length(max=16)])
     date      = DateField('Date (Optional)')
     day       = StringField('Weekday (Optional)', [validators.Length(max=9)])

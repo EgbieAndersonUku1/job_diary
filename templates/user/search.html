@@ -6,7 +6,7 @@
 
 <div row='row' >
 
-  <div class="col-md-offset-1 col-md-5">
+  <div class="col-md-offset-3 col-md-4">
 
 
     {% if error %}
@@ -15,22 +15,25 @@
 
     {% from '_formhelper.html' import render_field %}
 
-    <form method='Post' action="{{ url_for('search') }}" role='form'>
-      {{ form.hidden_tag() }}
 
-    
-      {{ render_field(form.job_title, class='form-control') }}
-      {{ render_field(form.location, class='form-control') }}
-      {{ render_field(form.month, class='form-control') }}
-      {{ render_field(form.date, class='form-control') }}
-      {{ render_field(form.day, class='form-control') }}
-      {{ render_field(form.start_time, class='form-control') }}
-      {{ render_field(form.finish_time, class='form-control') }}
-      {{ render_field(form.daily_rate, class='form-control') }}
+    <form method="post" action="{{ url_for('search') }}" role="form">
+        {{ form.hidden_tag() }}
 
-      <button type='submit'class='btn btn-primary'>Search</button>
+        {{ render_field(form.job_title, class='form-control') }}
+        {{ render_field(form.location, class='form-control') }}
+        {{ render_field(form.hrs_worked, class='form-control') }}
+        {{ render_field(form.month, class='form-control') }}
+        {{ render_field(form.date, class='form-control') }}
+        {{ render_field(form.day, class='form-control') }}
+        {{ render_field(form.start_time, class='form-control') }}
+        {{ render_field(form.finish_time, class='form-control') }}
+        {{ render_field(form.daily_rate, class='form-control') }}
+
+        <button type='submit'class='btn btn-primary'>Search</button>
 
     </form>
+
+
 
   </div>
 </div>

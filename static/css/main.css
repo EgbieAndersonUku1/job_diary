@@ -267,3 +267,13 @@ Label {
   font-size: 19px;
   color: 0000ff;
 }
+
+form {
+  border : 1px solid black;
+  padding : 10px;
+  background-color: #E6E0E0;
+}
+
+.form-control {
+  border : 0.5px solid black;
+}

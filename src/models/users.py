@@ -47,9 +47,8 @@ class User(object):
                          )
         return record.save()
 
-    def get_by_hour(self, hours, date1=None, date2=None, month1=None,
-                    month2=None, year1=None, year2=None):
-        pass
+    def get_by_hours(self, hours, limit=0):
+        return Records.find_by_hours_worked(hours, self.id, limit=limit)
 
     def get_by_user_id(self, no_of_rows):
         """get_by_user_id(None) -> return(obj)
@@ -81,6 +80,12 @@ class User(object):
         """
         return Records.find_by_date_or_day(date, day, self.id, limit=limit)
 
+    def get_by_time(self, start_time=None, end_time=None, limit=0):
+        """get_by_time(str, str, str) -> return(obj)
+        Return the jobs based on time
+        """
+        return Records.get_by_time(start_time, end_time, self.id, limit=limit)
+
     def get_by_location(self, loc, limit=5):
         """get_by_location(str) -> return(obj)
         Finds jobs based on the given location
@@ -103,7 +108,7 @@ class User(object):
     def get_by_amount(self, amount=None, operand=None, amount2=None, date=None, day=None):
         return Records.find_by_amount(operand, amount, amount2, date, day, self.id)
 
-    def get_by_month(self, month1, month2=None, limit=5):
+    def get_by_month(self, month1, month2=None, limit=100):
         """get_by_month(str, str(optional)) -> return(None or obj)
 
         month1: The month to query by.
