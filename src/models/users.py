@@ -47,6 +47,10 @@ class User(object):
                          )
         return record.save()
 
+    def get_by_multiple_queries(self, query, limit=0):
+        """Find jobs by a multiple queries"""
+        return Records.find_by_queries(query, limit=limit)
+
     def get_by_hours(self, hours, limit=0):
         return Records.find_by_hours_worked(hours, self.id, limit=limit)
 
@@ -72,7 +76,7 @@ class User(object):
         """
         return Records.find_by_job_title(job_title, self.id, limit)
 
-    def get_by_date_or_day(self, date=None, day=None, limit=6):
+    def get_by_date_or_day(self, date=None, day=None, limit=0):
         """get_by_date_and_day(str, str) -> return(str)
         Finds jobs based on the date and day
 
@@ -105,10 +109,13 @@ class User(object):
         """
         pass
 
-    def get_by_amount(self, amount=None, operand=None, amount2=None, date=None, day=None):
-        return Records.find_by_amount(operand, amount, amount2, date, day, self.id)
+    def get_by_daily_rate(self, daily_rate, limit=0):
+        """get_by_daily_rate(str, str) -> return(obj)
+        Return jobs based on the daily rate
+        """
+        return Records.find_by_daily_rate(float(daily_rate), limit=limit, user_id=self.id)
 
-    def get_by_month(self, month1, month2=None, limit=100):
+    def get_by_month(self, month1, month2=None, limit=0):
         """get_by_month(str, str(optional)) -> return(None or obj)
 
         month1: The month to query by.
