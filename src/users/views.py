@@ -193,7 +193,8 @@ def search():
                     total_hrs.append(float(job._hours))
                 return render_template("user/permalink_jobs_history.html", jobs=jobs,
                                         translate=translate_month, total_pay=sum(total_pay),
-                                        total_hrs=sum(total_hrs))
+                                        total_hrs=sum(total_hrs), curr_date=curr_date,
+                                        dt=datetime.datetime.strptime)
             else:
                 error = 'No records find by that entry'
                 return render_template('user/search.html', form=form, error=error)

@@ -48,6 +48,9 @@
               <th>
                 Finish time
               </th>
+              <th>
+                Worked shift (?)
+              </th>
 
             </tr>
             {% for job in jobs %}
@@ -86,10 +89,15 @@
                    <td>
                      {{ job.finish_time }}
                    </td>
-
-
+                   <td>
+                     {% if dt(job.date, '%d/%m/%Y') < dt(curr_date, '%d/%m/%Y')  %}
+                         Yes
+                     {% else %}
+                         No
+                     {% endif %}
+                   </td>
             {% endfor %}
-    
+
 {% endblock %}
 
 
