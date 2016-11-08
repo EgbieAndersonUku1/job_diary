@@ -121,9 +121,7 @@ def _get_jobs(active_jobs, rows):
                 get_jobs_helper(job.daily_rate, job._hours, job)
         elif active_jobs and datetime.datetime.strptime(job.date, "%d/%m/%Y") >= datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
                 get_jobs_helper(job.daily_rate, job._hours, job)
-
     return jobs, total_pay, total_hrs, worked_jobs
-
 
 def _display_row(html_link, active=False):
     row_num = request.form.get('row_num', None)
@@ -177,10 +175,11 @@ def user_login():
 
 @app.route('/index', methods=('GET', 'POST'))
 @app.route('/search', methods=('GET', 'POST'))
+@login_required
 def search():
 
     # FIX THE CODE SO THAT IT USES VALUES FROM THE RADIO BUTTONS
-    #title   = request.form.get('jobInfo')
+    #title  = request.form.get('jobInfo')
     form = SearchForm()
     error = ''
     if request.method == 'POST':
