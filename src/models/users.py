@@ -90,7 +90,7 @@ class User(object):
         """
         return Records.get_by_time(start_time, end_time, self.id, limit=limit)
 
-    def get_by_location(self, loc, limit=5):
+    def get_by_location(self, loc, limit=0):
         """get_by_location(str) -> return(obj)
         Finds jobs based on the given location
         Returns: either a single job object or multiple user object or None.
