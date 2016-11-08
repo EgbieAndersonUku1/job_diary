@@ -9,81 +9,87 @@
 {% block title %} Total jobs {% endblock %}
 
 {% block content %}
-   <h2>History of jobs past and present</h2>
-       <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
-        <tr>
-          <th>
-            Month
-          </th>
-          <th>
-            Date
-          </th>
-          <th>
-            Day
-          </th>
-          <th>
-            Job title
-          </th>
-          <th>
-            Job description
-          </th>
-          <th>
-            Job location
-          </th>
-          <th>
-            Hourly rate (£)
-          </th>
-          <th>
-            Total hours worked
-          </th>
-          <th>
-            Daily rate (£)
-          </th>
-          <th>
-            Start time
-          </th>
-          <th>
-            Finish time
-          </th>
 
-        </tr>
-        {% for job in jobs %}
-             <tr>
-               <td>
-                 {{ translate(job.month )[:3]}}
-               </td>
-               <td>
-                 {{ job.date }}
-               </td>
-               <td>
-                 {{ job.day[:3] }}
-               </td>
 
-               <td>
-                 {{ job.job_title }}
-               </td>
-               <td>
-                  {{ job.descr }}
-               </td>
-               <td>
-                 {{ job.loc }}
-               </td>
-               <td>
-                 £{{ job.hourly_rate}}
-               </td>
-               <td>
-                 {{ job.total_hours}}
-               </td>
-               <td>
-                 £{{ job.daily_rate }}
-               </td>
-               <td>
-                 {{ job.start_time }}
-               </td>
-               <td>
-                 {{ job.finish_time }}
-               </td>
-        {% endfor %}
+    <table class="table table-striped">
+              <h2>History of jobs past and present</h2>
+              <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
+            <tr>
+              <th>
+                Month
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Day
+              </th>
+              <th>
+                Job title
+              </th>
+              <th>
+                Job description
+              </th>
+              <th>
+                Job location
+              </th>
+              <th>
+                Hourly rate (£)
+              </th>
+              <th>
+                Total hours worked
+              </th>
+              <th>
+                Daily rate (£)
+              </th>
+              <th>
+                Start time
+              </th>
+              <th>
+                Finish time
+              </th>
+
+            </tr>
+            {% for job in jobs %}
+                 <tr>
+                   <td>
+                     {{ translate(job.month )[:3]}}
+                   </td>
+                   <td>
+                     {{ job.date }}
+                   </td>
+                   <td>
+                     {{ job.day[:3] }}
+                   </td>
+
+                   <td>
+                     {{ job.job_title }}
+                   </td>
+                   <td>
+                      {{ job.descr }}
+                   </td>
+                   <td>
+                     {{ job.loc }}
+                   </td>
+                   <td>
+                     £{{ job.hourly_rate}}
+                   </td>
+                   <td>
+                     {{ job.total_hours}}
+                   </td>
+                   <td>
+                     £{{ job.daily_rate }}
+                   </td>
+                   <td>
+                     {{ job.start_time }}
+                   </td>
+                   <td>
+                     {{ job.finish_time }}
+                   </td>
+
+
+            {% endfor %}
+    
 {% endblock %}
 
 
