@@ -70,7 +70,7 @@ class Records(object):
     def find_by_job_title(cls, query, user_id, limit=None):
         """Retrieves the data using the job title"""
         query = {'job_title' : query.title(), 'user_id': user_id}
-        return cls._find(query=query, key=('dates', -1), limit=limit)
+        return cls._find(query=query, key=('date', -1), limit=limit)
 
     @classmethod
     def find_by_hours_worked(cls, hours, user_id, limit):
@@ -78,7 +78,7 @@ class Records(object):
         Return the jobs based on the total hours worked
         """
         query = {'_hours' : hours, 'user_id': user_id}
-        return cls._find(query=query, key=('dates', -1), limit=limit)
+        return cls._find(query=query, key=('date', -1), limit=limit)
 
     @classmethod
     def get_by_time(cls, start_time, finish_time, user_id, limit=0):
@@ -87,10 +87,10 @@ class Records(object):
             return None
         elif start_time and finish_time==None:
             query = {'start_time': start_time, 'user_id': user_id}
-            return cls._find(query=query, key=('dates', -1), limit=limit)
+            return cls._find(query=query, key=('date', -1), limit=limit)
         elif finish_time and start_time==None:
             query = {'finish_time': finish_time, 'user_id': user_id}
-            return cls._find(query=query, key=('dates', -1), limit=limit)
+            return cls._find(query=query, key=('date', -1), limit=limit)
         else:
             return None
 
