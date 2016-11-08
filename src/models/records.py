@@ -62,7 +62,8 @@ class Records(object):
         return cls(**data) if data is not None else None
 
     @classmethod
-    def find_by_queries(self, query, limit):
+    def find_by_queries(cls, query, user_id, limit):
+        query.update({'user_id': user_id})
         return cls._find(query=query, key=('dates', -1), limit=limit)
 
     @classmethod

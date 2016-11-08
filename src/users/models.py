@@ -228,6 +228,9 @@ class ProcessSearchForm(object):
         self.finish_time = form.finish_time.data
         self.daily_rate  = form.daily_rate.data
         self._user = user = User(session['username'], _id=session['user_id'])
+        self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed ': 'Wednesday',
+                           'Thur':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
+                            'Sun': 'Sunday'}
 
     def _fix_time_str(self, time):
         # Temporay solution until I fix it: Databases stores values that end in 00 as 0
@@ -235,16 +238,29 @@ class ProcessSearchForm(object):
         return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
 
     def get_data(self):
-        if self.job_title:
+
+        if self.job_title and self.location and self.hrs_worked \
+                          and self.month and self.date and self.start_time \
+                          and self.finish_time and self.daily_rate:
+
+            query = {'job_title': self.job_title, 'loc':self.location,
+                     '_hours': self.hrs_worked, 'month':str(self.month[0:3].title()),
+                      'date': str(self.date),'start_time': self._fix_time_str(str(self.start_time)),
+                      'finish_time':self._fix_time_str(str(self.finish_time)),
+                      'day': self.days.get(self.day.title()[:3], None),
+                      'daily_rate': float(self.daily_rate) }
+
+            return self._user.get_by_multiple_queries(query)
+
+        elif self.job_title:
+            print 4565
             return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
             return self._user.get_by_location(self.location)
         elif self.date:
             return self._user.get_by_date_or_day(date=str(self.date))
         elif self.day:
-            days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
-                    'Thur':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday', 'Sun': 'Sunday'}
-            return self._user.get_by_date_or_day(day=days.get(self.day.title()[:3], None))
+            return self._user.get_by_date_or_day(day=self.days.get(self.day.title()[:3], None))
         elif self.start_time:
             return self._user.get_by_time(start_time=self._fix_time_str(str(self.start_time)))
         elif self.finish_time:

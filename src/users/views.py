@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-
 from src.users.form import RegisterForm, LoginForm, SearchForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
@@ -121,12 +120,11 @@ def _get_jobs(active_jobs, rows):
     return jobs, total_pay, total_hrs, worked_jobs
 
 
-
 def _display_row(html_link, active=False):
     row_num = request.form.get('row_num', None)
 
     if row_num == None:
-        row_num = 6
+        row_num = 0
     else:
         row_num = int(row_num)
 
@@ -175,19 +173,20 @@ def user_login():
 @app.route('/index', methods=('GET', 'POST'))
 @app.route('/search', methods=('GET', 'POST'))
 def search():
+
+    # FIX THE CODE SO THAT IT USES VALUES FROM THE RADIO BUTTONS
+    #title   = request.form.get('jobInfo')
     form = SearchForm()
     error = ''
     if request.method == 'POST':
         if form.validate_on_submit:
             search_form = ProcessSearchForm(form)
             jobs = search_form.get_data()
-
             if jobs:
                 total_hrs, total_pay = [], []
                 for job in jobs:
                     total_pay.append(float(job.daily_rate))
                     total_hrs.append(float(job._hours))
-                #return redirect(url_for('permalink_jobs_history', string=str(jobs) ))
                 return render_template("user/permalink_jobs_history.html", jobs=jobs,
                                         translate=translate_month, total_pay=sum(total_pay),
                                         total_hrs=sum(total_hrs))
@@ -211,8 +210,6 @@ def permalink_jobs_history(string):
 def get_json():
     user = User(session['username'], _id=session['user_id'])
     return render_template('user/json.html', records=user.get_records())
-
-
 
 @app.route('/update/<row>')
 @login_required

@@ -257,7 +257,7 @@ td {
 }
 
 body {
-  
+
 }
 hr {
   border-width: 2px;
@@ -273,7 +273,7 @@ Label {
 
 form {
   border : 1px solid black;
-  padding : 10px;
+  padding : 1px;
   background-color: #E6E0E0;
 }
 

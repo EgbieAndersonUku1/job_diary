@@ -49,7 +49,7 @@ class User(object):
 
     def get_by_multiple_queries(self, query, limit=0):
         """Find jobs by a multiple queries"""
-        return Records.find_by_queries(query, limit=limit)
+        return Records.find_by_queries(query, self.id, limit=limit)
 
     def get_by_hours(self, hours, limit=0):
         return Records.find_by_hours_worked(hours, self.id, limit=limit)
