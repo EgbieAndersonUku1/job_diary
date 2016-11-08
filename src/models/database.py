@@ -1,10 +1,10 @@
+
 ###################################################################
 # Author   : Egbie Uku
 # Database
 ###################################################################
 
 from flask.ext.pymongo import pymongo
-
 
 class DataBase(object):
     """Database stores the entire records of the users"""
@@ -31,7 +31,6 @@ class DataBase(object):
     @staticmethod
     def search(collections, query, key, limit_num):
         """search(str, value) -> return(cursor)
-
         collections: A table name from the database
         query      : The data to query from the database
         key        : The key for the data to sort out
@@ -69,6 +68,3 @@ class DataBase(object):
         """
         DataBase.DATABASE[collections].find_one_and_delete(query)
         return DataBase.DATABASE[collections].count(query)
-
-
-DataBase.initialize()

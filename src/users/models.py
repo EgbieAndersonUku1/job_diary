@@ -239,21 +239,7 @@ class ProcessSearchForm(object):
 
     def get_data(self):
 
-        if self.job_title and self.location and self.hrs_worked \
-                          and self.month and self.date and self.start_time \
-                          and self.finish_time and self.daily_rate:
-
-            query = {'job_title': self.job_title, 'loc':self.location,
-                     '_hours': self.hrs_worked, 'month':str(self.month[0:3].title()),
-                      'date': str(self.date),'start_time': self._fix_time_str(str(self.start_time)),
-                      'finish_time':self._fix_time_str(str(self.finish_time)),
-                      'day': self.days.get(self.day.title()[:3], None),
-                      'daily_rate': float(self.daily_rate) }
-
-            return self._user.get_by_multiple_queries(query)
-
-        elif self.job_title:
-            print 4565
+        if self.job_title:
             return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
             return self._user.get_by_location(self.location)

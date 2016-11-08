@@ -10,6 +10,11 @@ from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time
 import uuid
 from src.users.decorators import login_required, admin_required
 from flask_paginate import Pagination
+from src.models.database import DataBase
+
+@app.before_first_request
+def initialize():
+    DataBase.initialize()
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")

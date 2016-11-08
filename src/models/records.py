@@ -61,10 +61,6 @@ class Records(object):
         data = db.find_one('jobs_details', query)
         return cls(**data) if data is not None else None
 
-    @classmethod
-    def find_by_queries(cls, query, user_id, limit):
-        query.update({'user_id': user_id})
-        return cls._find(query=query, key=('dates', -1), limit=limit)
 
     @classmethod
     def find_by_job_title(cls, query, user_id, limit=None):
@@ -117,7 +113,7 @@ class Records(object):
         """find_by_month(str, str, str) -> return(None or obj)
         Return jobs based on the month worked
         """
-        key = ('month', -1)
+        key = ('month', 1)
         return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=key, limit=limit) # user wants information for a single month
 
     @classmethod
