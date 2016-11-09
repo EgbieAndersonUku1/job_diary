@@ -20,7 +20,7 @@ def initialize():
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
-POST_PER_PAGE = 5
+
 
 # use the _login_helper to log the user in
 @app.route('/', methods=('GET', 'POST'))
@@ -29,20 +29,11 @@ def login():
     """Allows the user entry to the login applicaton"""
     return login_helper(LoginForm, 'username', 'home', 'user/login.html', 'index')
 
-# admin registration
-@app.route('/admin/register', methods=('GET', 'POST'))
-def admin_register():
-    return register_helper(AdminRegisterForm, 'Incorrect admin name', 'admin/admin.html', 'home')
-
 # user registration
 @app.route('/register', methods=('GET', 'POST'))
 def user_register():
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'home')
 
-@app.route('/success')
-@login_required
-def success():
-    return 'some text will be here'
 
 @app.route('/job/entry', methods=('GET', 'POST'))
 @login_required
@@ -78,12 +69,6 @@ def entry_page():
                                start_mins=form.start_mins, rate=form.rate,end_hours=form.end_hours,
                                end_mins=form.end_mins, errors=errors)
 
-@app.route('/index', methods=('GET', 'POST'))
-def index():
-    if session.get('username', None) or session.get('admin', None):
-        return redirect(url_for('home'))
-    return (redirect(url_for('login')))
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -95,6 +80,7 @@ def logout():
     return (redirect(url_for('login')))
 
 @app.route('/reset')
+@login_required
 def reset():
     return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date, day=curr_day)
 
@@ -145,6 +131,7 @@ def active_jobs():
     return _display('user/active_jobs.html', True)
 
 @app.route('/job/edit/<value>')
+@login_required
 def edit(value):
     user = User(session['username'], _id=session['user_id'])
     return render_template('user/edit.html', form=user.get_by_row_id(str(value)))
@@ -211,11 +198,10 @@ def get_json():
 @app.route('/update/<row>')
 @login_required
 def update(row):
+    # FIX THE UPDATE METHOD
     pass
 
 @app.route('/home')
 @login_required
 def home():
     return render_template('user/home_page.html')
-
-#@app.route('/active/jobs')
