@@ -231,6 +231,7 @@ class ProcessSearchForm(object):
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed ': 'Wednesday',
                            'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
                             'Sun': 'Sunday'}
+        print self.month
 
     def _fix_time_str(self, time):
         # Temporay solution until I fix it: Databases stores values that end in 00 as 0
@@ -254,6 +255,7 @@ class ProcessSearchForm(object):
         elif self.hrs_worked:
             return self._user.get_by_hours(hours=self.hrs_worked)
         elif self.month:
+            print self.month[0:3].title()
             return self._user.get_by_month(month=str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)

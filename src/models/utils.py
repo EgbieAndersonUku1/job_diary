@@ -20,12 +20,11 @@ def translate_month(month_num):
 	>>> translate_month(1)
 	'January'
 	'''
-	if len(month_num) == 1:
-		month_num = '0' + str(month_num)
-	months = {'01': 'January', '02':'February', '03':'March',
-		      '04': 'April',   '05':'May',      '06': 'June',
-		      '07':'July',     '08': 'August',  '09':'September',
-	          '10':'October',  '11':'November', '12': 'December'}
+
+	months = {'1': 'January', '2':'February', '3':'March',
+		      '4': 'April',   '5':'May',      '6': 'June',
+		      '7':'July',     '8': 'August',  '9':'September',
+	          '10':'October', '11':'November','12': 'December'}
 	return months.get(month_num, None)
 
 def translate_to_month_num(month):
@@ -38,10 +37,10 @@ def translate_to_month_num(month):
 	>>> translate_to_month_num(01)
 	'January'
 	"""
-	months = {'Jan':'01', 'Feb':'02', 'Mar':'03',
-		      'Apr':'04', 'May':'05', 'Jun':'06',
-		      'Jul':'07', 'Aug':'08',  'Sep':'09',
-	          'Oct':'10',  'Nov':'11', 'Dec':'12'}
+	months = {'Jan':'1', 'Feb':'2', 'Mar':'3',
+		      'Apr':'4', 'May':'5', 'Jun':'6',
+		      'Jul':'7', 'Aug':'8', 'Sep':'9',
+	          'Oct':'10','Nov':'11','Dec':'12'}
 	return months.get(month.title(), None)
 
 def get_hours_worked(start_date, start_time, finish_date, finish_time):

@@ -30,10 +30,10 @@ img {
 }
 
 h2 {
-  color: green;
+  color: blue;
   font-family: fantasy;
   text-shadow: 2px 2px 5px red;
-  font-size: 72px;
+  font-size: 70px;
 }
 .mybutton {
   width: 10px;

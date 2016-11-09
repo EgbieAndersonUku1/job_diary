@@ -66,7 +66,8 @@ class Records(object):
         query. It returns a single job object that matches the users parameter or
         None if the parameters are not matched.
         """
-        return cls(**data) if db.find_one('jobs_details', query) is not None else None
+        data = db.find_one('jobs_details', query)
+        return cls(**data) if data is not None else None
 
     @classmethod
     def find_by_job_title(cls, query, user_id):
@@ -159,6 +160,7 @@ class Records(object):
 
         Retreive the jobs based on the month worked.
         """
+        
         return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=('month', 1))
 
     @classmethod
