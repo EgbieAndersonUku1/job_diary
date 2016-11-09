@@ -11,8 +11,11 @@
 
 
     {% if error %}
-        <div class="error text-danger">{{error}}</div>
-        <br />
+        <center>
+          <div class="error text-danger">{{error}}</div>
+          <br />
+        </center>
+
     {% endif %}
 
     {% from '_formhelper.html' import render_field %}
