@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-
 ####################################################################################
 # Author : Egbie Uku
-# Unlike the User class the Records class has directly access to the database and so
-# can access the records of the jobs for any users. The Records class does not have
-# access to the User class or anything else. Its primary job is to execute and return
-# queries for the User class.
+# class  : Record class
 ####################################################################################
 
 import sys
@@ -18,8 +14,8 @@ from database import DataBase as db
 
 class Records(object):
     """Records (class)
-    The Records class has directly access to the database. It can use that access
-    to either delete, retreive or update the record details of the user.
+    The Records class directly access the database to either delete,
+    retreive or update the job record details of the user.
     """
     def __init__(self, job_title, descr, loc, start_time, finish_time,
                            hourly_rate, total_hours, _hours, user_id, daily_rate,
@@ -44,65 +40,107 @@ class Records(object):
         self.track_times  = {}
 
     @classmethod
-    def _find(cls, query, key, limit=0):
-        """_find(str, str) -> return (obj or None)
+    def _find(cls, query, key):
+        """_find(dict, tuple) -> return (list or an empty list)
 
-        A private helper function that searches the database based on a query
-        and returns a list of job object that matches the users query or None
-        if not found.
+        @params:
+        query  : The query to be used to query the database.
+        key    : Sorts the returned data based on the key.
+        returns: Returns either an obj if the query is matched or None if it is not.
+
+        A private helper function that queries the database based on the user query.
+        Returns a list of job objects that matches the users parameters or an
+        empty list if the parameters do not match.
         """
-        return [cls(**data) for data in db.search('jobs_details', query=query, key=key, limit_num=limit)]
+        return [cls(**data) for data in db.search('jobs_details', query=query, key=key, limit_num=0)]
 
     @classmethod
     def _find_one(cls, query):
-        """A private helper function that searches the database for a value
-        and returns a single value that matches the users values
-        """
-        data = db.find_one('jobs_details', query)
-        return cls(**data) if data is not None else None
+        """_find_one(dict) -> return(obj or None)
 
+        @params:
+        query  : The query to be used to query the database
+        returns: A single object if parameter is matched and none otherwise
+
+        A private helper function that queries the database based on the user
+        query. It returns a single job object that matches the users parameter or
+        None if the parameters are not matched.
+        """
+        return cls(**data) if db.find_one('jobs_details', query) is not None else None
 
     @classmethod
     def find_by_job_title(cls, query, user_id):
-        """Retrieves the data using the job title"""
-        query = {'job_title' : query.title(), 'user_id': user_id}
-        return cls._find(query=query, key=('date', -1))
+        """find_by_job_title(dict, str) -> return(obj or None)
+
+        @params:
+        query  : The query to be used to query the database
+        user_id: The user ID
+        returns: A single object if parameter is matched and none otherwise
+
+        Retreives the data based on the job title.
+        """
+        return cls._find(query={'job_title' : query.title(), 'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_hours_worked(cls, hours, user_id):
-        """find_by_hours_worked(str, str, str) -> return(obj)
-        Return the jobs based on the total hours worked
+        """find_by_hours_worked(str, str) -> return(obj or None)
+
+        @params:
+        hours  : The total hours the user worked.
+        user_id: The user id.
+        returns: A single object if parameter is matched and none otherwise
+
+        Retreives the jobs based on the total hours the user worked.
         """
-        query = {'_hours' : hours, 'user_id': user_id}
-        return cls._find(query=query, key=('date', -1))
+        return cls._find(query={'_hours' : hours, 'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def get_by_time(cls, start_time, finish_time, user_id):
-        """Retreive the jobs based on either there start or end times"""
+        """get_by_time(str, str, str) -> return(obj or None)
+
+        @params:
+        start_time : The time the job started
+        finish_time: The time the job ended
+        returns    : An obj if the parameter are matched and None if is not matched.
+
+        Retreive the jobs based on either the start or end time.
+        """
         if start_time == None and finish_time == None:
             return None
         elif start_time and finish_time==None:
-            query = {'start_time': start_time, 'user_id': user_id}
-            return cls._find(query=query, key=('date', -1))
+            return cls._find(query={'start_time': start_time, 'user_id': user_id}, key=('date', -1))
         elif finish_time and start_time==None:
-            query = {'finish_time': finish_time, 'user_id': user_id}
-            return cls._find(query=query, key=('date', -1))
+            return cls._find(query={'finish_time': finish_time, 'user_id': user_id}, key=('date', -1))
         else:
-            query = {'finish_time': finish_time, 'start_time':start_time, 'user_id': user_id}
-            return cls._find(query=query, key=('date', -1))
-
+            return cls._find(query={'finish_time': finish_time, 'start_time':start_time, 'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_row_id(cls, row_id, user_id):
-        """Retreives the job data using the row id"""
-        row_id = '#' + str(row_id).strip('#')
+        """find_by_row_id(str, str) -> return(obj)
+
+        @params:
+        row_id : The row number for the table.
+        user_id: The user ID.
+        returns: A job object.
+
+        Retreives a specific job object based on the row ID
+        """
+        row_id = '#' + str(row_id).strip('#') #
         return cls._find_one(query={'row_id':row_id, 'user_id':user_id})
 
     @classmethod
     def find_by_date_or_day(cls, date, day, user_id):
-        """Retreives the job using the date or day"""
+        """find_by_date_or_day(str, str, str) -> return(obj or None)
 
-        key = ('daily_rate', -1)
+        @params:
+        date   : The data to query by.
+        day    : The day to query by.
+        user_id: The user ID
+        returns: an obj if the parameter are matched or None if it is not
+
+        Retreives the job by either date or day.
+        """
+        key = ('daily_rate', -1) # sort data based on the key
         if date and day:
             return cls._find({'date':date, 'day':day.title(), 'user_id':user_id}, key=key)
         elif date and not day:
@@ -112,15 +150,29 @@ class Records(object):
 
     @classmethod
     def find_by_month(cls, month, user_id):
-        """find_by_month(str, str, str) -> return(None or obj)
-        Return jobs based on the month worked
+        """find_by_month(str, str) -> return(None or obj)
+
+        @params:
+        month  : The month to query the database by.
+        user_id: The user ID.
+        returns: A single object if parameter is matched and none otherwise.
+
+        Retreive the jobs based on the month worked.
         """
-        key = ('month', 1)
-        return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=key) # user wants information for a single month
+        return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=('month', 1))
 
     @classmethod
-    def find_by_month_range(cls, month, month2, user_id, limit):
-        """Takes two months and returns the date worked between month one and month two"""
+    def find_by_month_range(cls, month, month2, user_id):
+        """find_by_month_range(str, str, str) -> return(obj or None)
+
+        @params:
+        month  : The starting month
+        month1 : The ending month
+        returns: An obj if the parameter are matched and None if not matched.
+
+        Takes month and month2 and returns the days worked between the months.
+        Also includes the starting and ending months.
+        """
 
         key = ('month', -1)
         month  = translate_to_month_num(month)  # translate month to number
@@ -130,18 +182,42 @@ class Records(object):
 
     @classmethod
     def find_by_location(cls, loc, user_id):
-        """return the jobs based on the location worked"""
+        """find_by_location(str, str) -> return(obj or None)
+
+        @params:
+        loc    : The location to query the database by.
+        user_id: The user ID
+        returns: An obj if the parameter are matched and None if not matched.
+
+        Queries the database by the job location.
+        """
         return cls._find(query={'loc': loc.title(),'user_id':user_id}, key=('date', -1))
 
     @classmethod
     def find_by_user_id(cls, user_id):
-        """retreive the job based on the user id"""
+        """find_by_user_id(str) -> returns(obj or none)
+
+        @params:
+        user_id: The user ID
+        returns: An obj if the there are jobs within the database or None if there are no jobs.
+
+        Queries the database by the user id and returns all jobs find in the database in the form
+        of an object.
+        """
         return cls._find({'user_id':user_id}, key=('date', 1))
 
-    # wages, bool_operation=None, amount=None, amount2=None, date=None, day=None
     @classmethod
     def find_by_daily_rate(cls, daily_rate, user_id):
-        """finds the job records based on the daily_rate"""
+        """find_by_daily_rate(str, str) -> return(obj or None)
+
+        @params:
+        daily_rate: A day's pay.
+        user_id   : The user id.
+        returns   : An obj if the there are jobs within the database or None if there are no jobs.
+
+        Queries the database based on the daily rate and returns an object if found
+        and none if not.
+        """
         return cls._find({'daily_rate': daily_rate, 'user_id':user_id}, key=('daily_rate', -1))
 
     @staticmethod
@@ -150,13 +226,14 @@ class Records(object):
         return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id), 'user_id':user_id})
 
     def save(self):
-        """saves the data to the databases. It is saved in the form of json"""
+        """Saves the data to the databases in the form of json"""
         db.insert_one('jobs_details', self.get_json())
         return self.row_id
 
     @staticmethod
     def get_records_in_json(user_id):
-        """ """
+        """Returns the record in the database albert in the form of a json object"""
+
         query = {'user_id':user_id}
         key=('date', -1)
         records = db.search('jobs_details', query=query, key=key, limit_num=0)

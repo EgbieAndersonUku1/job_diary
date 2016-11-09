@@ -14,7 +14,8 @@ from utils import translate_to_month_num, get_daily_rate, time_to_str, get_hours
 
 class User(object):
     """User(class)
-    The User class allows the user to add, modify and delete jobs from database.
+    The User class allows the user to add, modify and delete jobs from database
+    via the records class.
     """
     def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
         self.full_name  = full_name
