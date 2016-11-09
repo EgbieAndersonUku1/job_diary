@@ -229,7 +229,7 @@ class ProcessSearchForm(object):
         self.daily_rate  = form.daily_rate.data
         self._user = user = User(session['username'], _id=session['user_id'])
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed ': 'Wednesday',
-                           'Thur':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
+                           'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
                             'Sun': 'Sunday'}
 
     def _fix_time_str(self, time):
