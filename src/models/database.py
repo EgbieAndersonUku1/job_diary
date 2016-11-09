@@ -1,7 +1,6 @@
-
 ###################################################################
 # Author   : Egbie Uku
-# Database
+# Database : Database
 ###################################################################
 
 from flask.ext.pymongo import pymongo
@@ -22,6 +21,7 @@ class DataBase(object):
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
 
+        @params:
         collections: The name of the table(collections) to save to.
         data       : The data to insert into the database's collection
 
@@ -31,10 +31,12 @@ class DataBase(object):
 
     @staticmethod
     def search(collections, query, key, limit_num):
-        """search(str, value, value, int) -> return(cursor)
+        """search(str, value, value, tuple) -> return(cursor)
+
+        @params:
         collections: A table name for the database.
         query      : Queries the database based on the query.
-        key        : Sorts the data based on the key
+        key        : Sorts the data based on the key.
         limit_num  : Limits the data returned.
         return     : Returns a cursor object.
 
@@ -49,23 +51,24 @@ class DataBase(object):
     def find_one(collections, query):
         """find_one(str, value) -> return(dict)
 
+        @params:
         collections: A table name from the database
-        query : The information to query from the database
-        returns: A single row if found
+        query      : The information to query from the database
+        returns    : A single row if found
 
-        Returns the data from the database.
+        Return a single obj from from the database.
         """
         return DataBase.DATABASE[collections].find_one(query)
 
     @staticmethod
     def delete_row(collections, query):
-        """delete_row(str, value) -> return(dict)
+        """delete_row(str, value) -> return(None)
 
+        @params:
         collections: A table name from the database
-        query : The information to query from the database
-        returns: A single row if found
+        query      : The information to query from the database
+        returns    : A single row if found
 
         Deletes and entry from the row.
         """
         DataBase.DATABASE[collections].find_one_and_delete(query)
-        return DataBase.DATABASE[collections].count(query)
