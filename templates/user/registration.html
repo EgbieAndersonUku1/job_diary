@@ -3,11 +3,12 @@
 
 
 {% block content %}
+      <div>
+        <h2> Registration/Signup Account Page</h2>
+      </div>
 
       <div row='row' >
-
         <div class="col-md-offset-3 col-md-6">
-          <h3> Registration job page diary </h3>
 
           {% if error %}
               <div class="error text-danger">{{error}}</div>
@@ -21,10 +22,10 @@
             {{ render_field(form.password, class='form-control') }}
             {{ render_field(form.confirm, class='form-control') }}
 
-            <button type='submit'class='btn btn-primary'>Register</button>
-
+            <center>
+              <button type='submit'class='btn btn-primary btn-lg'>Register</button>
+            </center>
           </form>
-
         </div>
       </div>
 
