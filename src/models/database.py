@@ -14,6 +14,7 @@ class DataBase(object):
 
     @staticmethod
     def initialize():
+        """The initialize method initialize the pymongo database"""
         client = pymongo.MongoClient(DataBase.URI)
         DataBase.DATABASE = client['users']
 
@@ -21,8 +22,8 @@ class DataBase(object):
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
 
-        collections: The name of the table(collections) to save to
-        data : The data to insert into the database's collection
+        collections: The name of the table(collections) to save to.
+        data       : The data to insert into the database's collection
 
         Inserts data into a collection(table) for a given database.
         """
@@ -30,14 +31,14 @@ class DataBase(object):
 
     @staticmethod
     def search(collections, query, key, limit_num):
-        """search(str, value) -> return(cursor)
-        collections: A table name from the database
-        query      : The data to query from the database
-        key        : The key for the data to sort out
-        limit_num  :  Returns a default limit of 5 documents
-        return     : returns a cursor
+        """search(str, value, value, int) -> return(cursor)
+        collections: A table name for the database.
+        query      : Queries the database based on the query.
+        key        : Sorts the data based on the key
+        limit_num  : Limits the data returned.
+        return     : Returns a cursor object.
 
-        Takes a query and queries the database for information.
+        Takes a given query and queries the database for that information.
         """
         field, value = key
         if query == None:

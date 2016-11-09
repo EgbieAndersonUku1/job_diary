@@ -11,6 +11,7 @@ import uuid
 from src.users.decorators import login_required, admin_required
 from flask_paginate import Pagination
 from src.models.database import DataBase
+import json
 
 @app.before_first_request
 def initialize():
@@ -123,15 +124,9 @@ def _get_jobs(active_jobs, rows):
                 get_jobs_helper(job.daily_rate, job._hours, job)
     return jobs, total_pay, total_hrs, worked_jobs
 
-def _display_row(html_link, active=False):
-    row_num = request.form.get('row_num', None)
+def _display(html_link, active=False):
 
-    if row_num == None:
-        row_num = 0
-    else:
-        row_num = int(row_num)
-
-    jobs, total_pay, total_hrs, worked_jobs = _get_jobs(rows=row_num, active_jobs=active)
+    jobs, total_pay, total_hrs, worked_jobs = _get_jobs(rows=0, active_jobs=active)
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
@@ -142,12 +137,12 @@ def _display_row(html_link, active=False):
 @app.route('/history/jobs',  methods=('GET', 'POST'))
 @login_required
 def history():
-    return _display_row('user/history.html')
+    return _display('user/history.html')
 
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
-    return _display_row('user/active_jobs.html', True)
+    return _display('user/active_jobs.html', True)
 
 @app.route('/job/edit/<value>')
 def edit(value):
@@ -202,19 +197,16 @@ def search():
         return render_template('user/search.html', form=form)
 
 
-@app.route('/permalink_jobs_history/<string>')
-def permalink_jobs_history(string):
-    return string
-
 @app.route('/.json')
 @app.route('/home.json')
 @app.route('/history/jobs.json')
 @app.route('/active/jobs.json')
 @app.route('/job/entry.json')
+@app.route('/search.json')
 @login_required
 def get_json():
     user = User(session['username'], _id=session['user_id'])
-    return render_template('user/json.html', records=user.get_records())
+    return render_template('user/json.html', records=user.get_records(), json=json.dumps)
 
 @app.route('/update/<row>')
 @login_required

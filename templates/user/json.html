@@ -1,5 +1,5 @@
 {% if not records %}
    <h2> There are no records to display</h2>
 {% else %}
-     {{ records }}
+     {{ json(records, indent=4) }}
 {% endif %}

@@ -24,7 +24,7 @@
         </div>
 
       {% else %}
-              <br />
+              
               <h2>Days and times of jobs yet to work </h2>
               <h3>The total pay you will earn if you work an approximated period of {{ total_hrs }} hours is £{{ total_pay }}.</h3>
           <tr>
@@ -111,18 +111,7 @@
         {% endif %}
   </table>
 
-    <div id='searcher'>
-    <form  method="Post" action="{{ url_for('active_jobs') }}"
-      <form class="form-inline">
-        <div class="form-group">
-          <div class="input-group">
-            <div class="input-group-addon">#</div>
-            <input type="number" class="form-control" name='row_num' id="rows" placeholder="rows to show per page..">
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary default">display</button>
-    </form>
-  </div>
+
 
 
 {% endblock %}
