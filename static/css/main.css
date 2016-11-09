@@ -275,13 +275,22 @@ form {
   border : 1px solid black;
   padding : 1px;
   background-color: #E6E0E0;
+  padding-top: 1px;
 }
 
 .form-control {
   border : 0.5px solid black;
 }
 
+h4 {
+  text-align: center;
+  text-shadow: 2px 2px 5px red;
+  font-size: 100px;
+}
 
+#container{
+  padding-top: 1000px;
+}
 .button {
   center
 }

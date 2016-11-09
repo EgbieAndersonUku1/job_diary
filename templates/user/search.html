@@ -4,61 +4,50 @@
 
 {% block content %}
 
+<h4>Search form</h4>
 <div row='row' >
 
-  <div class="col-md-offset-3 col-md-4">
+  <div class="col-md-offset-0 col-md-12">
 
 
     {% if error %}
         <div class="error text-danger">{{error}}</div>
+        <br />
     {% endif %}
 
     {% from '_formhelper.html' import render_field %}
 
 
+    <div class='container'>
     <form method="post" action="{{ url_for('search') }}" role="form">
         {{ form.hidden_tag() }}
 
-        <div class="radio">
-             <label><input type="radio" name="jobInfo" checked="True">{{ render_field(form.job_title, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">{{ render_field(form.location, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">  {{ render_field(form.hrs_worked, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">{{ render_field(form.month, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">   {{ render_field(form.date, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo"> {{ render_field(form.day, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">  {{ render_field(form.start_time, class='form-control') }}</label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">{{ render_field(form.finish_time, class='form-control') }} </label>
-        </div>
-        <div class="radio">
-             <label><input type="radio" name="jobInfo">    {{ render_field(form.daily_rate, class='form-control') }}</label>
-        </div>
+           <label class="radio-inline"><input type="radio" name="jobInfo">{{ render_field(form.job_title, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.location, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.hrs_worked, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.month, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.date, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.day, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.start_time, class='form-control') }}</label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.finish_time, class='form-control') }} </label>
+           <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.daily_rate, class='form-control') }}</label>
+
+           <center>
+             <div>
+               <button type='submit'class='btn btn-primary btn'>Search</button>
+             </div>
+
+           </center>
 
 
 
+        <br />
 
 
 
-
-
-
-
-        <button type='submit'class='btn btn-primary'>Search</button>
 
     </form>
+  </div>
 
 
 
