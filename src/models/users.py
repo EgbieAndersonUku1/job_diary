@@ -43,9 +43,9 @@ class User(object):
                          _hours = time_to_float(hours),
                          user_id=self.id, daily_rate=daily_rate,
                          date=self.start_date,
-                         day=self.day,
+                         day=self.day.replace('0', ''),
                          end_date=self.end_date,
-                         month=self.start_date.split('/')[1])
+                         month=month.replace('0', ''))
         return record.save()
 
     def get_by_hours(self, hours):

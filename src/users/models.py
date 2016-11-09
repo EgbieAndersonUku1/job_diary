@@ -255,7 +255,6 @@ class ProcessSearchForm(object):
         elif self.hrs_worked:
             return self._user.get_by_hours(hours=self.hrs_worked)
         elif self.month:
-            print self.month[0:3].title()
             return self._user.get_by_month(month=str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)

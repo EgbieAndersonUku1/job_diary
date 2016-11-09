@@ -3,11 +3,12 @@
 {% block title %} Job Entry Page {% endblock %}
 
 {% block content %}
+<h2>Job attribute's entry page</h2>
   <div id='form'>
    <div class='border'>
     <div class="container">
       <div class="row">
-          <div class="col-md-offset-2 col-md-6">
+          <div class="col-md-offset-3 col-md-6">
 
         {% if success %}
             <div class="alert alert-success">
@@ -278,9 +279,10 @@
           <!-- Select Basic -->
 
 
-
+            <center>
               <button type="submit" class="btn btn-success btn-lg">Save</button>
               <a href="{{ url_for('reset') }}"><button type="button" class="btn btn-warning btn-lg">Reset</button></a>
+            </center>
         </form>
     </div>
   </div>

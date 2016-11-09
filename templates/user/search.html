@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h4>Search form</h4>
+<h4>Filter form</h4>
 <div row='row' >
 
   <div class="col-md-offset-0 col-md-12">
@@ -24,6 +24,7 @@
     <div class='container'>
     <form method="post" action="{{ url_for('search') }}" role="form">
         {{ form.hidden_tag() }}
+          <div>
 
            <label class="radio-inline"><input type="radio" name="jobInfo">{{ render_field(form.job_title, class='form-control') }}</label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.location, class='form-control') }}</label>
@@ -42,7 +43,7 @@
 
            </center>
 
-
+        </div>
 
         <br />
 

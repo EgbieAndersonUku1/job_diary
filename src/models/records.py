@@ -37,8 +37,7 @@ class Records(object):
         self.row_id = gen_row_id() if row_id is None else row_id
         self.month = month
         self._id = uuid.uuid4().hex if _id is None else _id
-        self.track_times  = {}
-
+        
     @classmethod
     def _find(cls, query, key):
         """_find(dict, tuple) -> return (list or an empty list)
@@ -160,7 +159,7 @@ class Records(object):
 
         Retreive the jobs based on the month worked.
         """
-        
+
         return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=('month', 1))
 
     @classmethod
