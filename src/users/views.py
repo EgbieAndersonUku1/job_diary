@@ -106,9 +106,9 @@ def success_page(row):
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=user.get_by_row_id(row))
 
-def _get_jobs(active_jobs, rows):
+def _get_jobs(active_jobs):
     user = User(session['username'], _id=session['user_id'])
-    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(rows), [], [], []
+    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(), [], [], []
 
     def get_jobs_helper(daily_rate, hrs, job):
         total_pay.append(float(job.daily_rate))
@@ -126,7 +126,7 @@ def _get_jobs(active_jobs, rows):
 
 def _display(html_link, active=False):
 
-    jobs, total_pay, total_hrs, worked_jobs = _get_jobs(rows=0, active_jobs=active)
+    jobs, total_pay, total_hrs, worked_jobs = _get_jobs(active_jobs=active)
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=translate_month,
                             dt=datetime.datetime.strptime,
