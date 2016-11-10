@@ -134,8 +134,9 @@ class ProcessForm(object):
              self.errors['end_date']   = 'The end date field must be not be empty'
          if datetime.strptime(str(end_date), "%d/%m/%Y") < datetime.strptime(str(start_date), "%d/%m/%Y"):
               self.errors['days_error'] = 'The end date cannot be less then the start date'
-         #if int(start_hours) != '0' and int(end_hours) >= 0 and  datetime.strptime(str(end_date), "%d/%m/%Y") == datetime.strptime(str(start_date), "%d/%m/%Y"):
-         #  self.errors['day_change'] = 'The start & end times you entered shows that you finished the next day increment the end date by one'
+         if int(end_hours) == 0 and start_date == end_date:
+             self.errors['next_day'] = 'It appears that your shift ended the next day. Increment the day in the end date by one'
+
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()
@@ -231,7 +232,7 @@ class ProcessSearchForm(object):
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
                            'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
                             'Sun': 'Sunday'}
-        
+
     def _fix_time_str(self, time):
         # Temporay solution until I fix it: Databases stores values that end in 00 as 0
         # due to one of my modules e.g 17:00 is stored as 17:0
