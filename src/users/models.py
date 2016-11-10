@@ -228,11 +228,10 @@ class ProcessSearchForm(object):
         self.finish_time = form.finish_time.data
         self.daily_rate  = form.daily_rate.data
         self._user = user = User(session['username'], _id=session['user_id'])
-        self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed ': 'Wednesday',
+        self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
                            'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
                             'Sun': 'Sunday'}
-        print self.month
-
+        
     def _fix_time_str(self, time):
         # Temporay solution until I fix it: Databases stores values that end in 00 as 0
         # due to one of my modules e.g 17:00 is stored as 17:0
