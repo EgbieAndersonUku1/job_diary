@@ -39,15 +39,36 @@ class Records(object):
         self.month = month
         self._id = uuid.uuid4().hex if _id is None else _id
 
-    @staticmethod
-    def delete_row(row_id, user_id):
-        """deletes the row using the id"""
-        return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id), 'user_id':user_id})
+    def get_json(self):
+        """returns a json represent of the class"""
+
+        return { 'job_title'  : self.job_title.title(),
+                 'descr'      : self.descr.title(),
+                 'loc'        : self.loc.title(),
+                 'start_time' : self.start_time,
+                 'finish_time': self.finish_time,
+                 'hourly_rate': float(self.hourly_rate),
+                 'total_hours': self.total_hours,
+                 '_hours'     : self._hours,
+                 'user_id'    : str(self.user_id),
+                 'daily_rate' : float(self.daily_rate),
+                 'date'       : str(self.date),
+                 'end_date'   : str(self.end_date),
+                 'month'      : int(self.month),
+                 'row_id'     : self.row_id,
+                 'day'        : self.day,
+                 'year'       : self.year,
+                 '_id'        : self._id }
 
     def save(self):
         """Saves the data to the databases in the form of json"""
         db.insert_one('jobs_details', self.get_json())
         return self.row_id
+
+    @staticmethod
+    def delete_row(row_id, user_id):
+        """deletes the row using the id"""
+        return db.delete_row(collections='jobs_details', query={'row_id': '#'+str(row_id), 'user_id':user_id})
 
     @classmethod
     def find_by_user_id(cls, user_id):
@@ -71,7 +92,7 @@ class Records(object):
         user_id: The user ID.
         returns: A job object.
 
-        Retreives a specific job object based on the row ID
+        Retreives a specific job object based on the row ID.
         """
         row_id = '#' + str(row_id).strip('#') #
         return cls._find_one(query={'row_id':row_id, 'user_id':user_id})
@@ -79,7 +100,7 @@ class Records(object):
     @classmethod
     def _date_range(cls, query_by, date, date_two, user_id):
         """A helper function that retreives the days worked between dates"""
-        
+
         date, date_two = int(month_to_num(date)), int(month_to_num(date_two)) # translate month2 to number
         date, date_two = min(date, date_two), max(date, date_two) # ensure that month1 is less then month2
         return cls._find(query={query_by: {'$gte': date, "$lte":date_two},
@@ -267,24 +288,4 @@ class Records(object):
             else:
                 user_records[record[u'date']] = [record]
         return user_records
-
-    def get_json(self):
-        """returns a json represent of the class"""
-
-        return { 'job_title'  : self.job_title.title(),
-                 'descr'      : self.descr.title(),
-                 'loc'        : self.loc.title(),
-                 'start_time' : self.start_time,
-                 'finish_time': self.finish_time,
-                 'hourly_rate': float(self.hourly_rate),
-                 'total_hours': self.total_hours,
-                 '_hours'     : self._hours,
-                 'user_id'    : str(self.user_id),
-                 'daily_rate' : float(self.daily_rate),
-                 'date'       : str(self.date),
-                 'end_date'   : str(self.end_date),
-                 'month'      : int(self.month),
-                 'row_id'     : self.row_id,
-                 'day'        : self.day,
-                 'year'       : self.year,
-                 '_id'        : self._id }
+        
