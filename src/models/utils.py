@@ -20,12 +20,11 @@ def month_to_str(month_num):
 	>>> month_to_str(1)
 	'January'
 	'''
-
 	months = {'1': 'January', '2':'February', '3':'March',
 		      '4': 'April',   '5':'May',      '6': 'June',
 		      '7':'July',     '8': 'August',  '9':'September',
 	          '10':'October', '11':'November','12': 'December'}
-	return months.get(month_num, None)
+	return months.get(str(month_num), None)
 
 def month_to_num(month):
 	"""month_to_num(int) -> return(str)
@@ -75,7 +74,6 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
 		hours = difference.days * 24           # convert days to hours
 		total_hours = difference.hours + hours # add the converted days hours to number of time hours worked
 		return total_hours, difference.minutes
-
 	return difference.hours, difference.minutes
 
 def gen_row_id():

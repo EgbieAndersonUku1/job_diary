@@ -32,6 +32,7 @@ class SearchForm(Form):
     Allows the user to search for jobs based on their, location, date, hourly
     rate, etc
     """
+    year = StringField('Year', [validators.Length(max=4)])
     job_title = StringField('Job title',[validators.Length(max=255)])
     location  = StringField('Location ', [validators.Length(max=255)])
     hrs_worked = StringField('Hours worked', [validators.Length(max=4)])
@@ -41,5 +42,5 @@ class SearchForm(Form):
     start_time = StringField('Start time')
     finish_time = StringField('Finish time')
     daily_rate  = DecimalField('Daily rate', rounding=2)
-    month_one = StringField('Month one or Date one ', [validators.Length(max=17)])
-    month_two = StringField('Month two or Date two ', [validators.Length(max=17)])
+    month_one = StringField('From', [validators.Length(max=17)])
+    month_two = StringField('To', [validators.Length(max=17)])

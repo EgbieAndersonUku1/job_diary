@@ -214,24 +214,25 @@ class ProcessForm(object):
 
 class ProcessSearchForm(object):
     """ProcessSearchForm(class)
-    Checks and process the search form
+    Checks and process the search form template.
     """
     def __init__(self, form):
         self.job_title = form.job_title.data
         self.location  = form.location.data
         self.hrs_worked = form.hrs_worked.data
+        self.year = form.year.data
         self.month     = form.month.data
         self.date = form.date.data
         self.day  = form.day.data
         self.start_time = form.start_time.data
         self.finish_time = form.finish_time.data
         self.daily_rate  = form.daily_rate.data
-        self.month_one = form.month_one.data
-        self.month_two = form.month_two.data
+        self.val_one = form.month_one.data
+        self.val_two = form.month_two.data
         self._user = user = User(session['username'], _id=session['user_id'])
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
-                           'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
-                            'Sun': 'Sunday'}
+                     'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
+                     'Sun': 'Sunday'}
 
 
     def _fix_time_str(self, time):
@@ -239,19 +240,17 @@ class ProcessSearchForm(object):
         # due to one of my modules e.g 17:00 is stored as 17:0
         return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
 
-    def _is_date_str(self, val):
-        """checks whether value is a date in word format e.g Jan or dd/mm/yyyy"""
-        return True
+    def _is_date_str(self, date):
+        """Returns True if date is in word format or False if date is in dd/mm/yyyy"""
+        return date.isalpha()
 
     def process_date(self, val, val2):
         """turn the dates into their month representives"""
-
         if self._is_date_str(val) and self._is_date_str(val2):
-            return self._user.get_by_month_range(val, val2)
-
+            return self._user.get_by_month_range(val[:3].title(), val2[:3].title())
 
     def get_data(self):
-        """retreives the data from the search form templates"""
+        """retreives the data from the search form template"""
         if self.job_title:
             return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
@@ -270,7 +269,8 @@ class ProcessSearchForm(object):
             return self._user.get_by_month(month=str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
-        elif self.month_one and self.month_two:
-            print self.month_one, self.month_two,44
-            return self.process_date(self.month_one[:3].title(), self.month_two[:3].title())
-
+        elif self.val_one and self.val_two:
+            return self.process_date(self.val_one, self.val_two)
+        elif self.year:
+            return self._user.get_by_year(self.year)
+        

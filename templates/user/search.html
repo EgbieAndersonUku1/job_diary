@@ -10,8 +10,6 @@
   <div class="col-md-offset-0 col-md-3">
     {% if error %}
         <center><span class="error text-danger">{{error}}</span></center>
-      
-
     {% endif %}
     {% from '_formhelper.html' import render_field %}
 
@@ -19,7 +17,6 @@
     <form method="post" action="{{ url_for('search') }}" role="form">
         {{ form.hidden_tag() }}
           <div>
-
            <label class="radio-inline"><input type="radio" name="jobInfo">{{ render_field(form.job_title, class='form-control') }}</label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.location, class='form-control') }}</label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.hrs_worked, class='form-control') }}</label>
@@ -29,6 +26,7 @@
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.start_time, class='form-control') }}</label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.finish_time, class='form-control') }} </label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.daily_rate, class='form-control') }}</label>
+            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.year, class='form-control') }}</label>
            <div id='month_range'>
              <div id='title'>
                   <h4>Month or date range</h4>
@@ -40,23 +38,14 @@
              </center>
 
            </div>
-
            <center>
                <button type='submit'class='btn btn-primary btn btn-lg'>Search</button>
            </center>
-
         </div>
-
     </form>
     <br/>
     <br/>
   </div>
-
-
-
   </div>
 </div>
-
-
-
 {% endblock %}

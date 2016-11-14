@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##################################################################################
 # Author : Egbie Uku
-# The User class does not have access to the database or anything else. It
-# can only access the job records of the users via the Record class API.
+# The User class access the database through the record class and returns
+# the attributes of the job such as title, location, etc.
 #################################################################################
 
 import time
@@ -35,6 +35,7 @@ class User(object):
         daily_rate = get_daily_rate(hours, hourly_rate) # calculate the daily rate
         day, month, year = self.start_date.split('/')
 
+        month  = month.replace('0', '') if month.startswith('0') else month
         record = Records(job_title=job_title, descr=descr,
                          loc=loc,start_time=start_time,
                          finish_time=finish_time,
@@ -45,14 +46,8 @@ class User(object):
                          date=self.start_date,
                          day=self.day.replace('0', ''),
                          end_date=self.end_date,
-                         month=month.replace('0', ''))
+                         month=month) 
         return record.save()
-
-    def get_by_hours(self, hours):
-        """get_by_hours(int) -> return(obj or None)
-        Queries the records by hours and returns a job obj if found or None.
-        """
-        return Records.find_by_hours_worked(hours, self.id)
 
     def get_by_user_id(self):
         """get_by_user_id(None) -> return(obj)
@@ -66,11 +61,9 @@ class User(object):
         """
         return Records.find_by_row_id(num, self.id)
 
-    def get_by_job_title(self, job_title):
-        """get_by_job_title(str) -> return(obj)
-        Queries the records by job title and returns a job obj if found or None.
-        """
-        return Records.find_by_job_title(job_title, self.id)
+    def get_by_year(self, year):
+        """Returns the days worked based on the year"""
+        return Records.find_by_year(year, self.id)
 
     def get_by_date_or_day(self, date=None, day=None):
         """get_by_date_and_day(str, str) -> return(str)
@@ -78,17 +71,59 @@ class User(object):
         """
         return Records.find_by_date_or_day(date, day, self.id)
 
+    def get_by_date_range(self, date, date_two):
+        """Returns the days worked between two dates including date and date two"""
+        return Records.find_by_date_range(date, date_two, self.id)
+
+
+    def get_by_month_range(self, month, month_two):
+        """Return the days worked between two months including
+        the month one and month2"""
+        return Records.find_by_month_range(month, month_two, self.id)
+
+    def get_by_month(self, month):
+        """get_by_month(str, str(optional)) -> return(None or obj)
+        Queries the records by month and returns a job obj if found or None.
+        """
+        return Records.find_by_month(month, self.id)
+
     def get_by_time(self, start_time=None, end_time=None):
         """get_by_time(str, str, str) -> return(obj)
         Queries the records by times and returns a job obj if found or None.
         """
-        return Records.get_by_time(start_time, end_time, self.id)
+        return Records.find_by_time(start_time, end_time, self.id)
+
+    def get_by_hours(self, hours):
+        """get_by_hours(int) -> return(obj or None)
+        Queries the records by hours and returns a job obj if found or None.
+        """
+        return Records.find_by_hours_worked(hours, self.id)
+
+    def get_by_job_title(self, job_title):
+        """get_by_job_title(str) -> return(obj)
+        Queries the records by job title and returns a job obj if found or None.
+        """
+        return Records.find_by_job_title(job_title, self.id)
+
+    def get_by_daily_rate(self, daily_rate):
+        """get_by_daily_rate(str) -> return(obj)
+        Queries the records by the daily rate and returns a job obj if found or None.
+        """
+        return Records.find_by_daily_rate(float(daily_rate), user_id=self.id)
 
     def get_by_location(self, loc):
         """get_by_location(str) -> return(obj)
         Queries the records by location and returns a job obj if found or None.
         """
         return Records.find_by_location(loc, self.id)
+
+    def get_records(self):
+        """return the records in json format"""
+        return Records.get_records_in_json(self.id)
+    
+    def de_activate_account(self):
+        """alllows the person to delete their account along with all their data"""
+        pass
 
     def delete_row(self, row_id):
         """delete_row(str) -> return(None)
@@ -101,32 +136,6 @@ class User(object):
         Updates a row using the row id
         """
         # WRITE CODE HERE TO UPDATES ROWS
-        pass
-
-    def get_by_daily_rate(self, daily_rate):
-        """get_by_daily_rate(str) -> return(obj)
-        Queries the records by the daily rate and returns a job obj if found or None.
-        """
-        return Records.find_by_daily_rate(float(daily_rate), user_id=self.id)
-
-    def get_by_month(self, month):
-        """get_by_month(str, str(optional)) -> return(None or obj)
-        Queries the records by month and returns a job obj if found or None.
-        """
-        return Records.find_by_month(month, self.id)
-
-    def get_records(self):
-        """return the records in json format"""
-        return Records.get_records_in_json(self.id)
-
-    def get_by_month_range(self, month, month_two):
-        """Return the dates worked between month one and month 2 including
-        the month one and month2"""
-        return Records.find_by_month_range(month, month_two, self.id)
-
-
-    def de_activate_account(self):
-        """alllows the person to delete their account along with all their data"""
         pass
 
     def __repr__(self):
