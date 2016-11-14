@@ -41,5 +41,5 @@ class SearchForm(Form):
     start_time = StringField('Start time')
     finish_time = StringField('Finish time')
     daily_rate  = DecimalField('Daily rate', rounding=2)
-    month_one = StringField('Month or Date ', [validators.Length(max=17)])
-    month_two = StringField('Month or Date ', [validators.Length(max=17)])
+    month_one = StringField('Month one or Date one ', [validators.Length(max=17)])
+    month_two = StringField('Month two or Date two ', [validators.Length(max=17)])

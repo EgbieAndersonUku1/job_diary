@@ -6,7 +6,7 @@ from user_form_helpers import login_helper, register_helper
 import datetime
 from src.users.models import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
-from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, translate_month
+from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, month_to_str
 import uuid
 from src.users.decorators import login_required, admin_required
 from flask_paginate import Pagination
@@ -114,7 +114,7 @@ def _display(html_link, active=False):
 
     jobs, total_pay, total_hrs, worked_jobs = _get_jobs(active_jobs=active)
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
-                            translate=translate_month,
+                            translate=month_to_str,
                             dt=datetime.datetime.strptime,
                             total_pay=sum(total_pay),
                             total_hrs=int(round(sum(total_hrs))), active=active)
@@ -174,7 +174,7 @@ def search():
                     total_pay.append(float(job.daily_rate))
                     total_hrs.append(float(job._hours))
                 return render_template("user/permalink_jobs_history.html", jobs=jobs,
-                                        translate=translate_month, total_pay=sum(total_pay),
+                                        translate=month_to_str, total_pay=sum(total_pay),
                                         total_hrs=sum(total_hrs), curr_date=curr_date,
                                         dt=datetime.datetime.strptime)
             else:

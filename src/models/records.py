@@ -9,7 +9,7 @@ import os
 import random
 import time
 import uuid
-from utils import translate_to_month_num, gen_row_id, get_hours_worked
+from utils import month_to_num, gen_row_id, get_hours_worked
 from database import DataBase as db
 
 class Records(object):
@@ -161,24 +161,23 @@ class Records(object):
         Retreive the jobs based on the month worked.
         """
 
-        return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=('month', 1))
+        return cls._find(query={'month':month_to_num(month), 'user_id': user_id}, key=('month', 1))
 
     @classmethod
     def find_by_month_range(cls, month, month_two, user_id):
         """find_by_month_range(str, str, str) -> return(obj or None)
 
         @params:
-        month  : The starting month
-        month1 : The ending month
-        returns: An obj if the parameter are matched and None if not matched.
+        month     : The starting month
+        month_two : The ending month
+        returns   : An obj if the parameter are matched and None if not matched.
 
-        Takes month and month2 and returns the days worked between the months.
-        Also includes the starting and ending months.
+        Takes two months and returns the days worked between the months
+        including the starting and ending months.
         """
 
-        key = ('month', -1)
-        month  = translate_to_month_num(month)  # translate month to number
-        month_two = translate_to_month_num(month_two) # translate month2 to number
+        key = ('date', -1) # sort dates in descending order e.g highest to lowest
+        month, month_two = month_to_num(month),month_to_num(month_two) # translate month2 to number
         month, month_two = min(month, month_two), max(month, month_two) # ensure that month1 is less then month2
         return cls._find(query={'month': {'$gte': str(month), "$lte":str(month_two)},'user_id':user_id}, key=key)
 
