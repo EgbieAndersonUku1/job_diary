@@ -38,7 +38,6 @@ class Records(object):
         self.row_id = gen_row_id() if row_id is None else row_id
         self.month = month
         self._id = uuid.uuid4().hex if _id is None else _id
-        print(month), int(month),5
 
     @staticmethod
     def delete_row(row_id, user_id):
@@ -80,11 +79,12 @@ class Records(object):
     @classmethod
     def _date_range(cls, query_by, date, date_two, user_id):
         """A helper function that retreives the days worked between dates"""
-
-        key = ('date', -1) # sort dates in descending order e.g highest to lowest
-        date, date_two = month_to_num(date),month_to_num(date_two) # translate month2 to number
+        
+        date, date_two = int(month_to_num(date)), int(month_to_num(date_two)) # translate month2 to number
         date, date_two = min(date, date_two), max(date, date_two) # ensure that month1 is less then month2
-        return cls._find(query={query_by: {'$gte': int(date), "$lte":int(date_two)},'user_id':user_id}, key=key)
+        return cls._find(query={query_by: {'$gte': date, "$lte":date_two},
+                        'user_id':user_id}, 
+                         key=('date', -1))
 
     @classmethod
     def _find(cls, query, key):
