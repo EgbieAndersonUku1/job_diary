@@ -134,9 +134,7 @@ class ProcessForm(object):
              self.errors['end_date']   = 'The end date field must be not be empty'
          if datetime.strptime(str(end_date), "%d/%m/%Y") < datetime.strptime(str(start_date), "%d/%m/%Y"):
               self.errors['days_error'] = 'The end date cannot be less then the start date'
-         if int(end_hours) == 0 and start_date == end_date:
-             self.errors['next_day'] = 'It appears that your shift ended the next day. Increment the day in the end date by one'
-
+         
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()
@@ -160,7 +158,7 @@ class ProcessForm(object):
         return True, self.errors, self._obj
 
     def _concatcenate_time_str(self):
-    	""" Takes two strings and concatcenates them together creating a time string"""
+    	""" Takes two strings \and concatcenates them together creating a time string"""
 
         # guarantees that time is expressed as hh:mm
         if len(self._obj.start_mins) == 1 and 1 <= int(self._obj.start_mins) < 10:
@@ -228,18 +226,32 @@ class ProcessSearchForm(object):
         self.start_time = form.start_time.data
         self.finish_time = form.finish_time.data
         self.daily_rate  = form.daily_rate.data
+        self.month_one = form.month_one.data
+        self.month_two = form.month_two.data
         self._user = user = User(session['username'], _id=session['user_id'])
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
                            'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
                             'Sun': 'Sunday'}
+
 
     def _fix_time_str(self, time):
         # Temporay solution until I fix it: Databases stores values that end in 00 as 0
         # due to one of my modules e.g 17:00 is stored as 17:0
         return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
 
-    def get_data(self):
+    def _is_date_str(self, val):
+        """checks whether value is a date in word format e.g Jan or dd/mm/yyyy"""
+        return True
 
+    def process_date(self, val, val2):
+        """turn the dates into their month representives"""
+
+        if self._is_date_str(val) and self._is_date_str(val2):
+            return self._user.get_by_month_range(val, val2)
+
+
+    def get_data(self):
+        """retreives the data from the search form templates"""
         if self.job_title:
             return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
@@ -258,3 +270,7 @@ class ProcessSearchForm(object):
             return self._user.get_by_month(month=str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
+        elif self.month_one and self.month_two:
+            print self.month_one, self.month_two,44
+            return self.process_date(self.month_one[:3].title(), self.month_two[:3].title())
+

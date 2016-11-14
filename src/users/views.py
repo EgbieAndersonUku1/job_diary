@@ -27,7 +27,7 @@ curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     """Allows the user entry to the login applicaton"""
-    return login_helper(LoginForm, 'username', 'home', 'user/login.html', 'index')
+    return login_helper(LoginForm, 'username', 'home', 'user/login.html', 'home')
 
 # user registration
 @app.route('/register', methods=('GET', 'POST'))

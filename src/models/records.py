@@ -37,7 +37,7 @@ class Records(object):
         self.row_id = gen_row_id() if row_id is None else row_id
         self.month = month
         self._id = uuid.uuid4().hex if _id is None else _id
-        
+
     @classmethod
     def _find(cls, query, key):
         """_find(dict, tuple) -> return (list or an empty list)
@@ -67,6 +67,7 @@ class Records(object):
         """
         data = db.find_one('jobs_details', query)
         return cls(**data) if data is not None else None
+
 
     @classmethod
     def find_by_job_title(cls, query, user_id):
@@ -163,7 +164,7 @@ class Records(object):
         return cls._find(query={'month':translate_to_month_num(month), 'user_id': user_id}, key=('month', 1))
 
     @classmethod
-    def find_by_month_range(cls, month, month2, user_id):
+    def find_by_month_range(cls, month, month_two, user_id):
         """find_by_month_range(str, str, str) -> return(obj or None)
 
         @params:
@@ -177,9 +178,9 @@ class Records(object):
 
         key = ('month', -1)
         month  = translate_to_month_num(month)  # translate month to number
-        month2 = translate_to_month_num(month2) # translate month2 to number
-        month, month2 = min(month, month2), max(month, month2) # ensure that month1 is less then month2
-        return cls._find(query={'month': {'$gte': month, "$lte":month2},'user_id':user_id}, key=key)
+        month_two = translate_to_month_num(month_two) # translate month2 to number
+        month, month_two = min(month, month_two), max(month, month_two) # ensure that month1 is less then month2
+        return cls._find(query={'month': {'$gte': str(month), "$lte":str(month_two)},'user_id':user_id}, key=key)
 
     @classmethod
     def find_by_location(cls, loc, user_id):
@@ -205,7 +206,7 @@ class Records(object):
         Queries the database by the user id and returns all jobs find in the database in the form
         of an object.
         """
-        return cls._find({'user_id':user_id}, key=('date', 1))
+        return cls._find({'user_id':user_id}, key=('daily_rate', -1))
 
     @classmethod
     def find_by_daily_rate(cls, daily_rate, user_id):

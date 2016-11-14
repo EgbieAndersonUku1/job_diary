@@ -119,6 +119,12 @@ class User(object):
         """return the records in json format"""
         return Records.get_records_in_json(self.id)
 
+    def get_by_month_range(self, month, month_two):
+        """Return the dates worked between month one and month 2 including
+        the month one and month2"""
+        return Records.find_by_month_range(month, month_two, self.id)
+
+
     def de_activate_account(self):
         """alllows the person to delete their account along with all their data"""
         pass

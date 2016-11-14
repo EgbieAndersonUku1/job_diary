@@ -4,22 +4,16 @@
 
 {% block content %}
 
-<h4>Filter form</h4>
+<h2>Filter form</h2>
 <div row='row' >
 
-  <div class="col-md-offset-0 col-md-12">
-
-
+  <div class="col-md-offset-0 col-md-3">
     {% if error %}
-        <center>
-          <div class="error text-danger">{{error}}</div>
-          <br />
-        </center>
+        <center><span class="error text-danger">{{error}}</span></center>
+      
 
     {% endif %}
-
     {% from '_formhelper.html' import render_field %}
-
 
     <div class='container'>
     <form method="post" action="{{ url_for('search') }}" role="form">
@@ -35,22 +29,27 @@
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.start_time, class='form-control') }}</label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.finish_time, class='form-control') }} </label>
            <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.daily_rate, class='form-control') }}</label>
+           <div id='month_range'>
+             <div id='title'>
+                  <h4>Month or date range</h4>
+             </div>
+             <center>
+               {{ render_field(form.month_one, class='form-group') }}
+               <h4>To</h4>
+               {{ render_field(form.month_two, class='form-group') }}
+             </center>
+
+           </div>
 
            <center>
-             <div>
                <button type='submit'class='btn btn-primary btn btn-lg'>Search</button>
-             </div>
-
            </center>
 
         </div>
 
-        <br />
-
-
-
-
     </form>
+    <br/>
+    <br/>
   </div>
 
 
