@@ -201,7 +201,7 @@ class Records(object):
         Takes two months and returns the days worked between the months
         including the starting and ending months.
         """
-        return cls._date_range('month', month, month_two, user_id)
+        return cls._date_range('month', month[0:3].title(), month_two[0:3].title(), user_id)
         
     @classmethod
     def find_by_time(cls, start_time, finish_time, user_id):
@@ -220,8 +220,7 @@ class Records(object):
             return cls._find(query={'start_time': start_time, 'user_id': user_id}, key=('date', -1))
         elif finish_time and start_time==None:
             return cls._find(query={'finish_time': finish_time, 'user_id': user_id}, key=('date', -1))
-        else:
-            return cls._find(query={'finish_time': finish_time, 'start_time':start_time, 'user_id': user_id}, key=('date', -1))
+        return cls._find(query={'finish_time': finish_time, 'start_time':start_time, 'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_hours_worked(cls, hours, user_id):

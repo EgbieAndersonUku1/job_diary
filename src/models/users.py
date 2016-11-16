@@ -75,8 +75,7 @@ class User(object):
         return Records.find_by_date_range(date, date_two, self.id)
 
     def get_by_month_range(self, month, month_two):
-        """Return the days worked between two months including
-        the month one and month2"""
+        """Return the days worked between two months including the month one and month2"""
         return Records.find_by_month_range(month, month_two, self.id)
 
     def get_by_month(self, month):

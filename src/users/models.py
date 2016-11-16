@@ -110,7 +110,6 @@ class ProcessForm(object):
             msg  = check_date(str(start_date))
             msg2 = check_date(str(end_date))
 
-           
             if msg != True and msg2 != True:
                 self.errors['date'] = msg
                 self.errors['date'] = msg2
@@ -249,7 +248,6 @@ class ProcessSearchForm(object):
         year, month, day = date.split('-')
         pass
 
-
     def _is_date_str(self, date):
         """Returns True if date is in word format or False if date is in dd/mm/yyyy"""
         return date.isalpha()
@@ -258,7 +256,7 @@ class ProcessSearchForm(object):
         """turn the dates into their month representives"""
         if self._is_date_str(val) and self._is_date_str(val2):
             if month_to_num(val) and month_to_num(val2):
-                return self._user.get_by_month_range(val[:3].title(), val2[:3].title())
+                return self._user.get_by_month_range(val, val2)
         elif not self._is_date_str(val) and not self._is_date_str(val2):
             return self._user.get_by_date_range(val, val2)
 
@@ -283,7 +281,7 @@ class ProcessSearchForm(object):
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
         elif self.val_one and self.val_two:
-            return self.process_date(self.val_one, self.val_two)
+            return self.process_date(self.val_one[:3].title(), self.val_two[:3].title())
         elif self.year:
             return self._user.get_by_year(self.year)
         
