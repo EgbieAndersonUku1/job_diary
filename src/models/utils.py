@@ -6,7 +6,6 @@ from datetime import datetime
 from dateutil import relativedelta
 import random
 
-
 def check_date(date):
     """check_date(str) -> return(True or str)
     Takes a date and checks if the date is in the format
@@ -164,3 +163,30 @@ def time_to_str(time):
 	elif hours > 1 and not mins:
 		time_str = '{} hours '.format(hours)
 	return time_str
+
+def get_jobs(active_jobs, user_obj, session, curr_date):
+    """get_job sorts the active jobs from the none active jobs
+
+    @params: 
+    active_jobs: flag that tells the function to only search for active jobs
+    user_obj   : user object module
+    session    : The session belonging to the user 
+    curr_date  : The current date
+    returns    : None if not found or an object if found
+    """
+    user = user_obj(session['username'], _id=session['user_id'])
+    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(), [], [], []
+
+    def get_jobs_helper(daily_rate, hrs, job):
+        """returns the daily rate and the hours worked for the processed jobs"""
+        total_pay.append(float(job.daily_rate))
+        total_hrs.append(float(job._hours))
+        worked_jobs.append(job)
+
+    for job in jobs:
+        if not active_jobs:
+            if datetime.strptime(job.date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d"):
+                get_jobs_helper(job.daily_rate, job._hours, job)
+        elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= datetime.strptime(curr_date, "%Y-%m-%d"):
+                get_jobs_helper(job.daily_rate, job._hours, job)
+    return jobs, total_pay, total_hrs, worked_jobs

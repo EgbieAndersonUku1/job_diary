@@ -3,15 +3,15 @@ from src.users.form import RegisterForm, LoginForm, SearchForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
 from user_form_helpers import login_helper, register_helper
-import datetime
 from src.users.models import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
-from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, month_to_str
-import uuid
+from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, month_to_str, get_jobs
 from src.users.decorators import login_required, admin_required
 from flask_paginate import Pagination
 from src.models.database import DataBase
 import json
+import datetime
+import uuid
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
@@ -32,7 +32,6 @@ def login():
 def user_register():
     """Register the user to the application"""
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'home')
-
 
 @app.route('/job/entry', methods=('GET', 'POST'))
 @login_required
@@ -96,24 +95,6 @@ def success_page(row):
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=user.get_by_row_id(row))
 
-def _get_jobs(active_jobs):
-    """helper function that sorts the active jobs from the none active jobs"""
-    user = User(session['username'], _id=session['user_id'])
-    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(), [], [], []
-
-    def get_jobs_helper(daily_rate, hrs, job):
-        """returns the daily rate and the hours worked for the processed jobs"""
-        total_pay.append(float(job.daily_rate))
-        total_hrs.append(float(job._hours))
-        worked_jobs.append(job)
-
-    for job in jobs:
-        if not active_jobs:
-            if datetime.datetime.strptime(job.date, "%Y-%m-%d") < datetime.datetime.strptime(curr_date, "%Y-%m-%d"):
-                get_jobs_helper(job.daily_rate, job._hours, job)
-        elif active_jobs and datetime.datetime.strptime(job.date, "%Y-%m-%d") >= datetime.datetime.strptime(curr_date, "%Y-%m-%d"):
-                get_jobs_helper(job.daily_rate, job._hours, job)
-    return jobs, total_pay, total_hrs, worked_jobs
 
 def _display(html_link, active=False):
     """_display(str, str) -> return(value)
@@ -125,13 +106,12 @@ def _display(html_link, active=False):
 
     Renders the jobs worked or not worked along with the hours and total pay.
     """
-    jobs, total_pay, total_hrs, worked_jobs = _get_jobs(active_jobs=active)
+    jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, User, session, curr_date)
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=month_to_str,
                             dt=datetime.datetime.strptime,
                             total_pay=sum(total_pay),
                             total_hrs=int(round(sum(total_hrs))), active=active)
-
 
 @app.route('/history/jobs',  methods=('GET', 'POST'))
 @login_required
@@ -202,7 +182,6 @@ def search():
                 return render_template('user/search.html', form=form, error=error)
     else:
         return render_template('user/search.html', form=form)
-
 
 @app.route('/.json')
 @app.route('/home.json')
