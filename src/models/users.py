@@ -33,7 +33,7 @@ class User(object):
         """
         hours = get_hours_worked(self.start_date, start_time, self.end_date, finish_time) # calculate the hours worked
         daily_rate = get_daily_rate(hours, hourly_rate) # calculate the daily rate
-        day, month, year = self.start_date.split('/')
+        year, month, day = self.start_date.split('-')
 
         month  = month.replace('0', '') if month.startswith('0') else month
         record = Records(job_title=job_title, descr=descr,
@@ -45,7 +45,6 @@ class User(object):
                          user_id=self.id, daily_rate=daily_rate,
                          date=self.start_date,
                          day=self.day.replace('0', ''),
-                         end_date=self.end_date,
                          month=month) 
         return record.save()
 
@@ -74,7 +73,6 @@ class User(object):
     def get_by_date_range(self, date, date_two):
         """Returns the days worked between two dates including date and date two"""
         return Records.find_by_date_range(date, date_two, self.id)
-
 
     def get_by_month_range(self, month, month_two):
         """Return the days worked between two months including

@@ -19,7 +19,7 @@ def initialize():
 
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
-curr_date = "{}/{}/{}".format(date.day, date.month, date.year)
+curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
 
 
 # use the _login_helper to log the user in
@@ -38,7 +38,10 @@ def user_register():
 @app.route('/job/entry', methods=('GET', 'POST'))
 @login_required
 def entry_page():
-
+    """entry_page(func)
+    Retreives and process the users data. Also renders the user data 
+    from the entry job page.
+    """
     start_date, end_date = curr_date, curr_date
     title   = request.form.get('job_title', '')
     descr   = request.form.get('description', '')
@@ -104,14 +107,22 @@ def _get_jobs(active_jobs):
     # get the jobs that we have already worked
     for job in jobs:
         if not active_jobs:
-            if datetime.datetime.strptime(job.date, "%d/%m/%Y") < datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
+            if datetime.datetime.strptime(job.date, "%Y-%m-%d") < datetime.datetime.strptime(curr_date, "%Y-%m-%d"):
                 get_jobs_helper(job.daily_rate, job._hours, job)
-        elif active_jobs and datetime.datetime.strptime(job.date, "%d/%m/%Y") >= datetime.datetime.strptime(curr_date, "%d/%m/%Y"):
+        elif active_jobs and datetime.datetime.strptime(job.date, "%Y-%m-%d") >= datetime.datetime.strptime(curr_date, "%Y-%m-%d"):
                 get_jobs_helper(job.daily_rate, job._hours, job)
     return jobs, total_pay, total_hrs, worked_jobs
 
 def _display(html_link, active=False):
+    """_display(str, str) -> return(value)
 
+    @params:
+    html_link: The link of the page to render
+    active   : Whether the jobs are active e.g not worked yet.
+    returns  : Render object.
+
+    Renders the jobs worked or not worked along with the hours and total pay.
+    """
     jobs, total_pay, total_hrs, worked_jobs = _get_jobs(active_jobs=active)
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=month_to_str,

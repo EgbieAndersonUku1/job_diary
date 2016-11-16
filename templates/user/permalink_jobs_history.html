@@ -90,7 +90,8 @@
                      {{ job.finish_time }}
                    </td>
                    <td>
-                     {% if dt(job.date, '%d/%m/%Y') < dt(curr_date, '%d/%m/%Y')  %}
+
+                     {% if dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
                          Yes
                      {% else %}
                          No

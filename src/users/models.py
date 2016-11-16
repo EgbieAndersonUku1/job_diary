@@ -5,6 +5,7 @@
 
 from src.models.database import DataBase as db
 from src.models.users import User
+from src.models.utils import month_to_num, check_date
 from src.models.utils import translate_day
 from src.models.utils import get_hours_worked, time_to_str, translate_day
 from flask import session
@@ -106,18 +107,24 @@ class ProcessForm(object):
          self.errors = {} # pass to the user so they can see there errors
          # check whether the dates are in the format dd/mm/yyyy
          if start_date and end_date:
-             st_date = start_date.split('/')
-             en_date = end_date.split('/')
-             if len(st_date) and len(en_date) == 3: # check whether dates are numbers
-                 if not(str(st_date[0]).isdigit() and str(st_date[1]).isdigit() and str(st_date[2]).isdigit()):
-                     self.errors['start_date'] = 'The start date has an incorrect format. Format(dd/mm/yyyy)'
-                 if not(str(en_date[0]).isdigit() and str(en_date[1]).isdigit() and str(en_date[2]).isdigit()):
-                     self.errors['end_date'] = 'The end date has an incorrect format. Format (dd/mm/yyyy)'
-             else:
-                self.errors['date'] = 'One or more of dates has an incorrect format'
+            msg  = check_date(str(start_date))
+            msg2 = check_date(str(end_date))
 
-         if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%d/%m/%Y") == datetime.strptime(str(start_date), "%d/%m/%Y")):
-            self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
+           
+            if msg != True and msg2 != True:
+                self.errors['date'] = msg
+                self.errors['date'] = msg2
+            elif msg == True and msg2 != True:
+                self.errors['date'] = 'Incorrect format for end date use YYYY-MM-DD'
+            elif msg != True and msg2 == True:
+                self.errors['date'] = 'Incorrect format for start date use YYYY-MM-DD'
+            else:
+            
+                if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%Y-%m-%d") == datetime.strptime(str(start_date), "%Y-%m-%d" )):
+                    self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
+                if datetime.strptime(str(end_date), "%Y-%m-%d") < datetime.strptime(str(start_date), "%Y-%m-%d"):
+                    self.errors['days_error'] = 'The end date cannot be less then the start date'
+                      
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:
@@ -132,9 +139,7 @@ class ProcessForm(object):
              self.errors['start_date']  = 'The start date field must be not be empty'
          if not end_date:
              self.errors['end_date']   = 'The end date field must be not be empty'
-         if datetime.strptime(str(end_date), "%d/%m/%Y") < datetime.strptime(str(start_date), "%d/%m/%Y"):
-              self.errors['days_error'] = 'The end date cannot be less then the start date'
-         
+        
 
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()
@@ -158,7 +163,7 @@ class ProcessForm(object):
         return True, self.errors, self._obj
 
     def _concatcenate_time_str(self):
-    	""" Takes two strings \and concatcenates them together creating a time string"""
+    	""" Takes two strings and concatcenates them together creating a time string"""
 
         # guarantees that time is expressed as hh:mm
         if len(self._obj.start_mins) == 1 and 1 <= int(self._obj.start_mins) < 10:
@@ -234,11 +239,16 @@ class ProcessSearchForm(object):
                      'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
                      'Sun': 'Sunday'}
 
-
     def _fix_time_str(self, time):
         # Temporay solution until I fix it: Databases stores values that end in 00 as 0
         # due to one of my modules e.g 17:00 is stored as 17:0
         return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
+
+    def _fix_date_str(self, date):
+        """checks if a date is in the form of yyyy/mm/dd. If not fix date"""
+        year, month, day = date.split('-')
+        pass
+
 
     def _is_date_str(self, date):
         """Returns True if date is in word format or False if date is in dd/mm/yyyy"""
@@ -247,7 +257,10 @@ class ProcessSearchForm(object):
     def process_date(self, val, val2):
         """turn the dates into their month representives"""
         if self._is_date_str(val) and self._is_date_str(val2):
-            return self._user.get_by_month_range(val[:3].title(), val2[:3].title())
+            if month_to_num(val) and month_to_num(val2):
+                return self._user.get_by_month_range(val[:3].title(), val2[:3].title())
+        elif not self._is_date_str(val) and not self._is_date_str(val2):
+            return self._user.get_by_date_range(val, val2)
 
     def get_data(self):
         """retreives the data from the search form template"""

@@ -6,11 +6,36 @@ from datetime import datetime
 from dateutil import relativedelta
 import random
 
+
+def check_date(date):
+    """check_date(str) -> return(True or str)
+    Takes a date and checks if the date is in the format
+    of YYYY-MM-DD.
+
+    Returns True if date is in the right format and returns
+    error message if the date is not.
+    """
+    if date != None:
+        if len(date) == 10 :
+            if '-' in date:
+                    year, month, day = date.split('-')
+                    if year.isdigit() and len(year) == 4:
+                            if month.isdigit() and len(month) == 2:
+                                    if day.isdigit() and len(day) == 2:
+                                            return True
+                                    return 'day must be in the format of DD'
+                            return 'month must be in the format of MM'
+                    return 'year must be YYYY'
+            return 'add "-" in between YYYY-MM-DD'
+        return 'incorrect date format try YYYY-MM-DD'
+    return 'date cannot be None'
+
+
 def translate_day(day):
 
 	days = {'mon': 'Monday',    'tue' : 'Tuesday',
-	       'wed': 'Wednesday', 'thu': 'Thursday',
-		   'fri': 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
+	       'wed' : 'Wednesday', 'thu' : 'Thursday',
+		   'fri' : 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
 	return days.get(str(day[0:3]).lower())
 
 def month_to_str(month_num):
@@ -60,8 +85,8 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
 	>>> get_hours_worked('1/1/2016', '1/4/2016', '9:23', '21:26')
 	(83, 43)
 	"""
-	day1, month1, year1 = start_date.split('/')  # split the dates for the start date by  /
-	day2, month2, year2 = finish_date.split('/') # split the dates for the finish date by /
+	year1, month1, day1 = start_date.split('-')  # split the dates for the start date by  /
+	year2, month2, day2 = finish_date.split('-') # split the dates for the finish date by /
 	hours1, minutes1 = start_time.split(':')
 	hours2, minutes2 = finish_time.split(':')
 	first_date = datetime(int(year1), int(month1), int(day1), int(hours1), int(minutes1))

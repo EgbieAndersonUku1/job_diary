@@ -18,8 +18,8 @@ class Records(object):
     retreive or update the job record details of the user.
     """
     def __init__(self, job_title, descr, loc, start_time, finish_time,
-                           hourly_rate, total_hours, _hours, user_id, daily_rate,
-                          date, day, end_date, month, year=None, row_id=None, _id=None):
+                 hourly_rate, total_hours, _hours, user_id, daily_rate,
+                 date, day, month, year=None, row_id=None, _id=None):
 
         self.job_title  = job_title
         self.descr = descr
@@ -32,15 +32,16 @@ class Records(object):
         self.user_id = user_id
         self.date =  date
         self.day  =  day
-        self.end_date = end_date
         self.loc  = loc
-        self.year = int(self.date.split('/')[-1]) if year == None else year
+        self.year = int(self.date.split('-')[0]) if year == None else year
         self.row_id = gen_row_id() if row_id is None else row_id
         self.month = month
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def get_json(self):
         """returns a json represent of the class"""
+
+        year, month, day = self.date.split('-')
 
         return { 'job_title'  : self.job_title.title(),
                  'descr'      : self.descr.title(),
@@ -52,8 +53,7 @@ class Records(object):
                  '_hours'     : self._hours,
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
-                 'date'       : str(self.date),
-                 'end_date'   : str(self.end_date),
+                 'date'       : '{}-{}-{}'.format(year, month, day),
                  'month'      : int(self.month),
                  'row_id'     : self.row_id,
                  'day'        : self.day,
@@ -81,7 +81,7 @@ class Records(object):
         Queries the database by the user id and returns all jobs find in the database in the form
         of an object.
         """
-        return cls._find({'user_id':user_id}, key=('daily_rate', -1))
+        return cls._find({'user_id':user_id}, key=('date', -1))
 
     @classmethod
     def find_by_row_id(cls, row_id, user_id):
@@ -101,12 +101,13 @@ class Records(object):
     def _date_range(cls, query_by, date, date_two, user_id):
         """A helper function that retreives the days worked between dates"""
 
-        date, date_two = int(month_to_num(date)), int(month_to_num(date_two)) # translate month2 to number
-        date, date_two = min(date, date_two), max(date, date_two) # ensure that month1 is less then month2
+        if query_by == 'month':
+            date, date_two = int(month_to_num(date)), int(month_to_num(date_two)) # translate month2 to number
+            date, date_two = min(date, date_two), max(date, date_two) # ensure that month1 is less then month2
+
         return cls._find(query={query_by: {'$gte': date, "$lte":date_two},
                         'user_id':user_id}, 
                          key=('date', -1))
-
     @classmethod
     def _find(cls, query, key):
         """_find(dict, tuple) -> return (list or an empty list)
@@ -140,7 +141,7 @@ class Records(object):
     @classmethod
     def find_by_date_range(cls, date, date_two, user_id):
         """find_by_date_range"""
-        return cls._date_range('date', date, date_two, user_id)
+        return cls._date_range('date', str(date), str(date_two), user_id)
 
     @classmethod
     def find_by_date_or_day(cls, date, day, user_id):
@@ -173,7 +174,7 @@ class Records(object):
         Queroes the database based on the year and returns a job object if found
         and None if none
         """
-        return cls._find({'year': int(year), 'user_id': user_id}, key=('month', -1))
+        return cls._find({'year': int(year), 'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_month(cls, month, user_id):
@@ -260,7 +261,7 @@ class Records(object):
         Queries the database based on the daily rate and returns an object if found
         and none if not.
         """
-        return cls._find({'daily_rate': daily_rate, 'user_id':user_id}, key=('daily_rate', -1))
+        return cls._find({'daily_rate': daily_rate, 'user_id':user_id}, key=('date', -1))
 
     @classmethod
     def find_by_location(cls, loc, user_id):
@@ -288,4 +289,3 @@ class Records(object):
             else:
                 user_records[record[u'date']] = [record]
         return user_records
-        
