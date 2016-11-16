@@ -191,9 +191,6 @@ class ProcessForm(object):
 
         Process the form and adds the user details to the database.
         """
-        # to be use with pymongo sorting for the database. Pymongo seems to have
-        # trouble sorting dates if 0 is not in front of a single digits. For example
-        # when sorting in smallest first it would place 19/09/2016 before 9/09/2016
         start_time, finish_time = self._concatcenate_time_str()
         hours = get_hours_worked(start_date, start_time, end_date, finish_time)
         user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
