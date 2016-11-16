@@ -29,9 +29,10 @@ class LoginForm(Form):
 
 class SearchForm(Form):
     """SearchForm(class)
-    Allows the user to search for jobs based on their, location, date, hourly
-    rate, etc
+    Allows the user to search the database based on the job attributes e.g. title,
+    location, month, etc via a form interface.
     """
+
     year = StringField('Year', [validators.Length(max=4)])
     job_title = StringField('Job title',[validators.Length(max=255)])
     location  = StringField('Location ', [validators.Length(max=255)])

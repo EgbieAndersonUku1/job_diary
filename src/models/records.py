@@ -104,7 +104,6 @@ class Records(object):
         if query_by == 'month':
             date, date_two = int(month_to_num(date)), int(month_to_num(date_two)) # translate month2 to number
             date, date_two = min(date, date_two), max(date, date_two) # ensure that month1 is less then month2
-
         return cls._find(query={query_by: {'$gte': date, "$lte":date_two},
                         'user_id':user_id}, 
                          key=('date', -1))
@@ -140,7 +139,15 @@ class Records(object):
 
     @classmethod
     def find_by_date_range(cls, date, date_two, user_id):
-        """find_by_date_range"""
+        """find_by_date_range(str, str, str) -> return(obj or None)
+
+        @parmas :
+        date    : starting date
+        date_two: the finishing date
+        user_id : The user id.
+
+        Returns the days worked between two dates including the starting and ending months
+        """
         return cls._date_range('date', str(date), str(date_two), user_id)
 
     @classmethod
@@ -193,10 +200,10 @@ class Records(object):
     def find_by_month_range(cls, month, month_two, user_id):
         """find_by_month_range(str, str, str) -> return(obj or None)
 
-        @params:
-        month     : The starting month
-        month_two : The ending month
-        returns   : An obj if the parameter are matched and None if not matched.
+        @params  :
+        month    : The starting month
+        month_two: The ending month
+        returns  : An obj if the parameter are matched and None if not matched.
 
         Takes two months and returns the days worked between the months
         including the starting and ending months.
@@ -207,7 +214,7 @@ class Records(object):
     def find_by_time(cls, start_time, finish_time, user_id):
         """get_by_time(str, str, str) -> return(obj or None)
 
-        @params:
+        @params    :
         start_time : The time the job started
         finish_time: The time the job ended
         returns    : An obj if the parameter are matched and None if is not matched.
@@ -252,7 +259,7 @@ class Records(object):
     def find_by_daily_rate(cls, daily_rate, user_id):
         """find_by_daily_rate(str, str) -> return(obj or None)
 
-        @params:
+        @params   :
         daily_rate: A day's pay.
         user_id   : The user id.
         returns   : An obj if the there are jobs within the database or None if there are no jobs.
@@ -282,6 +289,7 @@ class Records(object):
         query, user_records = {'user_id':user_id}, {}
         records = db.search('jobs_details', query=query, key=('date', -1))
         
+        # creates the json object based on the data retreive from the database.
         for record in records:
             if record[u'date'] in user_records:
                 user_records[record[u'date']].append(record)

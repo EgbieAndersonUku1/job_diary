@@ -4,9 +4,11 @@ from src.users.models import Login, Registration
 def login_helper(form_obj, *args):
     """
     Helper function: that assists the user entry to the applicaton
-    form_obj       : Takes either been a login form func or admin form func and renders it
-    msg            : An error message or message to display
-    template       : The template to display
+
+    @params:
+    form_obj  : Takes either been a login form func or admin form func and renders it
+    msg       : An error message or message to display
+    template  : The template to display
     """
 
     form           = form_obj()
@@ -40,6 +42,7 @@ def register_helper(obj, msg, template, redirect_link):
     """
     Helper function assists the users in registrating their details.
 
+    @parmas :
     obj     : either a normal registration or admin registration obj
     msg     : msg to display to the user
     template: The template to use

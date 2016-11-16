@@ -13,25 +13,24 @@ from flask_paginate import Pagination
 from src.models.database import DataBase
 import json
 
-@app.before_first_request
-def initialize():
-    DataBase.initialize()
-
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
 
+@app.before_first_request
+def initialize():
+    """initialize the database"""
+    DataBase.initialize()
 
-# use the _login_helper to log the user in
 @app.route('/', methods=('GET', 'POST'))
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     """Allows the user entry to the login applicaton"""
     return login_helper(LoginForm, 'username', 'home', 'user/login.html', 'home')
 
-# user registration
 @app.route('/register', methods=('GET', 'POST'))
 def user_register():
+    """Register the user to the application"""
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'home')
 
 
@@ -75,6 +74,7 @@ def entry_page():
 @app.route('/logout')
 @login_required
 def logout():
+    """log the user out of the application"""
     if session.get('admin', None):
         session.pop('admin')
     session.pop('username')
@@ -85,26 +85,28 @@ def logout():
 @app.route('/reset')
 @login_required
 def reset():
+    """reset the value in the form for the application"""
     return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date, day=curr_day)
 
 @app.route('/successful/<row>')
 @login_required
 def success_page(row):
-
+   """redirects the user to successful page entry after successful input"""
    user = User('',_id=session['user_id'])
    flash('The following data has been successful added to the database.')
    return render_template('user/table.html', rows=user.get_by_row_id(row))
 
 def _get_jobs(active_jobs):
+    """helper function that sorts the active jobs from the none active jobs"""
     user = User(session['username'], _id=session['user_id'])
     jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(), [], [], []
 
     def get_jobs_helper(daily_rate, hrs, job):
+        """returns the daily rate and the hours worked for the processed jobs"""
         total_pay.append(float(job.daily_rate))
         total_hrs.append(float(job._hours))
         worked_jobs.append(job)
 
-    # get the jobs that we have already worked
     for job in jobs:
         if not active_jobs:
             if datetime.datetime.strptime(job.date, "%Y-%m-%d") < datetime.datetime.strptime(curr_date, "%Y-%m-%d"):
@@ -134,22 +136,26 @@ def _display(html_link, active=False):
 @app.route('/history/jobs',  methods=('GET', 'POST'))
 @login_required
 def history():
+    """renders the entire job history active and none active"""
     return _display('user/history.html')
 
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
+    """renders the all jobs that are active (not worked)"""
     return _display('user/active_jobs.html', True)
 
 @app.route('/job/edit/<value>')
 @login_required
 def edit(value):
+    """Allows the jobs to be edited"""
     user = User(session['username'], _id=session['user_id'])
     return render_template('user/edit.html', form=user.get_by_row_id(str(value)))
 
 @app.route('/delete/<row>')
 @login_required
 def delete(row):
+    """deletes data from the a specific row"""
     user = User(session['username'], _id=session['user_id'])
     user.delete_row(row)
     return redirect(request.referrer)
@@ -157,12 +163,14 @@ def delete(row):
 @app.route('/admin')
 @login_required
 def admin_login():
+    """Changes the user from normal user to admin"""
     session['username'] = 'admin'
     return redirect(url_for('history'))
 
 @app.route('/user')
 @login_required
 def user_login():
+    """Logs the user into the user home page"""
     session['username'] = session['session_name']
     return redirect(url_for('history'))
 
@@ -170,8 +178,9 @@ def user_login():
 @app.route('/search', methods=('GET', 'POST'))
 @login_required
 def search():
-
-    # FIX THE CODE SO THAT IT USES VALUES FROM THE RADIO BUTTONS
+    """Search form that allows the user to search the form based on the job attributes"""
+    
+    # FIX THE CODE SO THAT IT USES VALUES FROM THE RADIO BUTTONS AND NOT ALL VALUES
     #title  = request.form.get('jobInfo')
     form = SearchForm()
     error = ''
@@ -203,6 +212,7 @@ def search():
 @app.route('/search.json')
 @login_required
 def get_json():
+    """gets the json representation of the data"""
     user = User(session['username'], _id=session['user_id'])
     return render_template('user/json.html', records=user.get_records(), json=json.dumps)
 
@@ -215,4 +225,5 @@ def update(row):
 @app.route('/home')
 @login_required
 def home():
+    """returns the user to home screen"""
     return render_template('user/home_page.html')
