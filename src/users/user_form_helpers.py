@@ -10,7 +10,6 @@ def login_helper(form_obj, *args):
     msg       : An error message or message to display
     template  : The template to display
     """
-
     form           = form_obj()
     session_name   = args[0]     # the name for the session
     redirect_link  = args[1]     # the redirect url for any successful login

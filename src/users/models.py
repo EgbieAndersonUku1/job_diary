@@ -105,7 +105,6 @@ class ProcessForm(object):
                  start_mins, end_hours, end_mins, day):
 
          self.errors = {} # pass to the user so they can see there errors
-         # check whether the dates are in the format dd/mm/yyyy
          if start_date and end_date:
             msg  = check_date(str(start_date))
             msg2 = check_date(str(end_date))
@@ -118,7 +117,6 @@ class ProcessForm(object):
             elif msg != True and msg2 == True:
                 self.errors['date'] = 'Incorrect format for start date use YYYY-MM-DD'
             else:
-            
                 if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%Y-%m-%d") == datetime.strptime(str(start_date), "%Y-%m-%d" )):
                     self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
                 if datetime.strptime(str(end_date), "%Y-%m-%d") < datetime.strptime(str(start_date), "%Y-%m-%d"):
@@ -139,7 +137,6 @@ class ProcessForm(object):
          if not end_date:
              self.errors['end_date']   = 'The end date field must be not be empty'
         
-
         #if start date and end date is True check whether there are in the form of dd/mm/yyyy
          self.job_title   = cgi.escape(job_title).title()
          self.description = cgi.escape(description).title()
@@ -252,13 +249,13 @@ class ProcessSearchForm(object):
     def process_date(self, val, val2):
         """turn the dates into their month representives"""
         if self._is_date_str(val) and self._is_date_str(val2):
-            if month_to_num(val) and month_to_num(val2):
+            if month_to_num(val[:3].title()) and month_to_num(val2[:3].title()):
                 return self._user.get_by_month_range(val, val2)
         elif not self._is_date_str(val) and not self._is_date_str(val2):
             return self._user.get_by_date_range(val, val2)
 
     def get_data(self):
-        """retreives the data from the search form template"""
+        """retreive and process the data from the search form template"""
         if self.job_title:
             return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
@@ -278,7 +275,7 @@ class ProcessSearchForm(object):
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
         elif self.val_one and self.val_two:
-            return self.process_date(self.val_one[:3].title(), self.val_two[:3].title())
+            return self.process_date(self.val_one, self.val_two)
         elif self.year:
             return self._user.get_by_year(self.year)
         

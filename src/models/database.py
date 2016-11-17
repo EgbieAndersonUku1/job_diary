@@ -44,10 +44,8 @@ class DataBase(object):
         """
         field, value = key
         if query == None:
-            db = DataBase.DATABASE[collections].find().sort(field, value).limit(limit_num) # query all documents
-            return db    
-        db = DataBase.DATABASE[collections].find(query).sort(field, value).limit(limit_num)
-        return db
+            return DataBase.DATABASE[collections].find().sort(field, value).limit(limit_num) # query all documents       
+        return DataBase.DATABASE[collections].find(query).sort(field, value).limit(limit_num)        
 
     @staticmethod
     def find_one(collections, query):

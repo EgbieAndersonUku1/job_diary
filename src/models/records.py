@@ -42,7 +42,6 @@ class Records(object):
         """returns a json represent of the class"""
 
         year, month, day = self.date.split('-')
-
         return { 'job_title'  : self.job_title.title(),
                  'descr'      : self.descr.title(),
                  'loc'        : self.loc.title(),
@@ -162,7 +161,7 @@ class Records(object):
 
         Retreives the job by either date or day.
         """
-        key = ('daily_rate', -1) # sort data based on the key
+        key = ('date', -1) # sort data based on the key
         if date and day:
             return cls._find({'date':date, 'day':day.title(), 'user_id':user_id}, key=key)
         elif date and not day:
@@ -194,7 +193,7 @@ class Records(object):
 
         Retreive the jobs based on the month worked.
         """
-        return cls._find(query={'month':int(month_to_num(month)), 'user_id': user_id}, key=('month', -1))
+        return cls._find(query={'month':int(month_to_num(month)), 'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_month_range(cls, month, month_two, user_id):
