@@ -34,8 +34,6 @@ class User(object):
         hours = get_hours_worked(self.start_date, start_time, self.end_date, finish_time) # calculate the hours worked
         daily_rate = get_daily_rate(hours, hourly_rate) # calculate the daily rate
         year, month, day = self.start_date.split('-')
-
-        month  = month.replace('0', '') if month.startswith('0') else month
         record = Records(job_title=job_title, descr=descr,
                          loc=loc,start_time=start_time,
                          finish_time=finish_time,
@@ -44,7 +42,7 @@ class User(object):
                          _hours = time_to_float(hours),
                          user_id=self.id, daily_rate=daily_rate,
                          date=self.start_date,
-                         day=self.day.replace('0', ''),
+                         day=self.day,
                          month=month) 
         return record.save()
 

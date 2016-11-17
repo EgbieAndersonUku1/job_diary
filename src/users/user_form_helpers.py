@@ -6,9 +6,10 @@ def login_helper(form_obj, *args):
     Helper function: that assists the user entry to the applicaton
 
     @params:
-    form_obj  : Takes either been a login form func or admin form func and renders it
-    msg       : An error message or message to display
-    template  : The template to display
+    form_obj     : Takes either been a login form func or admin form func and renders it
+    msg          : An error message or message to display
+    template     : The template to display
+    session_name : The session name to be used with this session
     """
     form           = form_obj()
     session_name   = args[0]     # the name for the session
@@ -28,9 +29,10 @@ def login_helper(form_obj, *args):
             user = Login(form.username.data, form.password.data)
             login_obj = user.is_credentials_ok()
             if login_obj:
+                # encode the session with users details
                 session[session_name] = login_obj.username
                 session['user_id']    = login_obj._id
-                session['session_name'] = login_obj.username # holds the current user session name
+                session['session_name'] = login_obj.username 
                 if 'next' in session:
                     url = session.pop('next')
                     return redirect(url)
@@ -59,16 +61,14 @@ def register_helper(obj, msg, template, redirect_link):
     # if registration is successful meaning username is unique log user in.
     if form.validate_on_submit():
         user = Registration(form.email.data, form.password.data)
-        # attempt to register the user
-        if user.register():
+        if user.register():                         # attempt to register the user
             user = Login(user.email, user.password) # log the user into the application
             user.save()                             # save username and encrypted password to the database
-            session['username'] = user.username
+            session['username'] = user.username     # encode the user details to a session cookier
             session['user_id']  = user._id
             session['session_name'] = user.username # holds the current user session name
             if 'next' in session:
                 return redirect(session.pop('next'))
             return redirect(url_for(redirect_link))
-        else:
-            error = msg
+        error = msg
     return render_template(template, form=form, error=error)
