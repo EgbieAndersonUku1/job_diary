@@ -286,7 +286,7 @@ class Records(object):
         """Returns the record in the database albert in the form of a json object"""
 
         query, user_records = {'user_id':user_id}, {}
-        records = db.search('jobs_details', query=query, key=('date', -1))
+        records = db.search('jobs_details', query=query, key=('date', -1), limit_num=0)
         
         # creates the json object based on the data retreive from the database.
         for record in records:
