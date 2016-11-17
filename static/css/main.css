@@ -308,3 +308,8 @@ h4 {
 .button {
   center
 }
+
+p, #order_list {
+  font-size: 18px;
+  font-family: Arial;
+}

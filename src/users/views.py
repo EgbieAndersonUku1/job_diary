@@ -206,3 +206,9 @@ def update(row):
 def home():
     """returns the user to home screen"""
     return render_template('user/home_page.html')
+
+@app.route('/faq')
+@login_required
+def faq():
+    """renders the FAQ to the user"""
+    return render_template('user/faq.html')

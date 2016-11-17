@@ -1,0 +1,75 @@
+{% extends 'secondary_base.html' %}
+
+{% block title %} Search {% endblock %}
+
+{% block content %}
+
+<h4>Welcome to the job_diary wiki!</h4>
+
+<center>
+<a href=' {{ url_for("home") }}'><img src="/static/fonts/jobDiary.jpg" class="img-circle" alt="Cinque Terre" width="210" height="236"></a>
+</center>
+
+
+
+<div>
+<p>
+<B>Why did I create job diary and why not use Excel to track your jobs?</B>
+
+<p>
+The primary reason I created this web application was to keep track of the different locations for the places that I have worked as well as the different rate of pay associated with each place.
+
+Yes it is true that Excel is a great application and can be used for storing data especially in the format that I require. But the problem that led me to create this application was because over a certain period amount of time I have worked in a lot of different places which has resulted in a spreadsheet that is hundred of hundreds rows long. This has made it exceptional difficult to query jobs based on their location, job title, hours, pay, etc.
+</p>
+
+</div>
+
+<p>
+<b> What is job diary? </b>
+</p>
+
+<p>
+Job diary is a web application that can be run on your personal computer or laptop to keep track of the different jobs that you have worked, currently working or not yet worked. It can be used by people who work shifts, non-shifts, 9-5, etc.
+
+Once logged in the web application's home page is divided into four parts .
+</p>
+	
+	<div id='order_list'
+	<p>
+	<ul>
+   		 <li>Search page</li>
+    	 <li> Entry page</li>
+    	<li> History page</li>
+        <li>Active page.</li>
+    </ul>
+    </p>
+    </div>
+
+<p>
+The <b>search page </b>enables the user to search for jobs that are either active or non-active based on their location, job title, pay, hours, months, range between two months, etc.
+
+<p>
+The <b>entry page </b> enables you to add jobs to the database more specifically the job attributes such as the job title, the job location, the job description, the hours worked, the hourly rate, etc.
+</p>
+
+<p>
+
+<p>
+The <b>history page </b>shows you all jobs that you have worked in the past.
+</p>
+
+<p>
+The <b>Active page </b>shows you all future jobs that you have yet to work.
+</p>
+
+<br>
+<div>
+<p>
+<b>I know this is a stupid question but how do I use the search form?</b>
+</p>
+
+<p>
+The search form contains <b>twelve fields</b>. The first ten fields enables the user to search the database based on the attribute of the jobs e.g. job title, location, etc. The bottom two field enables the user to search for job based on the ranges of two dates. This can either been as <em>months</em> or as <em>dates</em> but not a combination of both. For example you cannot use <b>month</b> in the first field and <b>date</b> in the second field or vice versa as this will result in the application returning a <b>not found on the data</b> even though the data might exist. The values for both fields must be the <b>same type</b>. <br>If months are used the application will return all the days worked between those two months including the starting and ending months. If date is used instead (which must be in the form of <b>YYYY-MM-DD</b> ) the application returns all days worked between those two dates including the starting and ending date.
+</p>
+</div>
+{% endblock %}
