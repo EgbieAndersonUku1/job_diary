@@ -71,7 +71,7 @@
                    {{ translate(job.month )[:3]}}
                  </td>
                  <td>
-                   {{ job.date }}
+                   {{ job.date.replace('-', '/') }}
                  </td>
                  <td>
                    {{ job.day[:3] }}
