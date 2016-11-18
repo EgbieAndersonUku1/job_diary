@@ -69,6 +69,7 @@ def month_to_num(month):
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
 	"""get_hours_worked(str, str, str, str) -> return(tuple)
 
+	@params    :
 	start_date : The beginning date in the form of dd/mm/yy
 	end_date   : The ending date in the form of dd/mm/yy
 	start_time : The starting time in the form of hh:mm
@@ -108,10 +109,12 @@ def gen_row_id():
 	return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
 
 def get_daily_rate(units, hourly_rate):
-	"""get_daily_rate(tuple, float or int) -> returns(float)
-	hours         : (h, m)
+	"""get_daily_rate(float, float) -> returns(float)
+
+	@params   
+	units         : The time in units
 	hourly_rate   : The amount paid in hours
-	returns float : The total amount paid for the day
+	returns       : The total amount paid for the day
 	"""
 	return units * float(hourly_rate)
 
