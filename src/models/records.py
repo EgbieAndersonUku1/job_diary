@@ -218,24 +218,29 @@ class Records(object):
         return cls._date_range('month', month[0:3].title(), month_two[0:3].title(), user_id)
         
     @classmethod
-    def find_by_time(cls, start_time, finish_time, user_id):
+    def find_by_start_time(cls, start_time, user_id):
         """get_by_time(str, str, str) -> return(obj or None)
 
         @params    :
         start_time : The time the job started
-        finish_time: The time the job ended
         returns    : An obj if the parameter are matched and None if is not matched.
 
         Retreive the jobs based on either the start or end time.
         """
-        if start_time == None and finish_time == None:
-            return None
-        elif start_time and finish_time==None:
-            return cls._find(query={'start_time': start_time, 'user_id': user_id}, key=('date', -1))
-        elif finish_time and start_time==None:
-            return cls._find(query={'finish_time': finish_time, 'user_id': user_id}, key=('date', -1))
-        return cls._find(query={'finish_time': finish_time, 'start_time':start_time, 'user_id': user_id}, key=('date', -1))
+        return cls._find(query={'start_time': start_time, 'user_id': user_id}, key=('date', -1))
+        
+    @classmethod
+    def find_by_finish_time(cls, finish_time, user_id):
+        """get_by_time(str, str, str) -> return(obj or None)
 
+        @params    :
+        finish_time : The time the job ended.
+        returns    : An obj if the parameter are matched and None if is not matched.
+
+        Retreive the jobs based on either the start or end time.
+        """
+        return cls._find(query={'finish_time': finish_time, 'user_id': user_id}, key=('date', -1))
+        
     @classmethod
     def find_by_hours_worked(cls, hours, user_id):
         """find_by_hours_worked(str, str) -> return(obj or None)

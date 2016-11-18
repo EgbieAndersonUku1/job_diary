@@ -36,12 +36,14 @@ Once logged in the web application's home page is divided into four parts .
 	
 	<div id='order_list'
 	<p>
+    <b>
 	<ul>
    		 <li>Search page</li>
     	 <li> Entry page</li>
     	<li> History page</li>
         <li>Active page.</li>
     </ul>
+    </b>
     </p>
     </div>
 
@@ -69,9 +71,19 @@ The <b>Active page </b>shows you all future jobs that you have yet to work.
 </p>
 
 <p>
-The search form contains <b>twelve fields</b>. The first ten fields enables the user to search the database based on the attribute of the jobs e.g. job title, location, etc. To enter the hours worked one must enter as a float. For example if one worked a total of 4 hrs then the hours field must be entered as 4.0 or one worked a total of 3 hrs and 30 mins then the field must must be entered as 3.30.
+The search form contains <b>twelve fields</b>. The first ten fields enables the user to search the database based on the attribute of the jobs e.g. job title, location, etc.
 
-<br><br>
+<p><b>To query by hours </b>one must enter it as a float. For example if one worked a total of 4 hrs then the hours field must be entered as 4.0 or one worked a total of 3 hrs and 30 mins then the field must must be entered as 3.30.
+</p>
+
+<p><b>To query by start time or finish time </b>one must enter it as an hour seperated by colon followed by minutes. For example if one was query the start or finish time one would enter it as h:m e.g 9 am would be represented as 9:0
+</p>
+
+<p><b>To query by date <b>one must enter it as </b>YYYY-MM-DD</b>.
+</p>
+
+<br>
+<p>
 The bottom two field enables the user to search for job based on the ranges of two dates. This can either been as <em>months</em> or as <em>dates</em> but not a combination of both. For example you cannot use <b>month</b> in the first field and <b>date</b> in the second field or vice versa as this will result in the application returning a <b>not found on the data</b> even though the data might exist. The values for both fields must be the <b>same type</b>. <br>If months are used the application will return all the days worked between those two months including the starting and ending months. If date is used instead (which must be in the form of <b>YYYY-MM-DD</b> ) the application returns all days worked between those two dates including the starting and ending date.
 </p>
 </div>

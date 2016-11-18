@@ -89,11 +89,17 @@ class User(object):
         """
         return Records.find_by_month(month, self.id)
 
-    def get_by_time(self, start_time=None, end_time=None):
-        """get_by_time(str, str, str) -> return(obj)
-        Queries the records by times and returns a job obj if found or None.
+    def get_by_start_time(self, start_time):
+        """get_by_time(str) -> return(obj)
+        Queries the records by start time and returns a job obj if found or None.
         """
-        return Records.find_by_time(start_time, end_time, self.id)
+        return Records.find_by_start_time(start_time, self.id)
+
+    def get_by_finish_time(self, finish_time):
+        """get_by_time(str) -> return(obj)
+        Queries the records by finsih time and returns a job obj if found or None.
+        """
+        return Records.find_by_finish_time(finish_time, self.id)
 
     def get_by_hours(self, hours):
         """get_by_hours(int) -> return(obj or None)
