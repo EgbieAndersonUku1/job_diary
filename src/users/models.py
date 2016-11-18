@@ -237,13 +237,8 @@ class ProcessSearchForm(object):
         # due to one of my modules e.g 17:00 is stored as 17:0
         return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
 
-    def _fix_date_str(self, date):
-        """checks if a date is in the form of yyyy/mm/dd. If not fix date"""
-        year, month, day = date.split('-')
-        pass
-
     def _is_date_str(self, date):
-        """Returns True if date is in word format or False if date is in dd/mm/yyyy"""
+        """Returns True if date is in word format or False if date is in YYYY-MM-DD"""
         return date.isalpha()
 
     def process_date(self, val, val2):
@@ -261,17 +256,17 @@ class ProcessSearchForm(object):
         elif self.location:
             return self._user.get_by_location(self.location)
         elif self.date:
-            return self._user.get_by_date(date=str(self.date))
+            return self._user.get_by_date(str(self.date))
         elif self.day:
-            return self._user.get_by_day(day=self.days.get(self.day.title()[:3], None))
+            return self._user.get_by_day(self.days.get(self.day.title()[:3], None))
         elif self.start_time:
             return self._user.get_by_start_time(self._fix_time_str(str(self.start_time)))
         elif self.finish_time:
             return self._user.get_by_finish_time(self._fix_time_str(str(self.finish_time)))
         elif self.hrs_worked:
-            return self._user.get_by_hours(hours=self.hrs_worked)
+            return self._user.get_by_hours(self.hrs_worked)
         elif self.month:
-            return self._user.get_by_month(month=str(self.month[0:3].title()))
+            return self._user.get_by_month(str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
         elif self.val_one and self.val_two:

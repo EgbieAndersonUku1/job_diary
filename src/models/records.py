@@ -35,7 +35,7 @@ class Records(object):
         self.loc  = loc
         self.year = int(self.date.split('-')[0]) if year == None else year
         self.row_id = gen_row_id() if row_id is None else row_id
-        self.month = month
+        self.month  = month
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def get_json(self):
@@ -93,7 +93,6 @@ class Records(object):
 
         Retreives a specific job object based on the row ID.
         """
-        row_id = '#' + str(row_id).strip('#') #
         return cls._find_one(query={'row_id':row_id, 'user_id':user_id})
 
     @classmethod
@@ -108,7 +107,7 @@ class Records(object):
                          key=('date', -1))
     @classmethod
     def _find(cls, query, key):
-        """_find(dict, tuple) -> return (list or an empty list)
+        """_find(dict, tuple) -> return (list of objects or an empty list)
 
         @params:
         query  : The query to be used to query the database.
@@ -299,7 +298,7 @@ class Records(object):
         """Returns the record in the database albert in the form of a json object"""
 
         query, user_records = {'user_id':user_id}, {}
-        records = db.search('jobs_details', query=query, key=('date', -1), limit_num=0)
+        records = db.search('jobs_details', query=query, key=('date', -1), limit_num=0) # returns a cursor not not an obj
         
         # creates the json object based on the data retreive from the database.
         for record in records:
