@@ -9,8 +9,6 @@
 {% block title %} Total jobs {% endblock %}
 
 {% block content %}
-
-
     <table class="table table-striped">
               <h2>History of jobs past and present</h2>
               <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
@@ -90,7 +88,6 @@
                      {{ job.finish_time }}
                    </td>
                    <td>
-
                      {% if dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
                          Yes
                      {% else %}

@@ -9,8 +9,6 @@
 {% block title %} Jobs history page {% endblock %}
 
 {% block content %}
-
-
     <table class="table table-striped">
       {% if not jobs %}
         <div id='error_msg'>
@@ -20,16 +18,15 @@
                   Your job history is totally empty!!
              </div>
              <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
-
         </div>
       {% else %}
               <h2>Dates of days and times worked </h2>
               <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
 
               {% if session['username'] == 'admin' %}
-                  <caption class="text-center">As an admin you can edit the job details regardless whether they are equal to current date or after the current date </caption>
+                  <caption class="text-center">As an admin you can edit any job regardless whether the current date has passed.</caption>
               {% else %}
-                    <caption class="text-center">Only dates that are equal to current date or after the current date can be edited</caption>
+                    <caption class="text-center">Only dates that are equal or greater than the current date can be edited.</caption>
               {% endif %}
             <tr>
               <th>
