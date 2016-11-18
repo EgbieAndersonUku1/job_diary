@@ -150,7 +150,7 @@ class Records(object):
         return cls._date_range('date', str(date), str(date_two), user_id)
 
     @classmethod
-    def find_by_date_or_day(cls, date, day, user_id):
+    def find_by_day(cls, day, user_id):
         """find_by_date_or_day(str, str, str) -> return(obj or None)
 
         @params:
@@ -161,14 +161,22 @@ class Records(object):
 
         Retreives the job by either date or day.
         """
-        key = ('date', -1) # sort data based on the key
-        if date and day:
-            return cls._find({'date':date, 'day':day.title(), 'user_id':user_id}, key=key)
-        elif date and not day:
-            return cls._find(query={'date': date, 'user_id': user_id}, key=key)
-        elif day and not date:
-            return cls._find(query={'day': day.title(), 'user_id':user_id}, key=key)
+        return cls._find(query={'day': day.title(), 'user_id':user_id}, key=('date', -1))
 
+    @classmethod
+    def find_by_date(cls, date, user_id):
+        """find_by_date_or_day(str, str, str) -> return(obj or None)
+
+        @params:
+        date   : The data to query by.
+        day    : The day to query by.
+        user_id: The user ID
+        returns: an obj if the parameter are matched or None if it is not
+
+        Retreives the job by either date or day.
+        """
+        return cls._find(query={'date': date, 'user_id': user_id}, key=('date', -1))
+       
     @classmethod
     def find_by_year(cls, year, user_id):
         """find_by_year(str, str) -> return(None or Obj)

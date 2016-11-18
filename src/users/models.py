@@ -32,7 +32,7 @@ class Login(object):
 
     def _get_user_login_details(self):
         """func : _get_user_login_details(None) -> return(obj or None)
-        Helper function: Checks whether the user details returns obj or False
+        Helper function: Checks whether the user details exists returns obj or False
         otherwise.
         """
         login_data = db.find_one(collections='login_credentials', query={'username': self.username})
@@ -261,9 +261,9 @@ class ProcessSearchForm(object):
         elif self.location:
             return self._user.get_by_location(self.location)
         elif self.date:
-            return self._user.get_by_date_or_day(date=str(self.date))
+            return self._user.get_by_date(date=str(self.date))
         elif self.day:
-            return self._user.get_by_date_or_day(day=self.days.get(self.day.title()[:3], None))
+            return self._user.get_by_day(day=self.days.get(self.day.title()[:3], None))
         elif self.start_time:
             return self._user.get_by_time(start_time=self._fix_time_str(str(self.start_time)))
         elif self.finish_time:

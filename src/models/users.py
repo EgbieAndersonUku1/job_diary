@@ -63,11 +63,17 @@ class User(object):
         """Returns the days worked based on the year"""
         return Records.find_by_year(year, self.id)
 
-    def get_by_date_or_day(self, date=None, day=None):
+    def get_by_date(self, date):
         """get_by_date_and_day(str, str) -> return(str)
         Queries the records by either date or day and returns a job obj if found or None.
         """
-        return Records.find_by_date_or_day(date, day, self.id)
+        return Records.find_by_date(date, self.id)
+
+    def get_by_day(self, day):
+        """get_by_date_and_day(str, str) -> return(str)
+        Queries the records by either date or day and returns a job obj if found or None.
+        """
+        return Records.find_by_day(day, self.id)
 
     def get_by_date_range(self, date, date_two):
         """Returns the days worked between two dates including date and date two"""

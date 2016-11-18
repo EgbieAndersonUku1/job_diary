@@ -199,6 +199,7 @@ def get_json():
 @login_required
 def update(row):
     # FIX THE UPDATE METHOD
+    print row
     pass
 
 @app.route('/home')
