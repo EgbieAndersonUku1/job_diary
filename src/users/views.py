@@ -5,7 +5,7 @@ from flask import render_template, session, redirect, url_for, flash, request
 from user_form_helpers import login_helper, register_helper
 from src.users.models import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
-from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, time_to_float, month_to_str, get_jobs
+from src.models.utils import get_daily_rate, time_to_str, get_hours_worked, month_to_str, get_jobs
 from src.users.decorators import login_required, admin_required
 from flask_paginate import Pagination
 from src.models.database import DataBase

@@ -10,7 +10,7 @@ import uuid
 import sys
 from records import Records
 from database import DataBase as db
-from utils import month_to_num, get_daily_rate, time_to_str, get_hours_worked, time_to_float
+from utils import month_to_num, get_daily_rate, time_to_str, get_hours_worked, time_to_units
 
 class User(object):
     """User(class)
@@ -32,14 +32,15 @@ class User(object):
         it to the database.
         """
         hours = get_hours_worked(self.start_date, start_time, self.end_date, finish_time) # calculate the hours worked
-        daily_rate = get_daily_rate(hours, hourly_rate) # calculate the daily rate
+        units = time_to_units(hours) # convert hours worked to units
+        daily_rate = get_daily_rate(units, hourly_rate) # calculate the daily rate
         year, month, day = self.start_date.split('-')
         record = Records(job_title=job_title, descr=descr,
                          loc=loc,start_time=start_time,
                          finish_time=finish_time,
                          hourly_rate=hourly_rate,
                          total_hours=time_to_str(hours),
-                         _hours = time_to_float(hours),
+                         _hours = units,
                          user_id=self.id, daily_rate=daily_rate,
                          date=self.start_date,
                          day=self.day,
