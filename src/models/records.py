@@ -317,8 +317,8 @@ class Records(object):
                  "year" : form.year,
                  "date" : form.date,
                  "hourly_rate" : form.hourly_rate,
-                 "day" : form.day,
-                 "job_title" : form.job_title}
+                 "day" : form.day.title(),
+                 "job_title" : form.job_title.title()}
 
         db.update_row('jobs_details', row_id, query)
         return form.row_id

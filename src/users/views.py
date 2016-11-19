@@ -120,7 +120,7 @@ def _display(html_link, active=False):
     return render_template(html_link, jobs=worked_jobs, date=curr_date,
                             translate=month_to_str,
                             dt=datetime.datetime.strptime,
-                            total_pay=sum(total_pay),
+                            total_pay=round(sum(total_pay),2),
                             total_hrs=int(round(sum(total_hrs))), active=active)
 
 @app.route('/history/jobs',  methods=('GET', 'POST'))
