@@ -12,9 +12,8 @@
 	 <br>
 </div>
  
-
   <a href='{{ url_for("search")}}'><img src="/static/fonts/search.jpg" class="img-circle" alt="Cinque Terre" width="210" height="170"></a>
-  <a href=' {{ url_for("entry_page") }}'><img src="/static/fonts/job.jpg" class="img-circle" alt="Cinque Terre" width="210" height="170"></a>
+  <a href=' {{ url_for("entry_page", row_ID=False) }}'><img src="/static/fonts/job.jpg" class="img-circle" alt="Cinque Terre" width="210" height="170"></a>
   <a href="{{ url_for('history') }}"><img src="/static/fonts/history.jpg" class="img-circle" alt="Cinque Terre" width="210" height="170"></a>
   <a href="{{ url_for('active_jobs') }}"><img src="/static/fonts/active.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="170"></a>
   <a href="{{ url_for('faq') }}"><img src="/static/fonts/FAQ.jpg" class="img-circle" alt="Cinque Terre" width="210" height="170"></a>

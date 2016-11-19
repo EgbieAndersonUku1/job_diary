@@ -9,7 +9,7 @@
  <div class="container">
    <div class="row">
        <div class="col-md-offset-3 col-md-6">
-    <form method="Post" action="{{ url_for('entry_page') }}">
+    <form method="Post" action="{{ url_for('entry_page', row_ID=form.row_id) }}">
         <div class="form-group">
           <label id='title_id' for="job_title">Job Title</label>
           <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100" value='{{form.job_title}}' >
@@ -31,7 +31,6 @@
               <div class="col-md-4">
                 <select id="start_hours" class="form-control" name="start_hours">
                   <option selected="">{{form.start_time.split(":")[0]}}</option>
-
                   <option value="0">00</option>
                   <option value="1">01</option>
                   <option value="2">02</option>
@@ -236,7 +235,6 @@
           <div class="col-md-14">
             <div class="input-group">
               <span class="input-group-addon">Starting work date</span>
-
               <input type='text' id="prependedtext" name="start_date" class="form-control" placeholder="start date-dd/mm/yyyy" required="" value='{{form.date}}'>
             </div>
           </div>
@@ -252,7 +250,6 @@
       <center>
           <button type="submit" class="btn btn-success">Update</button>
       </center>
-
     </form>
   </div>
 </div>

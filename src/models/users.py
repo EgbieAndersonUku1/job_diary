@@ -24,7 +24,7 @@ class User(object):
         self.day = day
         self.id  = uuid.uuid4().hex if _id is None else _id
 
-    def add_job_details(self, job_title, descr, loc, start_time, finish_time, hourly_rate):
+    def add_job_details(self, job_title, descr, loc, start_time, finish_time, hourly_rate, update=False):
         """add_job_details(str, str, str, str, str, str) -> return(None)
 
         Takes the attributes of a job such as the title, the job description,
@@ -45,8 +45,9 @@ class User(object):
                          date=self.start_date,
                          day=self.day,
                          month=month) 
-        return record.save()
-
+        # return row_id if update is false or return obj if object is true
+        return (record.save() if not update else record) 
+           
     def get_by_user_id(self):
         """get_by_user_id(None) -> return(obj)
         Queries the records by user id and returns a job obj.
@@ -139,12 +140,11 @@ class User(object):
         """
         return Records.delete_row(row_id, self.id)
 
-    def update_row(self, row_id):
+    def update_row(self, row_id, form):
         """update_row(str, str) -> return(None)
         Updates a row using the row id
         """
-        # WRITE CODE HERE TO UPDATES ROWS
-        pass
+        return Records.update_row(row_id, form)
 
     def __repr__(self):
         return '{}'.format(self.full_name)

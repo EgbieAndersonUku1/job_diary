@@ -293,6 +293,36 @@ class Records(object):
         """
         return cls._find(query={'loc': loc.title(),'user_id':user_id}, key=('date', -1))
    
+    @classmethod
+    def update_row(cls, row_id, form):
+        """update_row(str, form_obj) -> return(str)
+
+        @params :
+        row_id  : The row to update.
+        form    : form object.
+        returns : new row_id for redirection.
+
+        Updates the old row with information from the new row.
+        """
+        query = {"loc"    : form.loc.title(),
+                 "_hours" : form._hours,
+                 "row_id" : form.row_id,
+                 "user_id": form.user_id,
+                 "descr"  : form.descr.title(),
+                 "finish_time" : form.finish_time,
+                 "start_time" : form.start_time,
+                 "month" : form.month,
+                 "total_hours" : form.total_hours,
+                 "daily_rate"  : form.daily_rate,
+                 "year" : form.year,
+                 "date" : form.date,
+                 "hourly_rate" : form.hourly_rate,
+                 "day" : form.day,
+                 "job_title" : form.job_title}
+
+        db.update_row('jobs_details', row_id, query)
+        return form.row_id
+
     @staticmethod
     def get_records_in_json(user_id):
         """Returns the record in the database albert in the form of a json object"""

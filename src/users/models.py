@@ -8,7 +8,7 @@ from src.models.users import User
 from src.models.utils import month_to_num, check_date
 from src.models.utils import translate_day
 from src.models.utils import get_hours_worked, time_to_str, translate_day
-from flask import session
+from flask import session, redirect
 from src.models.users import User
 import cgi
 from flask import request
@@ -158,7 +158,7 @@ class ProcessForm(object):
             return False, self.errors, self._obj
         return True, self.errors, self._obj
 
-    def _concatcenate_time_str(self):
+    def _get_times(self):
     	""" Takes two strings and concatcenates them together creating a time string"""
 
         # guarantees that time is expressed as hh:mm
@@ -178,22 +178,54 @@ class ProcessForm(object):
             finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
     	return start_time, finish_time
 
-    def process_form(self, start_date, end_date, day):
-        """process_form(str, str, str) -> return(str)
+    def process_form(self, start_date, end_date, day, row_id=None, update=False):
+        """process_form(str, str, str, optional str, optional bool) -> return(str)
 
-        params start_date: A start date string
-        params end_date  : The end date string
-        params day       : The day string
-        params return    : returns a row id in the form a string
+        @params 
+        start_date: A start date string
+        end_date  : The end date string
+        day       : The day string
+        returns   : returns a row id if update flag is on and None if update flag is off
 
+        optional flags
+        -------------
+        row_id: The row id which corresponds to a row in database
+        update: When update is True the row will be updated with new data
+       
         Process the form and adds the user details to the database.
         """
-        start_time, finish_time = self._concatcenate_time_str()
+        start_time, finish_time = self._get_times()
         hours = get_hours_worked(start_date, start_time, end_date, finish_time)
+
+        if update: # if update flag is set updates the row with the new information.
+            user = User(session['username'], start_date, end_date, day, _id=session['user_id'])
+            form = user.add_job_details(self._obj.job_title, 
+                                        self._obj.description,
+                                        self._obj.location, 
+                                        start_time, 
+                                        finish_time, self._obj.rate, True)
+            return self._update_form(user, form, row_id)
+
         user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
-        return (user.add_job_details(self._obj.job_title, self._obj.description,
-                                     self._obj.location, start_time, finish_time,
-                                     self._obj.rate))
+        return user.add_job_details( self._obj.job_title, 
+                                     self._obj.description,
+                                     self._obj.location, 
+                                     start_time, 
+                                     finish_time,
+                                     self._obj.rate)
+
+    def _update_form(self, user_obj, form, row_id):
+        """update_form(obj, obj, str) -> return (str)
+
+        @params :
+        user_obj: The user object.
+        form    : The form obj contains all the information for the new row.
+        row_id  : The designated row ID for the table.
+
+        Updates the old row with information from the new row.
+        """
+        return user_obj.update_row(row_id, form)
+        
     def _get_json(self):
         """Returns the details of the form in json"""
         return {

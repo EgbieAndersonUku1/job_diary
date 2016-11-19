@@ -33,9 +33,9 @@ def user_register():
     """Register the user to the application"""
     return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'home')
 
-@app.route('/job/entry', methods=('GET', 'POST'))
+@app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
 @login_required
-def entry_page():
+def entry_page(row_ID):
     """entry_page(func)
     Retreives and process the users data. Also renders the user data 
     from the entry job page.
@@ -54,22 +54,33 @@ def entry_page():
     end_mins    = request.form.get('end_mins')
 
     if request.method == 'GET':
-        return render_template('user/entry_page.html',start_date=start_date, end_date=end_date, day=day,
-                               job_title=title, description=descr, location=loc, start_hours=start_hours,
-                               start_mins=start_mins, rate=hourly_rate,end_hours=end_hours,end_mins=end_mins, errors='',
+        return render_template('user/entry_page.html',start_date=start_date, 
+                                end_date=end_date, day=day,
+                               job_title=title, description=descr, 
+                               location=loc, start_hours=start_hours,
+                               start_mins=start_mins, rate=hourly_rate,
+                               end_hours=end_hours,end_mins=end_mins, errors='',
                                success='')
     else:
-        # process the user information
         user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date, start_hours, start_mins, end_hours, end_mins, day)
         success, errors, form = user_form.verify_form() # if job details are sucessful add to the database
         if success:
-            return redirect(url_for('success_page', row=user_form.process_form(start_date, end_date, day)))
-        return render_template('user/entry_page.html',start_date=form.start_date, end_date=form.end_date,
-                               job_title=form.job_title, description=form.description, location=form.location,
+           
+            # row_ID comes from the form so False is expressed as unicode
+            # instead of a boolean which would make the first if-condition True instead
+            # of False.
+            if str(row_ID) != 'False': 
+                row_id = user_form.process_form(start_date, end_date, day, row_ID, True)
+            else:
+                row_id = user_form.process_form(start_date, end_date, day)
+            return redirect(url_for('success_page', row_id=row_id)) 
+        return render_template('user/entry_page.html',start_date=form.start_date, 
+                               end_date=form.end_date, job_title=form.job_title, 
+                               description=form.description, location=form.location,
                                start_hours=form.start_hours, day=day,
-                               start_mins=form.start_mins, rate=form.rate,end_hours=form.end_hours,
+                               start_mins=form.start_mins, rate=form.rate,
+                               end_hours=form.end_hours,
                                end_mins=form.end_mins, errors=errors)
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -87,14 +98,13 @@ def reset():
     """reset the value in the form for the application"""
     return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date, day=curr_day)
 
-@app.route('/successful/<row>')
+@app.route('/successful/<row_id>')
 @login_required
-def success_page(row):
+def success_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User('',_id=session['user_id'])
    flash('The following data has been successful added to the database.')
-   return render_template('user/table.html', rows=user.get_by_row_id(row))
-
+   return render_template('user/table.html', rows=user.get_by_row_id(row_id))
 
 def _display(html_link, active=False):
     """_display(str, str) -> return(value)
@@ -118,7 +128,7 @@ def _display(html_link, active=False):
 def history():
     """renders the entire job history active and none active"""
     return _display('user/history.html')
-
+    
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
@@ -194,13 +204,6 @@ def get_json():
     """gets the json representation of the data"""
     user = User(session['username'], _id=session['user_id'])
     return render_template('user/json.html', records=user.get_records(), json=json.dumps)
-
-@app.route('/update/<row>')
-@login_required
-def update(row):
-    # FIX THE UPDATE METHOD
-    print row
-    pass
 
 @app.route('/home')
 @login_required

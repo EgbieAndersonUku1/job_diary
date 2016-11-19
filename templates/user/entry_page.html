@@ -25,7 +25,7 @@
               </div>
             </ul>
         {% endfor %}
-        <form method="Post" action="{{ url_for('entry_page') }}">
+        <form method="Post" action="{{ url_for('entry_page', row_ID=False) }}">
           <div class="form-group">
             <label id='title_id' for="job_title">Job Title</label>
             <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="100" value={{job_title}} >

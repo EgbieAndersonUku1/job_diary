@@ -67,8 +67,20 @@ class DataBase(object):
         @params:
         collections: A table name from the database
         query      : The information to query from the database
-        returns    : A single row if found
-
+      
         Deletes and entry from the row.
         """
         DataBase.DATABASE[collections].find_one_and_delete(query)
+
+    @staticmethod
+    def update_row(collections, row_id, query):
+        """update_row(str, value) -> return(None)
+
+        @params:
+        collections: A table name from the database
+        query      : The information to query from the database
+        
+        Updates a single row in the table.
+        """
+        DataBase.DATABASE[collections].update_one({'row_id': row_id}, {'$set':query})
+        

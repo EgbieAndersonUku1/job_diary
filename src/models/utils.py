@@ -116,7 +116,7 @@ def get_daily_rate(units, hourly_rate):
 	hourly_rate   : The amount paid in hours
 	returns       : The total amount paid for the day
 	"""
-	return units * float(hourly_rate)
+	return round((units * float(hourly_rate)), 2)
 
 def time_to_units(time):
 	"""time_to_units(tuple) -> returns(float)
