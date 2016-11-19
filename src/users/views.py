@@ -65,10 +65,10 @@ def entry_page(row_ID):
         user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date, start_hours, start_mins, end_hours, end_mins, day)
         success, errors, form = user_form.verify_form() # if job details are sucessful add to the database
         if success:
-           
             # row_ID comes from the form so False is expressed as unicode
             # instead of a boolean which would make the first if-condition True instead
-            # of False.
+            # of False. By expressing it as str(row_ID) != 'False' it makes the if-statement
+            # False if the value of the string does not equal the string False.
             if str(row_ID) != 'False': 
                 row_id = user_form.process_form(start_date, end_date, day, row_ID, True)
             else:
