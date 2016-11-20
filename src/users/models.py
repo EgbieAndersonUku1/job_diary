@@ -5,9 +5,9 @@
 
 from src.models.database import DataBase as db
 from src.models.users import User
-from src.models.utils import month_to_num, check_date
-from src.models.utils import translate_day
-from src.models.utils import get_hours_worked, time_to_str, translate_day
+from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
+from src.utilities.job_processor import get_hours_worked
+from src.utilities.time_processor import time_to_str
 from flask import session, redirect
 from src.models.users import User
 import cgi

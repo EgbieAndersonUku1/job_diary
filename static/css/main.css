@@ -13,7 +13,6 @@
     padding: .1em .25em;
     font-size: 150%;
 }
-
 body {
   background-color: FFE5CC;
 }
@@ -286,6 +285,7 @@ form {
   padding-top: 1px;
 
 }
+
 
 #month_range {
   border : 1px solid black;

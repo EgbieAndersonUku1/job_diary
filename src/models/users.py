@@ -10,7 +10,9 @@ import uuid
 import sys
 from records import Records
 from database import DataBase as db
-from utils import month_to_num, get_daily_rate, time_to_str, get_hours_worked, time_to_units
+from src.utilities.date_month_day_processor import month_to_num
+from src.utilities.time_processor import time_to_str, time_to_units
+from src.utilities.job_processor import get_daily_rate, get_hours_worked
 
 class User(object):
     """User(class)

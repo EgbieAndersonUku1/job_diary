@@ -9,7 +9,9 @@ import os
 import random
 import time
 import uuid
-from utils import month_to_num, gen_row_id, get_hours_worked
+from src.utilities.date_month_day_processor import month_to_num
+from src.utilities.common import gen_row_id
+from src.utilities.job_processor import get_hours_worked
 from database import DataBase as db
 
 class Records(object):
