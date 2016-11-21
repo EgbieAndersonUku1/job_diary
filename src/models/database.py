@@ -16,12 +16,30 @@ class DataBase(object):
         """The initialize method initialize the pymongo database"""
         client = pymongo.MongoClient(DataBase.URI)
         DataBase.DATABASE = client['users']
-
+        job_details = client['users']['jobs_details']
+        job_details.create_index([('user_id', pymongo.DESCENDING),
+                                   ('_hours', pymongo.DESCENDING),
+                                   ('loc', pymongo.DESCENDING),
+                                   ('start_time', pymongo.DESCENDING),
+                                   ('finish_time', pymongo.DESCENDING),
+                                   ('daily_rate', pymongo.DESCENDING),
+                                   ('day', pymongo.DESCENDING),
+                                   ('job_title', pymongo.DESCENDING),
+                                   ('hourly_rate', pymongo.DESCENDING),
+                                   ('row_id', pymongo.DESCENDING),
+                                   ('date', pymongo.DESCENDING),
+                                   ('year', pymongo.DESCENDING),
+                                   ('month', pymongo.DESCENDING)],
+                                   name='job_attributes') # create an index for fast lookup
+        
     @staticmethod
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
 
-        @params:
+        @params:,
+        ('finish_time', pymongo.DESCENDING),
+        ('hourly_rate', pymongo.DESCENDING),
+        'daily_rate', pymongo.DESCENDING
         collections: The name of the table(collections) to save to.
         data       : The data to insert into the database's collection
 
