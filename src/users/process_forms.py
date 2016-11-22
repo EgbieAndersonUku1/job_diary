@@ -5,7 +5,6 @@ from src.utilities.date_month_day_processor import month_to_num, check_date, tra
 from src.utilities.job_processor import get_hours_worked
 import cgi
 
-
 class ProcessForm(object):
     """Process the form and checks whether the details are correct"""
     def __init__(self, job_title, description, location,

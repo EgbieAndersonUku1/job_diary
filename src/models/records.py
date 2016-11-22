@@ -316,7 +316,7 @@ class Records(object):
                  "descr"  : form.descr.title(),
                  "finish_time" : form.finish_time,
                  "start_time" : form.start_time,
-                 "month" : form.month.title(),
+                 "month" : int(form.month),
                  "total_hours" : form.total_hours,
                  "daily_rate"  : form.daily_rate,
                  "year" : form.year,
