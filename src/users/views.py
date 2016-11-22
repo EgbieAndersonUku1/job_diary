@@ -63,26 +63,26 @@ def entry_page(row_ID):
                                start_mins=start_mins, rate=hourly_rate,
                                end_hours=end_hours,end_mins=end_mins, errors='',
                                success='')
-    else:
-        user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date, start_hours, start_mins, end_hours, end_mins, day)
-        success, errors, form = user_form.verify_form() # if job details are sucessful add to the database
-        if success:
-            # row_ID comes from the form so False is expressed as unicode
-            # instead of a boolean which would make the first if-condition True instead
-            # of False. By expressing it as str(row_ID) != 'False' it makes the if-statement
-            # False if the value of the string does not equal the string False.
-            if str(row_ID) != 'False': 
-                row_id = user_form.process_form(start_date, end_date, day, row_ID, True)
-            else:
-                row_id = user_form.process_form(start_date, end_date, day)
-            return redirect(url_for('success_page', row_id=row_id)) 
-        return render_template('user/entry_page.html',start_date=form.start_date, 
-                               end_date=form.end_date, job_title=form.job_title, 
-                               description=form.description, location=form.location,
-                               start_hours=form.start_hours, day=day,
-                               start_mins=form.start_mins, rate=form.rate,
-                               end_hours=form.end_hours,
-                               end_mins=form.end_mins, errors=errors)
+
+    user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date, start_hours, start_mins, end_hours, end_mins, day)
+    success, errors, form = user_form.verify_form() # if job details are sucessful add to the database
+    if success:
+        # row_ID comes from the form so False is expressed as unicode
+        # instead of a boolean which would make the first if-condition True instead
+        # of False. By expressing it as str(row_ID) != 'False' it makes the if-statement
+        # False if the value of the string does not equal the string False.
+        if str(row_ID) != 'False': # means the row should be updated.
+            row_id = user_form.process_form(start_date, end_date, day, row_ID, True)
+        else:
+            row_id = user_form.process_form(start_date, end_date, day)
+        return redirect(url_for('success_page', row_id=row_id)) 
+    return render_template('user/entry_page.html',start_date=form.start_date, 
+                           end_date=form.end_date, job_title=form.job_title, 
+                           description=form.description, location=form.location,
+                           start_hours=form.start_hours, day=day,
+                           start_mins=form.start_mins, rate=form.rate,
+                           end_hours=form.end_hours,
+                           end_mins=form.end_mins, errors=errors)
 @app.route('/logout')
 @login_required
 def logout():
