@@ -45,6 +45,7 @@ class User(object):
                          _hours = units,
                          user_id=self.id, daily_rate=daily_rate,
                          date=self.start_date,
+                         end_date=self.end_date,
                          day=self.day,
                          month=month) 
         # return row_id if update is false or return obj if object is true

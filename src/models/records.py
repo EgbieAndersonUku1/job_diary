@@ -21,7 +21,7 @@ class Records(object):
     """
     def __init__(self, job_title, descr, loc, start_time, finish_time,
                  hourly_rate, total_hours, _hours, user_id, daily_rate,
-                 date, day, month, year=None, row_id=None, _id=None):
+                 date, end_date, day, month, year=None, row_id=None, _id=None):
 
         self.job_title  = job_title
         self.descr = descr
@@ -33,6 +33,7 @@ class Records(object):
         self._hours  = _hours          # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
         self.user_id = user_id
         self.date =  date
+        self.end_date = end_date
         self.day  =  day
         self.loc  = loc
         self.year = int(self.date.split('-')[0]) if year == None else year
@@ -44,6 +45,7 @@ class Records(object):
         """returns a json represent of the class"""
 
         year, month, day = self.date.split('-')
+        end_year, end_month, end_day = self.end_date.split('-')
         return { 'job_title'  : self.job_title.title(),
                  'descr'      : self.descr.title(),
                  'loc'        : self.loc.title(),
@@ -55,6 +57,7 @@ class Records(object):
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
                  'date'       : '{}-{}-{}'.format(year, month, day),
+                 'end_date'   : '{}-{}-{}'.format(end_year, end_month, end_day),
                  'month'      : int(self.month),
                  'row_id'     : self.row_id,
                  'day'        : self.day,
@@ -318,6 +321,7 @@ class Records(object):
                  "daily_rate"  : form.daily_rate,
                  "year" : form.year,
                  "date" : form.date,
+                 "end_date": form.end_date,
                  "hourly_rate" : form.hourly_rate,
                  "day" : form.day.title(),
                  "job_title" : form.job_title.title()}

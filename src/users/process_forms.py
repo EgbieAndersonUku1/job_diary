@@ -16,7 +16,6 @@ class ProcessForm(object):
          if start_date and end_date:
             msg  = check_date(str(start_date))
             msg2 = check_date(str(end_date))
-
             if msg != True and msg2 != True:
                 self.errors['date'] = msg
                 self.errors['date'] = msg2
