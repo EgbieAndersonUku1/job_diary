@@ -45,3 +45,5 @@ class SearchForm(Form):
     daily_rate  = DecimalField('Daily rate', rounding=2)
     month_one = StringField('From', [validators.Length(max=17)])
     month_two = StringField('To', [validators.Length(max=17)])
+
+    

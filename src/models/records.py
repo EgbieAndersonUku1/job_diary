@@ -343,3 +343,5 @@ class Records(object):
             else:
                 user_records[record[u'date']] = [record]
         return user_records
+
+

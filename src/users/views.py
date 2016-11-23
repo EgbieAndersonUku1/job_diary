@@ -18,7 +18,6 @@ date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
 
-
 @app.before_first_request
 def initialize():
     """initialize the database"""

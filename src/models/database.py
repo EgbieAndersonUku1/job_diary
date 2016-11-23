@@ -17,21 +17,22 @@ class DataBase(object):
         client = pymongo.MongoClient(DataBase.URI)
         DataBase.DATABASE = client['users']
         job_details = client['users']['jobs_details']
-        job_details.create_index([('user_id', pymongo.DESCENDING),
-                                   ('_hours', pymongo.DESCENDING),
-                                   ('loc', pymongo.DESCENDING),
-                                   ('start_time', pymongo.DESCENDING),
-                                   ('finish_time', pymongo.DESCENDING),
-                                   ('daily_rate', pymongo.DESCENDING),
-                                   ('day', pymongo.DESCENDING),
-                                   ('job_title', pymongo.DESCENDING),
-                                   ('hourly_rate', pymongo.DESCENDING),
-                                   ('row_id', pymongo.DESCENDING),
-                                   ('date', pymongo.DESCENDING),
-                                   ('year', pymongo.DESCENDING),
-                                   ('month', pymongo.DESCENDING)],
-                                   name='job_attributes') # create an index for fast lookup
-        
+
+        # created index one line because mongo does query compound indexes properly
+        job_details.create_index([('user_id', pymongo.DESCENDING)])
+        job_details.create_index([('_hours', pymongo.DESCENDING)])
+        job_details.create_index([('loc', pymongo.DESCENDING)])
+        job_details.create_index([('start_time', pymongo.DESCENDING)])
+        job_details.create_index([('finish_time', pymongo.DESCENDING)])
+        job_details.create_index([('daily_rate', pymongo.DESCENDING)])
+        job_details.create_index([('day', pymongo.DESCENDING)])
+        job_details.create_index([('job_title', pymongo.DESCENDING)])
+        job_details.create_index([('hourly_rate', pymongo.DESCENDING)])
+        job_details.create_index([('row_id', pymongo.DESCENDING)])
+        job_details.create_index([('date', pymongo.DESCENDING)])
+        job_details.create_index([('year', pymongo.DESCENDING)])
+        job_details.create_index([('month', pymongo.DESCENDING)])
+                                   
     @staticmethod
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
