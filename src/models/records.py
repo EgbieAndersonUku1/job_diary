@@ -34,7 +34,7 @@ class Records(object):
         self.user_id = user_id
         self.date =  date
         self.end_date = end_date
-        self.day  =  day
+        self.day  =  day # expressed as string e.g Fri
         self.loc  = loc
         self.year = int(self.date.split('-')[0]) if year == None else year
         self.row_id = gen_row_id() if row_id is None else row_id
@@ -55,7 +55,7 @@ class Records(object):
                  '_hours'     : self._hours,
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
-                 'date'       : '{}-{}-{}'.format(self.year, self.month, self.day),
+                 'date'       : '{}-{}-{}'.format(self.year, self.month, self.date.split('-')[-1]), # get the day part
                  'end_date'   : '{}-{}-{}'.format(end_year, end_month, end_day),
                  'month'      : int(self.month),
                  'row_id'     : self.row_id,

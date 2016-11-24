@@ -64,8 +64,8 @@ class ProcessForm(object):
             return False, self.errors, self._obj
         return True, self.errors, self._obj
 
-    def _get_times(self):
-    	""" Takes two strings and concatcenates them together creating a time string"""
+    def get_start_and_finish_time(self):
+    	"""Returns the start and finish time"""
 
         # guarantees that time is expressed as hh:mm
         if len(self._obj.start_mins) == 1 and 1 <= int(self._obj.start_mins) < 10:
@@ -100,7 +100,7 @@ class ProcessForm(object):
        
         Process the form and adds the user details to the database.
         """
-        start_time, finish_time = self._get_times()
+        start_time, finish_time = self.get_start_and_finish_time()
         if update:   # if update flag is set to true the row is updated.
             user = User(session['username'], start_date, end_date, day, _id=session['user_id'])
             form_obj = user.add_job_details(self._obj.job_title, 
@@ -165,7 +165,7 @@ class ProcessSearchForm(object):
         """Returns True if date is in word format or False if date is in YYYY-MM-DD"""
         return date.isalpha()
 
-    def process_date(self, val, val2):
+    def process_dates(self, val, val2):
         """turn the dates into their month representives"""
         if self._is_date_str(val) and self._is_date_str(val2):
             if month_to_num(val[:3].title()) and month_to_num(val2[:3].title()):
@@ -194,7 +194,7 @@ class ProcessSearchForm(object):
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
         elif self.val_one and self.val_two:
-            return self.process_date(self.val_one, self.val_two)
+            return self.process_dates(self.val_one, self.val_two)
         elif self.year:
             return self._user.get_by_year(self.year)
         
