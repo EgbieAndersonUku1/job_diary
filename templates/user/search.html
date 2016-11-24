@@ -29,11 +29,13 @@
             <label class='radio-inline'><input type="radio" name="jobInfo">{{ render_field(form.year, class='form-control') }}</label>
            <div id='month_range'>
              <div id='title'>
-                  <h4>Months or dates (YYYY-MM-DD) range</h4>
+                  <center>
+                  <h6>Months or dates (YYYY-MM-DD) range</h6>
+                  </center>
              </div>
              <center>
                {{ render_field(form.month_one, class='form-group') }}
-               <h4>To</h4>
+               <h6>To</h6>
                {{ render_field(form.month_two, class='form-group') }}
              </center>
 
