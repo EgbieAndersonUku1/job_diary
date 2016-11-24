@@ -17,13 +17,13 @@ def check_date(date):
                     if year.isdigit() and len(year) == 4:
                             if month.isdigit() and len(month) == 2:
                                     if day.isdigit() and len(day) == 2:
-                                            return True
-                                    return 'day must be in the format of DD'
-                            return 'month must be in the format of MM'
-                    return 'year must be YYYY'
-            return 'add "-" in between YYYY-MM-DD'
-        return 'incorrect date format try YYYY-MM-DD'
-    return 'date cannot be None'
+                                            return True, True
+                                    return False,'day must be in the format of DD'
+                            return False, 'month must be in the format of MM'
+                    return False, 'year must be YYYY'
+            return False, 'replace the delimeter with "-" e.g. YYYY-MM-DD'
+        return False, 'incorrect date format try YYYY-MM-DD'
+    return False, 'date cannot be None'
 
 
 def translate_day(day):

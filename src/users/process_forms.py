@@ -11,17 +11,19 @@ class ProcessForm(object):
                  rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, day):
 
-         self.errors = {}   # pass to the user so they can see there errors
+         self.errors = {}  # pass to the user so they can see there errors
+
          if start_date and end_date:
-            msg  = check_date(str(start_date))
-            msg2 = check_date(str(end_date))
-            if not msg and not msg2:
+            # check whether the dates has the right format
+            val, msg  = check_date(str(start_date)) 
+            val_two, msg2 = check_date(str(end_date))
+            if not val and not val_two:
                 self.errors['date'] = msg
                 self.errors['date'] = msg2
-            elif msg and not msg2:
-                self.errors['date'] = 'Incorrect format for end date use YYYY-MM-DD'
-            elif not msg and not msg2:
-                self.errors['date'] = 'Incorrect format for start date use YYYY-MM-DD'
+            elif val and not val_two:
+                self.errors['date'] = 'end-date has {}'.format(msg2)
+            elif not val and val_two:
+                self.errors['date'] = 'start_date has {}'.format(msg)
             else:
                 if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%Y-%m-%d") == datetime.strptime(str(start_date), "%Y-%m-%d" )):
                     self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
