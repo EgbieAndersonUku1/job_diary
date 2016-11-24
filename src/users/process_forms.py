@@ -21,15 +21,15 @@ class ProcessForm(object):
                 self.errors['date'] = msg
                 self.errors['date'] = msg2
             elif val and not val_two:
-                self.errors['date'] = 'end-date has {}'.format(msg2)
+                self.errors['date'] = 'end-date : {}'.format(msg2)
             elif not val and val_two:
-                self.errors['date'] = 'start_date has {}'.format(msg)
-            else:
-                if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%Y-%m-%d") == datetime.strptime(str(start_date), "%Y-%m-%d" )):
-                    self.errors['time'] = 'The  start and end time cannot be the same if start date and end dates equal'
+                self.errors['date'] = 'start_date : {}'.format(msg)
+            else:          
                 if datetime.strptime(str(end_date), "%Y-%m-%d") < datetime.strptime(str(start_date), "%Y-%m-%d"):
                     self.errors['days_error'] = 'The end date cannot be less then the start date'
-                      
+                if int(end_hours) == 0 and start_date == end_date:
+                    self.errors['next_day'] = 'It appears your shift ended the next day, increment the end date day by one'     
+         
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:

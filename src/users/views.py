@@ -204,7 +204,7 @@ def search():
 def get_json():
     """gets the json representation of the data"""
     user = User(session['username'], _id=session['user_id'])
-    return render_template('user/json.html', records=user.get_records(), json=json.dumps)
+    return render_template('user/json.html', records=user.to_json(), json=json.dumps)
 
 @app.route('/home')
 @login_required

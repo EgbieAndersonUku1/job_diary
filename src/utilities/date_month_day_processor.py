@@ -3,16 +3,18 @@
 #####################################################################
 
 def check_date(date):
-    """check_date(str) -> return(True or str)
+    """check_date(str) -> return(tuple)
     Takes a date and checks if the date is in the format
     of YYYY-MM-DD.
 
-    Returns True if date is in the right format and returns
-    error message if the date is not.
+    Returns a tuple where the first part and second part
+    is a boolean True if date is in the format YYYY-MM-DD.
+    If the date does match the correct format returns False
+    and a error message indicating the error.
     """
     if date != None:
         if len(date) == 10 :
-            if '-' in date:
+            if '-' in date and date.count('-') == 2: # ensures that date 
                     year, month, day = date.split('-')
                     if year.isdigit() and len(year) == 4:
                             if month.isdigit() and len(month) == 2:
