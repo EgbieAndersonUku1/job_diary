@@ -44,7 +44,6 @@ class Records(object):
     def get_json(self):
         """returns a json represent of the class"""
 
-        year, month, day = self.date.split('-')
         end_year, end_month, end_day = self.end_date.split('-')
         return { 'job_title'  : self.job_title.title(),
                  'descr'      : self.descr.title(),
@@ -56,7 +55,7 @@ class Records(object):
                  '_hours'     : self._hours,
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
-                 'date'       : '{}-{}-{}'.format(year, month, day),
+                 'date'       : '{}-{}-{}'.format(self.year, self.month, self.day),
                  'end_date'   : '{}-{}-{}'.format(end_year, end_month, end_day),
                  'month'      : int(self.month),
                  'row_id'     : self.row_id,
@@ -278,7 +277,8 @@ class Records(object):
         @params   :
         daily_rate: A day's pay.
         user_id   : The user id.
-        returns   : An obj if the there are jobs within the database or None if there are no jobs.
+        returns   : An obj if the there are jobs within the database or
+                    None if there are no jobs.
 
         Queries the database based on the daily rate and returns an object if found
         and none if not.
@@ -343,5 +343,3 @@ class Records(object):
             else:
                 user_records[record[u'date']] = [record]
         return user_records
-
-

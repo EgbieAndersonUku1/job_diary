@@ -12,16 +12,18 @@
     <table class="table table-striped">
       {% if not jobs %}
         <div id='error_msg'>
-             This is not an error this page has loaded correct.
+             <h5>This is not an error this page has loaded correct.</h5>
              <src img='static/css/error.png' alt=''></src>
              <div id='error_msg2'>
-                  Your job history is totally empty!!
+                  <h5>Your job history is totally empty!!<h5>
              </div>
              <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
         </div>
       {% else %}
               <h2>Dates of days and times worked </h2>
-              <h3>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h3>
+              <center>
+              <h6>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h6>
+              </center>
 
               {% if session['username'] == 'admin' %}
                   <caption class="text-center">As an admin you can edit any job regardless whether the current date has passed.</caption>

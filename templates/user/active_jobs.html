@@ -14,9 +14,9 @@
     <table class="table table-striped">
       {% if not jobs %}
         <div id='error_msg'>
-             This is not an error this page has loaded correct.
+             <h5>This is not an error this page has loaded correct.</h5>
              <div>
-               You currently have no active jobs !!!
+               <h5>You currently have no active jobs !!!</h5>
              </div>
              <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
 
@@ -26,7 +26,9 @@
       {% else %}
               
               <h2>Days and times of jobs yet to work </h2>
-              <h3>The total pay you will earn if you work an approximated period of {{ total_hrs }} hours is £{{ total_pay }}.</h3>
+              <center>
+              <h6>The total pay you will earn if you work an approximated period of {{ total_hrs }} hours is £{{ total_pay }}.</h6>
+              </center>
           <tr>
             <th>
               Month

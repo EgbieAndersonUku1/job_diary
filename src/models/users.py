@@ -34,22 +34,21 @@ class User(object):
         it to the database.
         """
         hours = get_hours_worked(self.start_date, start_time, self.end_date, finish_time) # calculate the hours worked
-        units = time_to_units(hours) # convert hours worked to units
-        daily_rate = get_daily_rate(units, hourly_rate) # calculate the daily rate
-        year, month, day = self.start_date.split('-')
+        units = time_to_units(hours)    # convert hours worked to units
         record = Records(job_title=job_title, descr=descr,
                          loc=loc,start_time=start_time,
                          finish_time=finish_time,
                          hourly_rate=hourly_rate,
                          total_hours=time_to_str(hours),
                          _hours = units,
-                         user_id=self.id, daily_rate=daily_rate,
+                         user_id=self.id, 
+                         daily_rate=get_daily_rate(units, hourly_rate),
                          date=self.start_date,
                          end_date=self.end_date,
                          day=self.day,
-                         month=month) 
-        # return row_id if update is false or return obj if object is true
-        return (record.save() if not update else record) 
+                         month=self.start_date.split('-')[1] # get the month part of the date
+                         ) 
+        return (record.save() if not update else record) # returns row_id if update is true else obj
            
     def get_by_user_id(self):
         """get_by_user_id(None) -> return(obj)

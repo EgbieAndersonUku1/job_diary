@@ -11,16 +11,16 @@ class ProcessForm(object):
                  rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, day):
 
-         self.errors = {} # pass to the user so they can see there errors
+         self.errors = {}   # pass to the user so they can see there errors
          if start_date and end_date:
             msg  = check_date(str(start_date))
             msg2 = check_date(str(end_date))
-            if msg != True and msg2 != True:
+            if not msg and not msg2:
                 self.errors['date'] = msg
                 self.errors['date'] = msg2
-            elif msg == True and msg2 != True:
+            elif msg and not msg2:
                 self.errors['date'] = 'Incorrect format for end date use YYYY-MM-DD'
-            elif msg != True and msg2 == True:
+            elif not msg and not msg2:
                 self.errors['date'] = 'Incorrect format for start date use YYYY-MM-DD'
             else:
                 if (start_hours == end_hours and start_mins == end_mins) and (datetime.strptime(str(end_date), "%Y-%m-%d") == datetime.strptime(str(start_date), "%Y-%m-%d" )):
@@ -101,16 +101,15 @@ class ProcessForm(object):
         Process the form and adds the user details to the database.
         """
         start_time, finish_time = self._get_times()
-        hours = get_hours_worked(start_date, start_time, end_date, finish_time)
-
-        if update: # if update flag is set updates the row with the new information.
+        if update:   # if update flag is set to true the row is updated.
             user = User(session['username'], start_date, end_date, day, _id=session['user_id'])
-            form = user.add_job_details(self._obj.job_title, 
-                                        self._obj.description,
-                                        self._obj.location, 
-                                        start_time, 
-                                        finish_time, self._obj.rate, True)
-            return self._update_form(user, form, row_id)
+            form_obj = user.add_job_details(self._obj.job_title, 
+                                            self._obj.description,
+                                            self._obj.location, 
+                                            start_time, 
+                                            finish_time, 
+                                            self._obj.rate, update=True)
+            return user.update_row(row_id, form_obj) # update the row within the form
 
         user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
         return user.add_job_details( self._obj.job_title, 
@@ -119,19 +118,6 @@ class ProcessForm(object):
                                      start_time, 
                                      finish_time,
                                      self._obj.rate)
-
-    def _update_form(self, user_obj, form, row_id):
-        """update_form(obj, obj, str) -> return (str)
-
-        @params :
-        user_obj: The user object.
-        form    : The form obj contains all the information for the new row.
-        row_id  : The designated row ID for the table.
-
-        Updates the old row with information from the new row.
-        """
-        return user_obj.update_row(row_id, form)
-        
     def _get_json(self):
         """Returns the details of the form in json"""
         return {
