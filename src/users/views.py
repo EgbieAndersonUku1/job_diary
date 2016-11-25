@@ -6,7 +6,7 @@ from user_form_helpers import login_helper, register_helper
 from src.users.process_forms import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
 from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs
-from src.utilities.time_processor import time_to_str
+from src.utilities.time_processor import time_to_str, is_shift_now
 from src.utilities.date_month_day_processor import month_to_str
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
@@ -184,10 +184,12 @@ def search():
                 for job in jobs:
                     total_pay.append(float(job.daily_rate))
                     total_hrs.append(float(job._hours))
+
                 return render_template("user/permalink_jobs_history.html", jobs=jobs,
                                         translate=month_to_str, total_pay=sum(total_pay),
                                         total_hrs=sum(total_hrs), curr_date=curr_date,
-                                        dt=datetime.datetime.strptime)
+                                        dt=datetime.datetime.strptime,
+                                        shift_now=is_shift_now)
             else:
                 error = 'No records find by that entry'
                 return render_template('user/search.html', form=form, error=error)

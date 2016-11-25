@@ -10,7 +10,7 @@
 
 {% block content %}
     <table class="table table-striped">
-              <h2>History of jobs past and present</h2>
+              <h2>History of jobs past, present and future</h2>
               <h4>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h4>
             <tr>
               <th>
@@ -88,10 +88,14 @@
                      {{ job.finish_time }}
                    </td>
                    <td>
-                     {% if dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
+              
+                     {% if shift_now(job.start_time.split(':')[0], job.finish_time.split(':')[1],  job.finish_time.split(':')[0], job.finish_time.split(':')[1]) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
+                        Currently working shift
+
+                     {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
                          Yes
                      {% else %}
-                         No
+                         No 
                      {% endif %}
                    </td>
             {% endfor %}
