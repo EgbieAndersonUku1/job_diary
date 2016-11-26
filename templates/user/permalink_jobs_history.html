@@ -89,7 +89,7 @@
                    </td>
                    <td>
                      <!--Checks if the user is currently working their shift -->
-                     {% if is_shift_now(job.start_time.split(':')[0], job.finish_time.split(':')[1], job.finish_time.split(':')[0], job.finish_time.split(':')[1]) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
+                     {% if is_shift_now(job.start_time.split(':')[0], job.start_time.split(':')[1], job.finish_time.split(':')[0], job.finish_time.split(':')[1]) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
                         Currently working shift
                       <!--check if the user shift is over-->
                      {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]) %}
