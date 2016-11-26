@@ -86,8 +86,8 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
             if datetime.strptime(job.date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d"):
                 get_jobs_helper(job.daily_rate, job._hours, job)
 
-            # if job date is equal to current working date and is_shift_over equals False
-            # it means that the users shift is currently over.
+            # if job date is equal to current working date and is_shift_over equals True
+            # it means that the users shift is currently finished.
             elif datetime.strptime(job.date, "%Y-%m-%d") == \
                            datetime.strptime(curr_date, "%Y-%m-%d") and \
                            is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]):
