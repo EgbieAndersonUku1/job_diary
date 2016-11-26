@@ -6,7 +6,7 @@ from user_form_helpers import login_helper, register_helper
 from src.users.process_forms import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
 from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs
-from src.utilities.time_processor import time_to_str, is_shift_now
+from src.utilities.time_processor import time_to_str, is_shift_now, is_shift_over
 from src.utilities.date_month_day_processor import month_to_str
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
@@ -54,6 +54,7 @@ def entry_page(row_ID):
     end_hours   = request.form.get('end_hours')
     end_mins    = request.form.get('end_mins')
 
+    print date
     if request.method == 'GET':
         return render_template('user/entry_page.html',start_date=start_date, 
                                 end_date=end_date, day=day,
@@ -189,7 +190,8 @@ def search():
                                         translate=month_to_str, total_pay=sum(total_pay),
                                         total_hrs=sum(total_hrs), curr_date=curr_date,
                                         dt=datetime.datetime.strptime,
-                                        shift_now=is_shift_now)
+                                        is_shift_now=is_shift_now,
+                                        is_shift_over=is_shift_over)
             else:
                 error = 'No records find by that entry'
                 return render_template('user/search.html', form=form, error=error)
