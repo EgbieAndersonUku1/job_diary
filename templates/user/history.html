@@ -26,9 +26,9 @@
               </center>
 
               {% if session['username'] == 'admin' %}
-                  <caption class="text-center">As an admin you can edit any job regardless whether the current date has passed.</caption>
+                  <caption class="text-center">As an admin you can edit any shift regardless whether the shift has over or not.</caption>
               {% else %}
-                    <caption class="text-center">Only dates that are equal or greater than the current date can be edited.</caption>
+                    <caption class="text-center">Normal user can only edit shifts that are not over</caption>
               {% endif %}
             <tr>
               <th>
@@ -110,8 +110,8 @@
                         <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
                         <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
                      {% else %}
-                        <!-- Only jobs that are active can be edited, e.g jobs that are have not worked yet -->
-                        {% if dt(job.date, "%Y-%m-%d") >= dt(date, "%Y-%m-%d")  %}
+                        <!-- As a normal user, user can only edit jobs if their shift is not over-->
+                        {% if dt(job.date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and not is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]) %}
                         <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
                         <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
                         {% else %}

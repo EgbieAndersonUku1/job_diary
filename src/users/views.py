@@ -123,7 +123,8 @@ def _display(html_link, active=False):
                             translate=month_to_str,
                             dt=datetime.datetime.strptime,
                             total_pay=round(sum(total_pay),2),
-                            total_hrs=int(round(sum(total_hrs))), active=active)
+                            total_hrs=int(round(sum(total_hrs))), active=active, 
+                            is_shift_over=is_shift_over)
 
 @app.route('/history/jobs',  methods=('GET', 'POST'))
 @login_required

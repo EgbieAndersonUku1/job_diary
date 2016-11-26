@@ -94,7 +94,7 @@
                       <!--check if the user shift is over-->
                      {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]) %}
                          Yes
-                      <!-- Checks if the day is over -->
+                      <!-- Checks if the day the user's shift was on is over -->
                      {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
                         Yes
                      {% else %}

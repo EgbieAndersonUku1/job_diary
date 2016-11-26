@@ -6,6 +6,7 @@
 from datetime import datetime
 from dateutil import relativedelta
 import random
+from src.utilities.time_processor import is_shift_over
 
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
         """get_hours_worked(str, str, str, str) -> return(tuple)
@@ -78,10 +79,23 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
         total_hrs.append(float(job._hours))
         worked_jobs.append(job)
 
+    # sort the job based on whether the jobs are active
     for job in jobs:
         if not active_jobs:
+            # if the job is less than the current day it means the job has been worked
             if datetime.strptime(job.date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d"):
                 get_jobs_helper(job.daily_rate, job._hours, job)
-        elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= datetime.strptime(curr_date, "%Y-%m-%d"):
-                get_jobs_helper(job.daily_rate, job._hours, job)
+
+            # if job date is equal to current working date and is_shift_over equals False
+            # it means that the users shift is currently over.
+            elif datetime.strptime(job.date, "%Y-%m-%d") == \
+                           datetime.strptime(curr_date, "%Y-%m-%d") and \
+                           is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]):
+                          get_jobs_helper(job.daily_rate, job._hours, job)    
+        elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= \
+                          datetime.strptime(curr_date, "%Y-%m-%d") and \
+                          not is_shift_over(job.finish_time.split(':')[0], 
+                          job.finish_time.split(':')[1]):
+                get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
+                
     return jobs, total_pay, total_hrs, worked_jobs
