@@ -183,7 +183,7 @@ class ProcessSearchForm(object):
             return self._user.get_by_location(self.location)
         elif self.date:
             return self._user.get_by_date(str(self.date))
-        elif self.day:
+        elif self.day and translate_day(self.day):
             return self._user.get_by_day(self.days.get(self.day.title()[:3], None))
         elif self.start_time:
             return self._user.get_by_start_time(self._fix_time_str(str(self.start_time)))
