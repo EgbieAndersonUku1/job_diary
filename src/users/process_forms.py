@@ -191,7 +191,7 @@ class ProcessSearchForm(object):
             return self._user.get_by_finish_time(self._fix_time_str(str(self.finish_time)))
         elif self.hrs_worked:
             return self._user.get_by_hours(self.hrs_worked)
-        elif self.month:
+        elif self.month and month_to_num(self.month):
             return self._user.get_by_month(str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)

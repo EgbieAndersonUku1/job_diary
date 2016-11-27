@@ -213,7 +213,6 @@ def search():
                 for job in jobs:
                     total_pay.append(float(job.daily_rate))
                     total_hrs.append(float(job._hours))
-
                 return render_template("user/permalink_jobs_history.html", 
                                         jobs=jobs,
                                         translate=month_to_str, 
@@ -223,11 +222,9 @@ def search():
                                         dt=datetime.datetime.strptime,
                                         is_shift_now=is_shift_now,
                                         is_shift_over=is_shift_over)
-            else:
-                error = 'No records find by that entry'
-                return render_template('user/search.html', form=form, error=error)
-    else:
-        return render_template('user/search.html', form=form)
+            error = 'No records find by that entry'
+            return render_template('user/search.html', form=form, error=error)
+    return render_template('user/search.html', form=form)
 
 @app.route('/.json')
 @app.route('/home.json')

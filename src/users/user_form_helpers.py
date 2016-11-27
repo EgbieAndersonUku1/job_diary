@@ -33,8 +33,7 @@ def login_user(**kw):
                     url = session.pop('next')
                     return redirect(url)
                 return redirect(url_for(kw['redirect_link']))
-                error = 'Incorrect username and password'
-        return render_template(kw['template'], form=kw['form'], error=error)
+        return render_template(kw['template'], form=kw['form'], error='Incorrect username and password')
 
 def register_user(**kw):
     """
