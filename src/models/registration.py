@@ -1,0 +1,42 @@
+import uuid
+from database import DataBase as db
+import bcrypt
+import time
+
+class Registration(object):
+    """Registration(class)
+    Allows the user to register their details.
+    """
+    def __init__(self, email, password, registration_date=None, _id=None):
+        self.email = email
+        self.password = password
+        self.registration_id = uuid.uuid4().hex if _id is None else _id
+        self.registration_date = registration_date
+
+    def _is_user_name_unique(self, email):
+        """check whether the username is unique"""
+        # False means that the user was found, True means that no user was found by that name
+        return False if db.find_one(collections='login_credentials', query={'username': self.email}) else True
+
+    def register(self):
+        """register the user
+        Returns False if users details was not registered correctly or True
+        if it was.
+        """
+
+        if not self._is_user_name_unique(self.email):
+            return False
+        self.password = bcrypt.hashpw(self.password, bcrypt.gensalt(log_rounds=14))
+        self._save()  # save user details to database
+        return True   # True Means that everything was created smoothly
+
+    def _save(self):
+        """Saves the registration details to the database in json format"""
+        db.insert_one(collection='user_credentials', data=self._get_json())
+
+    def _get_json(self):
+        """Get the details of the registration in the form of a json format """
+        return {'email'            : self.email,
+                'password'         : self.password,
+                'registration_date': time.strftime("%d/%m/%Y"),
+                'registration_id'  : self.registration_id }

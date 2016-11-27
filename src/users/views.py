@@ -2,9 +2,9 @@
 from src.users.form import RegisterForm, LoginForm, SearchForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
-from user_form_helpers import login_helper, register_helper
+from user_form_helpers import login_user, register_user
 from src.users.process_forms import ProcessForm, ProcessSearchForm
-from src.models.users import User, Records
+from src.models.users import User
 from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs, is_shift_now, is_shift_over
 from src.utilities.time_processor import time_to_str
 from src.utilities.date_month_day_processor import month_to_str
@@ -27,12 +27,21 @@ def initialize():
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     """Allows the user entry to the login applicaton"""
-    return login_helper(LoginForm, 'username', 'home', 'user/login.html', 'home')
+    form = LoginForm()
+    return login_user(form=form, 
+                      session_name='username',
+                      redirect_link='home',
+                      template='user/login.html',
+                      index='home')
 
 @app.route('/register', methods=('GET', 'POST'))
 def user_register():
     """Register the user to the application"""
-    return register_helper(RegisterForm, 'username must be unique', 'user/registration.html', 'home')
+    form = RegisterForm()
+    return register_user(form=form,
+                         error='username must be unique', 
+                         template='user/registration.html', 
+                         redirect_link='home')
 
 @app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
 @login_required
@@ -54,15 +63,21 @@ def entry_page(row_ID):
     end_hours   = request.form.get('end_hours')
     end_mins    = request.form.get('end_mins')
 
-    print date
     if request.method == 'GET':
-        return render_template('user/entry_page.html',start_date=start_date, 
-                                end_date=end_date, day=day,
-                               job_title=title, description=descr, 
-                               location=loc, start_hours=start_hours,
-                               start_mins=start_mins, rate=hourly_rate,
-                               end_hours=end_hours,end_mins=end_mins, errors='',
-                               success='')
+        return render_template('user/entry_page.html',
+                                start_date=start_date, 
+                                end_date=end_date, 
+                                day=day,
+                                job_title=title, 
+                                description=descr, 
+                                location=loc, 
+                                start_hours=start_hours,
+                                start_mins=start_mins, 
+                                rate=hourly_rate,
+                                end_hours=end_hours,
+                                end_mins=end_mins, 
+                                errors='',
+                                success='')
 
     user_form = ProcessForm(title, descr, loc, hourly_rate,start_date, end_date, start_hours, start_mins, end_hours, end_mins, day)
     success, errors, form = user_form.verify_form() # if job details are sucessful add to the database
@@ -76,13 +91,19 @@ def entry_page(row_ID):
         else:
             row_id = user_form.process_form(start_date, end_date, day)
         return redirect(url_for('success_page', row_id=row_id)) 
-    return render_template('user/entry_page.html',start_date=form.start_date, 
-                           end_date=form.end_date, job_title=form.job_title, 
-                           description=form.description, location=form.location,
-                           start_hours=form.start_hours, day=day,
-                           start_mins=form.start_mins, rate=form.rate,
+    return render_template('user/entry_page.html',
+                           start_date=form.start_date, 
+                           end_date=form.end_date, 
+                           job_title=form.job_title, 
+                           description=form.description, 
+                           location=form.location,
+                           start_hours=form.start_hours, 
+                           day=day,
+                           start_mins=form.start_mins, 
+                           rate=form.rate,
                            end_hours=form.end_hours,
-                           end_mins=form.end_mins, errors=errors)
+                           end_mins=form.end_mins, 
+                           errors=errors)
 @app.route('/logout')
 @login_required
 def logout():
@@ -98,7 +119,10 @@ def logout():
 @login_required
 def reset():
     """reset the value in the form for the application"""
-    return render_template('user/entry_page.html', start_date=curr_date, end_date=curr_date, day=curr_day)
+    return render_template('user/entry_page.html', 
+                            start_date=curr_date, 
+                            end_date=curr_date, 
+                            day=curr_day)
 
 @app.route('/successful/<row_id>')
 @login_required
@@ -119,15 +143,17 @@ def _display(html_link, active=False):
     Renders the jobs worked or not worked along with the hours and total pay.
     """
     jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, User, session, curr_date)
-    return render_template(html_link, jobs=worked_jobs, date=curr_date,
-                            translate=month_to_str,
-                            dt=datetime.datetime.strptime,
-                            total_pay=round(sum(total_pay),2),
-                            total_hrs=int(round(sum(total_hrs))), 
-                            active=active, 
-                            is_shift_over=is_shift_over)
+    return render_template(html_link, 
+                           jobs=worked_jobs, 
+                           date=curr_date,
+                           translate=month_to_str,
+                           dt=datetime.datetime.strptime,
+                           total_pay=round(sum(total_pay),2),
+                           total_hrs=int(round(sum(total_hrs))), 
+                           active=active, 
+                           is_shift_over=is_shift_over)
 
-@app.route('/history/jobs',  methods=('GET', 'POST'))
+@app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required
 def history():
     """renders the entire job history active and none active"""
@@ -188,9 +214,12 @@ def search():
                     total_pay.append(float(job.daily_rate))
                     total_hrs.append(float(job._hours))
 
-                return render_template("user/permalink_jobs_history.html", jobs=jobs,
-                                        translate=month_to_str, total_pay=sum(total_pay),
-                                        total_hrs=sum(total_hrs), curr_date=curr_date,
+                return render_template("user/permalink_jobs_history.html", 
+                                        jobs=jobs,
+                                        translate=month_to_str, 
+                                        total_pay=sum(total_pay),
+                                        total_hrs=sum(total_hrs), 
+                                        curr_date=curr_date,
                                         dt=datetime.datetime.strptime,
                                         is_shift_now=is_shift_now,
                                         is_shift_over=is_shift_over)

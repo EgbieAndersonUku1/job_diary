@@ -2,15 +2,12 @@
 # Author = Egbie Uku
 #####################################################################
 
-
 from datetime import datetime
 from dateutil import relativedelta
 import random
-from src.utilities.time_processor import is_shift_over
-
 
 def is_shift_now(start_hour, start_mins, end_hours, end_mins):
-    """checks if the user shift has started"""
+    """checks if the user shift has started or currently in progress"""
     curr_time = datetime.now()
     shift_start_time = curr_time.replace(hour=int(start_hour), minute=int(start_mins))
     shift_end_time = curr_time.replace(hour=int(end_hours), minute=int(end_mins))
@@ -96,7 +93,7 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
     # sort the job based on whether the jobs are active
     for job in jobs:
         if not active_jobs:
-            # if the job is less than the current day it means the job has been worked
+            # if the shift day is less than the current day it means the shift has already been worked
             if datetime.strptime(job.date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d"):
                 get_jobs_helper(job.daily_rate, job._hours, job)
 
