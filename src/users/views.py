@@ -5,8 +5,8 @@ from flask import render_template, session, redirect, url_for, flash, request
 from user_form_helpers import login_helper, register_helper
 from src.users.process_forms import ProcessForm, ProcessSearchForm
 from src.models.users import User, Records
-from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs
-from src.utilities.time_processor import time_to_str, is_shift_now, is_shift_over
+from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs, is_shift_now, is_shift_over
+from src.utilities.time_processor import time_to_str
 from src.utilities.date_month_day_processor import month_to_str
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
@@ -123,7 +123,8 @@ def _display(html_link, active=False):
                             translate=month_to_str,
                             dt=datetime.datetime.strptime,
                             total_pay=round(sum(total_pay),2),
-                            total_hrs=int(round(sum(total_hrs))), active=active, 
+                            total_hrs=int(round(sum(total_hrs))), 
+                            active=active, 
                             is_shift_over=is_shift_over)
 
 @app.route('/history/jobs',  methods=('GET', 'POST'))

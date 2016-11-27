@@ -8,6 +8,20 @@ from dateutil import relativedelta
 import random
 from src.utilities.time_processor import is_shift_over
 
+
+def is_shift_now(start_hour, start_mins, end_hours, end_mins):
+    """checks if the user shift has started"""
+    curr_time = datetime.now()
+    shift_start_time = curr_time.replace(hour=int(start_hour), minute=int(start_mins))
+    shift_end_time = curr_time.replace(hour=int(end_hours), minute=int(end_mins))
+    return True if shift_start_time <= curr_time <= shift_end_time else False
+
+def is_shift_over(end_hrs, end_mins):
+    """checks if the user shift is over"""
+    curr_time = datetime.now()
+    shift_end_time = curr_time.replace(hour=int(end_hrs), minute=int(end_mins))
+    return True if curr_time > shift_end_time else False
+
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
         """get_hours_worked(str, str, str, str) -> return(tuple)
 
