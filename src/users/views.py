@@ -2,7 +2,7 @@
 from src.users.form import RegisterForm, LoginForm, SearchForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
-from user_form_helpers import login_user, register_user
+from _user_form_helper import login_user, register_user
 from src.users.process_forms import ProcessForm, ProcessSearchForm
 from src.models.users import User
 from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs, is_shift_now, is_shift_over
@@ -79,9 +79,11 @@ def entry_page(row_ID):
                                 errors='',
                                 success='')
 
-    user_form = ProcessForm(title, descr, loc, hourly_rate,
-                             start_date, end_date, start_hours, 
-                             start_mins, end_hours, end_mins, day)
+    user_form = ProcessForm(title, descr, loc, 
+                            hourly_rate, start_date, 
+                            end_date, start_hours, 
+                            start_mins, end_hours, 
+                            end_mins, day)
     success, errors, form = user_form.verify_form() 
     if success:
         # row_ID comes from the form so False is expressed as unicode

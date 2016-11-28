@@ -95,8 +95,9 @@ class User(object):
         return Records.find_by_month_range(month, month_two, self.id)
 
     def get_by_month(self, month):
-        """get_by_month(str, str(optional)) -> return(None or obj)
-        Queries the records by month and returns a job obj if found or None.
+        """get_by_month(str) -> return(None or obj)
+        Queries the records by month and returns a 
+        job obj if found or None.
         """
         return Records.find_by_month(month, self.id)
 

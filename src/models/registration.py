@@ -15,20 +15,21 @@ class Registration(object):
 
     def _is_user_name_unique(self, email):
         """check whether the username is unique"""
-        # False means that the user was found, True means that no user was found by that name
-        return False if db.find_one(collections='login_credentials', query={'username': self.email}) else True
+        if db.find_one('login_credentials', {'username': self.email}):
+           return False
+        return True
 
     def register(self):
         """register the user
-        Returns False if users details was not registered correctly or True
-        if it was.
+        Returns False if users details was not registered correctly.
+        True if registration it was.
         """
 
         if not self._is_user_name_unique(self.email):
             return False
         self.password = bcrypt.hashpw(self.password, bcrypt.gensalt(log_rounds=14))
-        self._save()  # save user details to database
-        return True   # True Means that everything was created smoothly
+        self._save() 
+        return True  
 
     def _save(self):
         """Saves the registration details to the database in json format"""
@@ -39,4 +40,4 @@ class Registration(object):
         return {'email'            : self.email,
                 'password'         : self.password,
                 'registration_date': time.strftime("%d/%m/%Y"),
-                'registration_id'  : self.registration_id }
+                'registration_id'  : self.registration_id}

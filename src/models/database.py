@@ -36,14 +36,6 @@ class DataBase(object):
     @staticmethod
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
-
-        @params:,
-        ('finish_time', pymongo.DESCENDING),
-        ('hourly_rate', pymongo.DESCENDING),
-        'daily_rate', pymongo.DESCENDING
-        collections: The name of the table(collections) to save to.
-        data       : The data to insert into the database's collection
-
         Inserts data into a collection(table) for a given database.
         """
         DataBase.DATABASE[collection].insert_one(data)
@@ -52,14 +44,14 @@ class DataBase(object):
     def search(collections, query, key, limit_num):
         """search(str, value, value, tuple) -> return(cursor)
 
-        @params:
-        collections: A table name for the database.
-        query      : Queries the database based on the query.
-        key        : Sorts the data based on the key.
-        limit_num  : Limits the data returned.
-        return     : Returns a cursor object.
-
         Takes a given query and queries the database for that information.
+
+        parameters:
+         - collections: A table name for the database.
+         - query      : Queries the database based on the query.
+         - key        : Sorts the data based on the key.
+         - limit_num  : Limits the data returned.
+         - return     : Returns a cursor object.
         """
         field, value = key
         if query == None:
@@ -68,38 +60,38 @@ class DataBase(object):
 
     @staticmethod
     def find_one(collections, query):
-        """find_one(str, value) -> return(dict)
+        """find_one(str, dict) -> return(dict)
 
-        @params:
-        collections: A table name from the database
-        query      : The information to query from the database
-        returns    : A single row if found
+        Return a json object from from the database.
 
-        Return a single obj from from the database.
+        parameters:
+           - collections: A table name from the database
+           - query      : The information to query from the database
+           - returns    : A single row if found
         """
         return DataBase.DATABASE[collections].find_one(query)
 
     @staticmethod
     def delete_row(collections, query):
-        """delete_row(str, value) -> return(None)
+        """delete_row(str, dict) -> return(None)
 
-        @params:
-        collections: A table name from the database
-        query      : The information to query from the database
-      
         Deletes and entry from the row.
+
+        parameters:
+           - collections: A table name from the database
+           - query      : The information to query from the database
         """
         DataBase.DATABASE[collections].find_one_and_delete(query)
 
     @staticmethod
     def update_row(collections, row_id, query):
-        """update_row(str, value) -> return(None)
+        """update_row(str, str, dict) -> return(None)
 
-        @params:
-        collections: A table name from the database
-        query      : The information to query from the database
-        
         Updates a single row in the table.
+
+        parameters:
+           - collections: A table name from the database
+           - query      : The information to query from the database
         """
         DataBase.DATABASE[collections].update_one({'row_id': row_id}, {'$set':query})
         

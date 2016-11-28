@@ -7,10 +7,12 @@ from datetime import datetime
 def time_to_units(time):
 	"""time_to_units(tuple) -> returns(float)
 
-	@params:
-	time   : tuple of two where the first elements is hours and second is minutes
-	returns: returns time in units
+	Takes a time tuple and returns the time as units.
 
+	parameters:
+		- time: tuple of two where the first elements is
+		        hours and second is minutes.
+	
 	>>> time_to_unit((2,2))
 	2.03
 	>>> time_to_unit((10,15))
@@ -22,8 +24,13 @@ def time_to_units(time):
 def time_to_str(time):
 	"""time_to_str(tuple) -> return(str)
 
-	time   : contains a tuple (h, m) where is the hours and m is the minutes
-	return : return the time in string format
+	Takes a time tuple and returns the
+	string representation of that tuple.
+
+	parameters:
+		- time: contains a tuple (h, m) 
+		        where the first element(h) is hours and 
+		        the second element(m) m is the minutes.
 
 	>>> time_to_str((1, 0))
 	1 hour

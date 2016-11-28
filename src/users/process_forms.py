@@ -35,17 +35,17 @@ class ProcessForm(object):
          if not job_title:
              self.errors['job_title'] = 'The job title field must be not be empty'
          if not location:
-             self.errors['job_loc']   = 'The job location field must be not be empty'
-         if not description:
+             self.errors['job_loc'] = 'The job location field must be not be empty'
+         if not description: 
              self.errors['job_descr'] = 'The job description field must be not be empty'
          if not rate:
              self.errors['hourly_rate'] = 'The hourly rate field must be not be empty'
          if not start_date:
-             self.errors['start_date']  = 'The start date field must be not be empty'
+             self.errors['start_date'] = 'The start date field must be not be empty'
          if not end_date:
-             self.errors['end_date']   = 'The end date field must be not be empty'
+             self.errors['end_date'] = 'The end date field must be not be empty'
         
-        #if start date and end date is True check whether there are in the form of dd/mm/yyyy
+         # escape the html
          self.job_title   = cgi.escape(job_title).title()
          self.description = cgi.escape(description).title()
          self.location    = cgi.escape(location).title()

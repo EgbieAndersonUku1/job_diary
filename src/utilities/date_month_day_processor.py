@@ -4,6 +4,10 @@
 
 def check_date(date):
     """check_date(str) -> return(tuple)
+
+    parameters:
+       - date: The date to check.
+       
     Takes a date and checks if the date is in the format
     of YYYY-MM-DD.
 
@@ -37,9 +41,15 @@ def translate_day(day):
 
 def month_to_str(month_num):
 	'''month_to_str(str) -> return(str)
-	Takes a string digit and returns the month equivalent of that
-	string.
-	>>> month_to_str(1)
+	
+	Takes a number between 1-12 and returns a month name
+	corresponding to that number. e.g 1-> January, 
+	2 -> Feb, etc.
+
+	parameters:
+	   -month_num : Month in number e.g 1-12.
+
+	>>> month_two_num(01)
 	'January'
 	'''
 	months = {'1': 'January', '2':'February', '3':'March',
@@ -49,14 +59,19 @@ def month_to_str(month_num):
 	return months.get(str(month_num), None)
 
 def month_to_num(month):
-	"""month_to_num(int) -> return(str)
-	Takes a number between 1-12 and returns a month name
-	corresponding to that number.
+	"""month_to_num(str) -> return(str)
 
-	e.g 1 returns January, 2 returns Feb, etc
+	Takes a month and if the first three characters
+	match returns the month number corresponding to 
+	that month.
 
-	>>> month_two_num(01)
-	'January'
+	e.g 1 -> January, 2 -> Feb, etc.
+
+	parameters:
+	   -month : the month
+
+	>>> month_two_num(January)
+	'01'
 	"""
 	months = {'Jan':'1', 'Feb':'2', 'Mar':'3',
 		      'Apr':'4', 'May':'5', 'Jun':'6',
