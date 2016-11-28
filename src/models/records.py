@@ -43,8 +43,8 @@ class Records(object):
 
     def get_json(self):
         """returns a json represent of the class"""
-
         end_year, end_month, end_day = self.end_date.split('-')
+
         return { 'job_title'  : self.job_title.title(),
                  'descr'      : self.descr.title(),
                  'loc'        : self.loc.title(),
@@ -336,7 +336,7 @@ class Records(object):
         """update_row(str, form_obj) -> return(str)
 
         Updates the old row with new information.
-
+        
         parameters :
             - row_id  : The row to update.
             - form    : form object.

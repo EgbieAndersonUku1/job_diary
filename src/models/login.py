@@ -3,7 +3,6 @@ from datetime import datetime
 from uuid import uuid4
 import bcrypt
 
-
 class Login(object):
     """Login(class) -> Checks whether the user registration is valid.
     If not returns the appropriate response.
@@ -19,10 +18,11 @@ class Login(object):
 
     def _get_user_login_details(self):
         """func : _get_user_login_details(None) -> return(obj or None)
-        Helper function: Checks whether the user details exists returns obj or False
-        otherwise.
+        Helper function: Checks whether the user details 
+        exists returns obj or False otherwise.
         """
-        login_data = db.find_one(collections='login_credentials', query={'username': self.username})
+        login_data = db.find_one(collections='login_credentials', 
+                                query={'username': self.username})
         return False if not login_data else Login(**login_data)
 
     def is_credentials_ok(self):
@@ -33,7 +33,9 @@ class Login(object):
         login_obj = self._get_user_login_details()
         if not login_obj:
             return False # users details does not exist
-        return (login_obj if bcrypt.hashpw(self.password, login_obj.password) == login_obj.password else False) # users details found verify login in details
+        elif bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
+           return login_obj
+        return False 
 
     def save(self):
         """Saves the form to the database in json format"""
