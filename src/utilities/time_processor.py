@@ -5,11 +5,17 @@
 from datetime import datetime
 
 def convert_mins_to_hour(minutes):
-	"""convert_mins_to_hour(float) -> return(float)
+	"""convert_mins_to_hour(float) -> return(str)
 
 	Takes time in minutes/hrs and converts to its
 	string representation. 
-	
+
+	:parameters
+	   - minutes : either minutes/hrs and converts
+	               to its string representation.
+	               e.g 20.75 will be converted
+	               to 21 hours and 25 minutes.
+
 	>>> convert_mins_to_hour(549)
 	9 hours and 15 minutes
 	"""
