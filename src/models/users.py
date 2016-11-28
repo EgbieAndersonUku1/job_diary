@@ -16,16 +16,14 @@ class User(object):
     The User class allows the user to add, modify and 
     delete jobs from database via the records class.
     """
-    def __init__(self, full_name, start_date=None,
-                 end_date=None, day=None, _id=None):
+    def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
         self.full_name = full_name
         self.start_date = start_date
         self.end_date = end_date
         self.day = day
         self.id = uuid.uuid4().hex if _id is None else _id
 
-    def add_to_records(self, job_title, descr, loc, start_time,
-                        finish_time, hourly_rate, update=False):
+    def add_to_records(self, job_title, descr, loc, **kwargs):
         """add_to_records(str, str, str, str, str, str) -> return(obj or str)
 
         Takes the attributes of a job e.g. title,
@@ -34,34 +32,39 @@ class User(object):
         Returns an the record object if update is True.
         Returns the row id if update is  False.
 
-        parameters:
+        :parameters
             - job_title  : The title of the job.
             - descr      : The description for the job.
             - loc        : The location for the job.
+
+        :kwargs arguments
             - start_time : The time shift/job starting.
             - finish_time: The time shift/job is ending
             - hourly_rate: The hourly rate for the job.
             - update     : (Optional) parameter, if set to True, updates 
-                           the row with with new the jobs details.
+                            the row with with new the jobs details.
         """
-        hours = get_hours_worked(self.start_date, start_time,
-                                 self.end_date, finish_time)
-        units = time_to_units(hours)    # convert hours worked to units
+        hours = get_hours_worked(self.start_date, kwargs['start_time'],
+                                 self.end_date, kwargs['finish_time'])
+        units  = time_to_units(hours)    # convert hours worked to units
         record = Records(job_title=job_title, 
                          descr=descr,
                          loc=loc,
-                         start_time=start_time,
-                         finish_time=finish_time,
-                         hourly_rate=hourly_rate,
+                         start_time=kwargs['start_time'],
+                         finish_time=kwargs['finish_time'],
+                         hourly_rate=kwargs['hourly_rate'],
                          total_hours=time_to_str(hours),
                          _hours=units,
                          user_id=self.id,
-                         daily_rate=get_daily_rate(units, hourly_rate),
+                         daily_rate=get_daily_rate(units, kwargs['hourly_rate']),
                          date=self.start_date,
                          end_date=self.end_date,
                          day=self.day,
-                         month=self.start_date.split('-')[1]) # get the month part
-        return (record.save() if not update else record) # return obj if update is true else row id
+                         month=self.start_date.split('-')[1],
+                         year=None,
+                         row_id=None,
+                        _id=None) # get the month part
+        return (record.save() if not kwargs['update'] else record) # return obj if update is true else row id
 
     def get_by_user_id(self):
         """get_by_user_id(None) -> return(obj)
@@ -137,13 +140,29 @@ class User(object):
 
         parameters:
            - start_time: The start time to query by.
+                         Time must be entered as hh:mm
+
+        >>> get_by_start_time('11:00')
+        objectID(..)
+        >>> get_by_start_time('12:00')
+        None
         """
         return Records.find_by_start_time(start_time, self.id)
 
     def get_by_finish_time(self, finish_time):
         """get_by_time(str) -> return(obj)
+
         Queries the records by finish time and returns
         a job obj if found or None.
+
+        parameters:
+           - finish_time: The finish time to query by.
+                          Time must be entered as hh:mm.
+
+        >>> get_by_finish_time('11:00')
+        objectID(..)
+        >>> get_by_finish_time('12:00')
+        None
         """
         return Records.find_by_finish_time(finish_time, self.id)
 
@@ -211,7 +230,7 @@ class User(object):
 
     def update_row(self, row_id, form):
         """update_row(str, obj) -> return(None)
-        Updates a row using the row id.
+        Updates a particular row using its row id.
 
         parameters:
            - row_id: The row id to update.

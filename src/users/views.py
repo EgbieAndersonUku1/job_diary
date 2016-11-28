@@ -134,7 +134,7 @@ def reset():
 def success_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User('',_id=session['user_id'])
-   flash('The following data has been successful added to the database.')
+   flash('The data below has been added to the database.')
    return render_template('user/table.html', rows=user.get_by_row_id(row_id))
 
 def _display(html_link, active=False):

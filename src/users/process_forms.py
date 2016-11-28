@@ -108,18 +108,20 @@ class ProcessForm(object):
             form_obj = user.add_to_records(self._obj.job_title, 
                                            self._obj.description,
                                            self._obj.location, 
-                                           start_time, 
-                                           finish_time, 
-                                           self._obj.rate, update=True)
+                                           start_time=start_time, 
+                                           finish_time=finish_time, 
+                                           hourly_rate=self._obj.rate, 
+                                           update=True)
             return user.update_row(row_id, form_obj) # update the row within the form
 
         user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
         return user.add_to_records(self._obj.job_title, 
                                    self._obj.description,
                                    self._obj.location, 
-                                   start_time, 
-                                   finish_time,
-                                   self._obj.rate)
+                                   start_time=start_time, 
+                                   finish_time=finish_time,
+                                   hourly_rate=self._obj.rate,
+                                   update=False)
     def _get_json(self):
         """Returns the details of the form in json"""
         return {

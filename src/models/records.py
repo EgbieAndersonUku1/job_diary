@@ -19,27 +19,50 @@ class Records(object):
     The Records class directly access the database to either delete,
     retreive or update the job record details of the user.
     """
-    def __init__(self, job_title, descr, loc, start_time, finish_time,
-                 hourly_rate, total_hours, _hours, user_id, daily_rate,
-                 date, end_date, day, month, year=None, row_id=None, _id=None):
+    def __init__(self, **kwargs):
+        """Takes a list of parameters from kwargs that 
+        consists of the job attributes for the user and 
+        adds them to the database.
 
-        self.job_title  = job_title
-        self.descr = descr
-        self.daily_rate  = daily_rate
-        self.start_time  = start_time
-        self.finish_time = finish_time
-        self.hourly_rate = hourly_rate
-        self.total_hours = total_hours # hours in words e.g 2 hrs and 10 mins
-        self._hours  = _hours          # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
-        self.user_id = user_id
-        self.date =  date
-        self.end_date = end_date
-        self.day  =  day 
-        self.loc  = loc
-        self.year = int(self.date.split('-')[0]) if year == None else year
-        self.row_id = gen_row_id() if row_id is None else row_id
-        self.month  = month
-        self._id = uuid.uuid4().hex if _id is None else _id
+        :keywords parameters
+            job_title  : The job title.
+            descr      : The role of the job. 
+            loc        : The location of the job. 
+            start_time : The start time for the job. 
+            finish_time: The time the job ends.
+            hourly_rate: The rate for the job. 
+            total_hours: (float) The total hours worked
+            _hours     : The total hours worked to be 
+                         used only with mongodb for comparing.
+            user_id    : The user id for the record.
+            daily_rate : The daily rate for the job.
+            date       : The date the job starts. 
+            end_date   : The end date for the job. Used to calcuate
+                         the daily rate.
+            day        : The day on the week the job is on.
+            month      : The month the job is on. 
+            year       : Year optional parameter.
+            row_id     : The row id for the table consisting of the data.
+            _id        : The _id use to identify the user table.
+
+        """
+        self.job_title  = kwargs['job_title']
+        self.descr = kwargs['descr']
+        self.daily_rate  = kwargs['daily_rate']
+        self.start_time  = kwargs['start_time']
+        self.finish_time = kwargs['finish_time']
+        self.hourly_rate = kwargs['hourly_rate']
+        self.total_hours = kwargs['total_hours'] # hours in words e.g 2 hrs and 10 mins
+        self._hours  = kwargs['_hours']          # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
+        self.user_id = kwargs['user_id']
+        self.date =  kwargs['date']
+        self.end_date = kwargs['end_date']
+        self.day  =  kwargs['day']
+        self.loc  = kwargs['loc']
+        self.year = int(self.date.split('-')[0]) if kwargs['year'] == None else kwargs['year']
+        self.row_id = gen_row_id() if kwargs['row_id'] is None else kwargs['row_id']
+        self.month  = kwargs['month']
+        self._id = uuid.uuid4().hex if kwargs['_id'] is None else kwargs['_id']
 
     def get_json(self):
         """returns a json represent of the class"""
@@ -120,7 +143,7 @@ class Records(object):
         that matches the users parameters or an empty list if 
         the parameters do not match.
 
-        parameters:
+        :parameters
            - query  : The query to be used to query the database.
            - key    : Sorts the returned data based on the key.
         """
@@ -137,7 +160,7 @@ class Records(object):
         job object that matches the users parameter or
         None if the parameters are not matched.
 
-        parameters:
+        :parameters
            - query  : query to be used to query the database        
         """
         data = db.find_one('jobs_details', query)
@@ -150,13 +173,13 @@ class Records(object):
         Returns the days worked between two dates 
         including the starting and ending months.
 
-        paramaters:
+        :paramaters
            - date    : starting date
            - date_two: the finishing date
            - user_id : The user id.
 
         >>> find_by_date_range(2016-09-10, 2016-09-12, '12548')
-        [obj]
+        [objectID('..')]
         >>> find_by_date_range(2016-09-10, 2016-09-12, '12548')
         []
         """
@@ -169,7 +192,7 @@ class Records(object):
         Queries the database by day and returns an object
         if found and none if not found.
 
-        parameters:
+        :parameters
            - date   : The data to query by.
            - day    : The day to query by.
            - user_id: The user ID
@@ -185,7 +208,7 @@ class Records(object):
         Queries the database by date and returns an object if found
         and none if not found.
 
-        parameters:
+        :parameters
            - date   : The data to query by.
            - day    : The day to query by.
            - user_id: The user ID
@@ -200,7 +223,7 @@ class Records(object):
 
         Returns the query based on year.
 
-        parameters:
+        :parameters
             - year   : The year in which to query
             - user_id: The user ID to use for the query.
         """
@@ -215,7 +238,7 @@ class Records(object):
         Returns a single object if parameters are matched
         or none if the parameters are not matched.
 
-        parameters:
+        :parameters
             - month  : The month to query the database by.
             - user_id: The user ID.
         """
@@ -231,7 +254,7 @@ class Records(object):
         two months. The days returned including the starting
         and ending months.
 
-        parameters:
+        :parameters
             - month_one: The starting month.
             - month_two: The ending month.
             
@@ -248,7 +271,7 @@ class Records(object):
         Retrieives the job based on the start time.
         Returns object if found and none if not found.
 
-        parameters:
+        :parameters
             - start_time: The time the job started.
             - user_id  : The user id to use for the query.
         """
@@ -263,7 +286,7 @@ class Records(object):
         Returns the job based on the finish time.
         Returns the object or None.
 
-        parameter:
+        :parameter
             - finish_time: The time the job ended.
             - user_id    : The user id to used for the query. 
         """
@@ -278,7 +301,7 @@ class Records(object):
         Queries by hours worked. Returns an object if found or
         None.
 
-        parameters:
+        :parameters
             - hours  : The total hours the user worked.
             - user_id: The user itself.
         """
@@ -293,7 +316,7 @@ class Records(object):
         Queries the database based on the job title. Returns
         an object if parameters match or None or not found.
 
-        parameters:
+        :parameters:
             - query  : The query to be used to query the database
             - user_id: The user ID
         """
@@ -308,7 +331,7 @@ class Records(object):
         Queries the database based on the daily rate 
         and returns an object if found and none if not.
 
-        parameters:
+        :parameters:
             - daily_rate: A day's pay.
             - user_id   : The user id.
         """
@@ -323,7 +346,7 @@ class Records(object):
         Queries the database by location. Returns obj
         if found or None if not found.
 
-        parameters:
+        :parameters:
             - loc    : The location to query the database by.
             - user_id: The user ID
         """
@@ -337,9 +360,9 @@ class Records(object):
 
         Updates the old row with new information.
         
-        parameters :
-            - row_id  : The row to update.
-            - form    : form object.
+        :parameters 
+            - row_id : The row to update.
+            - form   : form object.
         """
         query = {"loc"    : form.loc.title(),
                  "_hours" : form._hours,
