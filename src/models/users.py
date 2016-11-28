@@ -24,9 +24,9 @@ class User(object):
         self.day = day
         self.id = uuid.uuid4().hex if _id is None else _id
 
-    def add_job_details(self, job_title, descr, loc, start_time,
+    def add_to_records(self, job_title, descr, loc, start_time,
                         finish_time, hourly_rate, update=False):
-        """add_job_details(str, str, str, str, str, str) -> return(obj or str)
+        """add_to_records(str, str, str, str, str, str) -> return(obj or str)
 
         Takes the attributes of a job e.g. title,
         job description, etc and saves it to the database.
@@ -41,9 +41,8 @@ class User(object):
             - start_time : The time shift/job starting.
             - finish_time: The time shift/job is ending
             - hourly_rate: The hourly rate for the job.
-            - update     : (Optional) parameter, if set to
-                           True, updates the row with with
-                           new the jobs details.
+            - update     : (Optional) parameter, if set to True, updates 
+                           the row with with new the jobs details.
         """
         hours = get_hours_worked(self.start_date, start_time,
                                  self.end_date, finish_time)
