@@ -13,8 +13,8 @@ from src.utilities.job_processor import get_daily_rate, get_hours_worked
 
 class User(object):
     """User(class)
-    The User class allows the user to add, modify and delete jobs from database
-    via the records class.
+    The User class allows the user to add, modify and 
+    delete jobs from database via the records class.
     """
     def __init__(self, full_name, start_date=None,
                  end_date=None, day=None, _id=None):
@@ -24,14 +24,26 @@ class User(object):
         self.day = day
         self.id = uuid.uuid4().hex if _id is None else _id
 
-    def add_job_details(self, job_title, descr, loc, start_time, finish_time,
-                        hourly_rate, update=False):
-        """add_job_details(str, str, str, str, str, str) -> return(None)
+    def add_job_details(self, job_title, descr, loc, start_time,
+                        finish_time, hourly_rate, update=False):
+        """add_job_details(str, str, str, str, str, str) -> return(obj or str)
 
-        Takes the attributes of a job such as the title,
-        the job description,the job location, the hourly rate,
-        the start and finish time and saves
-        it to the database.
+        Takes the attributes of a job e.g. title,
+        job description, etc and saves it to the database.
+
+        Returns an the record object if update is True.
+        Returns the row id if update is  False.
+
+        parameters:
+            - job_title  : The title of the job.
+            - descr      : The description for the job.
+            - loc        : The location for the job.
+            - start_time : The time shift/job starting.
+            - finish_time: The time shift/job is ending
+            - hourly_rate: The hourly rate for the job.
+            - update     : (Optional) parameter, if set to
+                           True, updates the row with with
+                           new the jobs details.
         """
         hours = get_hours_worked(self.start_date, start_time,
                                  self.end_date, finish_time)
@@ -61,6 +73,9 @@ class User(object):
     def get_by_row_id(self, num):
         """get_by_row_id(None) -> return(obj)
         Queries the records by row and returns a job obj.
+
+        parameters
+           - num : The row id to query by.
         """
         return Records.find_by_row_id(num, self.id)
 
@@ -76,21 +91,33 @@ class User(object):
         return Records.find_by_date(date, self.id)
 
     def get_by_day(self, day):
-        """get_by_date_and_day(str, str) -> return(str)
-        Queries the records by either date or day and returns
+        """get_by_date_and_day(str) -> return(str)
+        Queries the records by either by day and returns
         a job obj if found or None.
         """
         return Records.find_by_day(day, self.id)
 
     def get_by_date_range(self, date, date_two):
-        """Returns the days worked between two dates
-        including date and date two
+        """get_by_date_range(str, str) -> return(obj or None)
+
+        Queries the days worked between two dates
+        including the starting date and ending 
+        date. Returns obj if the parameters match
+        and None.
+
+        parameters:
+            - date: The starting date.
+            - date_two: The end date.
         """
         return Records.find_by_date_range(date, date_two, self.id)
 
     def get_by_month_range(self, month, month_two):
         """Return the days worked between two months
          including the month one and month2
+
+         parameters:
+            - month    : The first month to query by.
+            - month_two: The second month to query by.
          """
         return Records.find_by_month_range(month, month_two, self.id)
 
@@ -98,6 +125,9 @@ class User(object):
         """get_by_month(str) -> return(None or obj)
         Queries the records by month and returns a 
         job obj if found or None.
+
+        parameters:
+           - month : The month to query by.
         """
         return Records.find_by_month(month, self.id)
 
@@ -105,6 +135,9 @@ class User(object):
         """get_by_time(str) -> return(obj)
         Queries the records by start time and returns
         a job obj if found or None.
+
+        parameters:
+           - start_time: The start time to query by.
         """
         return Records.find_by_start_time(start_time, self.id)
 
@@ -116,28 +149,46 @@ class User(object):
         return Records.find_by_finish_time(finish_time, self.id)
 
     def get_by_hours(self, hours):
-        """get_by_hours(int) -> return(obj or None)
+        """get_by_hours(float) -> return(obj or None)
         Queries the records by hours and returns a job obj if found or None.
+
+        parameters:
+           - hours: Queries by hours. Hours must be entered
+                    as float. For example 2 hrs and 10 mins
+                    must be entered as 2.10. 
+
+        >>> get_by_hours(2.10)
+        objectID(...)
         """
         return Records.find_by_hours_worked(hours, self.id)
 
     def get_by_job_title(self, job_title):
-        """get_by_job_title(str) -> return(obj)
+        """get_by_job_title(str) -> return(obj or none)
         Queries the records by job title and returns
         a job obj if found or None.
+
+        parameters:
+           - job_title : The job title to query by.
         """
         return Records.find_by_job_title(job_title, self.id)
 
     def get_by_daily_rate(self, daily_rate):
-        """get_by_daily_rate(str) -> return(obj)
+        """get_by_daily_rate(float) -> return(obj or none)
         Queries the records by the daily rate and
         returns a job obj if found or None.
+
+        parameters:
+          - daily_rate: The daily rate (float) to query by.
         """
         return Records.find_by_daily_rate(float(daily_rate), user_id=self.id)
 
     def get_by_location(self, loc):
         """get_by_location(str) -> return(obj)
-        Queries the records by location and returns a job obj if found or None.
+        Queries the records by location and returns a 
+        job obj if found or None.
+
+        parameters:
+            - loc: The location of job to query by.
         """
         return Records.find_by_location(loc, self.id)
 
@@ -153,12 +204,20 @@ class User(object):
     def delete_row(self, row_id):
         """delete_row(str) -> return(None)
         Deletes a row from the database using the row id.
+
+        parameters:
+           - row_id: The row id to update.
         """
-        return Records.delete_row(row_id, self.id)
+        Records.delete_row(row_id, self.id)
 
     def update_row(self, row_id, form):
-        """update_row(str, str) -> return(None)
+        """update_row(str, obj) -> return(None)
         Updates a row using the row id.
+
+        parameters:
+           - row_id: The row id to update.
+           - form  : Form object contains the new
+                     data to update the old row with.
         """
         return Records.update_row(row_id, form)
 
