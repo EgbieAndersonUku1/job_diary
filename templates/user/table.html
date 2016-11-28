@@ -10,7 +10,7 @@
         {% if messages %}
           <ul class=flashes>
               {% for message in messages %}
-                <li>{{ message }}</li>
+                <h5>{{ message }}</h5>
               {% endfor %}
           </ul>
           {% endif %}
@@ -59,19 +59,19 @@
       </tr>
       <tr>
         <td>
-            Hourly rate ($)
+            Hourly rate (£)
         </td>
         <td>
-          ${{ rows.hourly_rate }}
+          £{{ rows.hourly_rate }}
         </td>
       </tr>
       <tr>
         <td>
-          Daily Rate ($)
+          Daily Rate (£)
         </td>
         <td>
 
-          ${{ rows.daily_rate }}
+          £{{ rows.daily_rate }}
 
         </td>
       </tr>
