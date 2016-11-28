@@ -6,7 +6,7 @@ from _user_form_helper import login_user, register_user
 from src.users.process_forms import ProcessForm, ProcessSearchForm
 from src.models.users import User
 from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs, is_shift_now, is_shift_over
-from src.utilities.time_processor import time_to_str
+from src.utilities.time_processor import time_to_str, convert_mins_to_hour
 from src.utilities.date_month_day_processor import month_to_str
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
@@ -154,9 +154,10 @@ def _display(html_link, active=False):
                            translate=month_to_str,
                            dt=datetime.datetime.strptime,
                            total_pay=round(sum(total_pay),2),
-                           total_hrs=int(round(sum(total_hrs))), 
+                           total_hrs=round(sum(total_hrs), 2), 
                            active=active, 
-                           is_shift_over=is_shift_over)
+                           is_shift_over=is_shift_over,
+                           converter=convert_mins_to_hour)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required
@@ -226,7 +227,8 @@ def search():
                                         curr_date=curr_date,
                                         dt=datetime.datetime.strptime,
                                         is_shift_now=is_shift_now,
-                                        is_shift_over=is_shift_over)
+                                        is_shift_over=is_shift_over,
+                                        converter=convert_mins_to_hour)
             error = 'No records find by that entry'
             return render_template('user/search.html', form=form, error=error)
     return render_template('user/search.html', form=form)

@@ -4,6 +4,27 @@
 
 from datetime import datetime
 
+def convert_mins_to_hour(minutes):
+	"""convert_mins_to_hour(float) -> return(float)
+
+	Takes time in minutes and converts it to hours
+	and minutes in float. The first digit before
+	the point is the hours and the rest is the
+	minutes. For example 9.15 is 9 hrs and 15 minutes.
+
+	>>> convert_mins_to_hour(549)
+	9 hours and 15 minutes
+	"""
+	try:
+	      hrs, mins = str(minutes).split('.')
+	except ValueError:
+	     return time_to_str((minutes, 0))
+
+	hour, minutes = str(minutes).split('.')
+	time = str(round((int(hour) + (int(minutes)/60.0)),2))
+	hrs, mins = time.split('.')
+	return time_to_str((hrs, int(mins)))
+
 def time_to_units(time):
 	"""time_to_units(tuple) -> returns(float)
 

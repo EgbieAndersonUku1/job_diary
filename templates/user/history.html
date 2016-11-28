@@ -22,7 +22,7 @@
       {% else %}
               <h2>Dates of days and times worked </h2>
               <center>
-              <h6>The total pay accumlated is £{{ total_pay }} over an approximated period of {{ total_hrs }} hours</h6>
+              <h6>The total pay accumlated is £{{ total_pay }} over a period of {{ converter(total_hrs) }}. </h6>
               </center>
 
               {% if session['username'] == 'admin' %}
