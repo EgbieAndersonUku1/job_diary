@@ -42,7 +42,7 @@ class User(object):
             - finish_time: The time shift/job is ending
             - hourly_rate: The hourly rate for the job.
             - update     : (Optional) parameter, if set to True, updates 
-                            the row with with new the jobs details.
+                            the row with with the new jobs info.
         """
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
@@ -60,10 +60,10 @@ class User(object):
                          date=self.start_date,
                          end_date=self.end_date,
                          day=self.day,
-                         month=self.start_date.split('-')[1],
+                         month=self.start_date.split('-')[1], # get the month part
                          year=None,
                          row_id=None,
-                        _id=None) # get the month part
+                        _id=None) 
         return (record.save() if not kwargs['update'] else record) # return obj if update is true else row id
 
     def get_by_user_id(self):
