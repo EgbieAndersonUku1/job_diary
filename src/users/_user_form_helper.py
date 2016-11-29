@@ -12,7 +12,7 @@ def login_user(**kw):
         - template     : The template to display.
         - session_name : The session name to be used with this session.
     """
-    
+    msg = ''
     if session.get(kw['session_name'], None) != None:
         return redirect(url_for(kw['index']))
     if request.method == 'GET' and request.args.get('next'):

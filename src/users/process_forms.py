@@ -156,8 +156,9 @@ class ProcessSearchForm(object):
         self.val_one = form.month_one.data
         self.val_two = form.month_two.data
         self._user = user = User(session['username'], _id=session['user_id'])
-        self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday',
-                     'Thu':'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday',
+        self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 
+                     'Wed': 'Wednesday','Thu':'Thursday', 
+                     'Fri': 'Friday', 'Sat': 'Saturday',
                      'Sun': 'Sunday'}
 
     def _fix_time_str(self, time):

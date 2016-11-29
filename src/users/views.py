@@ -31,7 +31,7 @@ def login():
     return login_user(form=form, 
                       session_name='username',
                       redirect_link='home',
-                      template='user/login.html',
+                      template='login_and_registration/login.html',
                       index='home')
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -40,7 +40,7 @@ def user_register():
     form = RegisterForm()
     return register_user(form=form,
                          error='username must be unique', 
-                         template='user/registration.html', 
+                         template='login_and_registration/registration.html', 
                          redirect_link='home')
 
 @app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
@@ -64,7 +64,7 @@ def entry_page(row_ID):
     end_mins    = request.form.get('end_mins')
 
     if request.method == 'GET':
-        return render_template('user/entry_page.html',
+        return render_template('forms/job_entry_page.html',
                                 start_date=start_date, 
                                 end_date=end_date, 
                                 day=day,
@@ -96,7 +96,7 @@ def entry_page(row_ID):
         else:
             row_id = user_form.process_form(start_date, end_date, day)
         return redirect(url_for('success_page', row_id=row_id)) 
-    return render_template('user/entry_page.html',
+    return render_template('forms/entry_page.html',
                            start_date=form.start_date, 
                            end_date=form.end_date, 
                            job_title=form.job_title, 
@@ -124,7 +124,7 @@ def logout():
 @login_required
 def reset():
     """reset the value in the form for the application"""
-    return render_template('user/entry_page.html', 
+    return render_template('forms/entry_page.html', 
                             start_date=curr_date, 
                             end_date=curr_date, 
                             day=curr_day)
@@ -135,7 +135,7 @@ def success_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User('',_id=session['user_id'])
    flash('The data below has been added to the database.')
-   return render_template('user/table.html', rows=user.get_by_row_id(row_id))
+   return render_template('render_to_user/table.html', rows=user.get_by_row_id(row_id))
 
 def _display(html_link, active=False):
     """_display(str, str) -> return(value)
@@ -163,20 +163,20 @@ def _display(html_link, active=False):
 @login_required
 def history():
     """renders the entire job history active and none active"""
-    return _display('user/history.html')
+    return _display('worked_jobs/jobs_history.html')
     
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
     """renders the all jobs that are active (not worked)"""
-    return _display('user/active_jobs.html', True)
+    return _display('current_jobs/current_jobs.html', True)
 
 @app.route('/job/edit/<value>')
 @login_required
 def edit(value):
     """Allows the jobs to be edited"""
     user = User(session['username'], _id=session['user_id'])
-    return render_template('user/edit.html', form=user.get_by_row_id(str(value)))
+    return render_template('forms/edit_page.html', form=user.get_by_row_id(str(value)))
 
 @app.route('/delete/<row>')
 @login_required
@@ -230,8 +230,8 @@ def search():
                                         is_shift_over=is_shift_over,
                                         converter=convert_mins_to_hour)
             error = 'No records find by that entry'
-            return render_template('user/search.html', form=form, error=error)
-    return render_template('user/search.html', form=form)
+            return render_template('forms/search_page.html', form=form, error=error)
+    return render_template('forms/search_page.html', form=form)
 
 @app.route('/.json')
 @app.route('/home.json')
@@ -243,16 +243,16 @@ def search():
 def get_json():
     """gets the json representation of the data"""
     user = User(session['username'], _id=session['user_id'])
-    return render_template('user/json.html', records=user.to_json(), json=json.dumps)
+    return render_template('json/json.html', records=user.to_json(), json=json.dumps)
 
 @app.route('/home')
 @login_required
 def home():
     """returns the user to home screen"""
-    return render_template('user/home_page.html')
+    return render_template('home_page/home_page.html')
 
 @app.route('/faq')
 @login_required
 def faq():
     """renders the FAQ to the user"""
-    return render_template('user/faq.html')
+    return render_template('faq/faq.html')
