@@ -62,6 +62,9 @@
               Finish time
             </th>
             <th>
+              Job start
+            </th>
+            <th>
               Update/Delete
             </th>
           </tr>
@@ -100,6 +103,9 @@
                  </td>
                  <td>
                    {{ job.finish_time }}
+                 </td>
+                 <td>
+                    {{ when_is_shift_starting(job.date, job.start_time) }}
                  </td>
                  <td>
                     <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /

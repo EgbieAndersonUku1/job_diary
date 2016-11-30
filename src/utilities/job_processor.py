@@ -6,6 +6,20 @@ from datetime import datetime
 from dateutil import relativedelta
 import random
 
+def _return_time_passed(start_date, start_time, finish_date, finish_time):
+    """A wrapper function that returned the years, month, hours, days, minutes
+    passed by two dateshift_start.
+    """
+
+    year1, month1, day1 = start_date.split('-')  
+    year2, month2, day2 = finish_date.split('-') 
+    hours1, minutes1 = start_time.split(':')
+    hours2, minutes2 = finish_time.split(':')
+    first_date = datetime(int(year1), int(month1), int(day1), int(hours1), int(minutes1))
+    sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
+    return relativedelta.relativedelta(sec_date, first_date)
+
+
 def is_shift_now(start_hour, start_mins, end_hours, end_mins):
     """is_shift_now(str, str, str, str) -> return(bool)
 
@@ -68,14 +82,8 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
     >>> get_hours_worked('1/1/2016', '9:23', 1/4/2016', '21:26')
     (83, 43)
     """
-    year1, month1, day1 = start_date.split('-')  
-    year2, month2, day2 = finish_date.split('-') 
-    hours1, minutes1 = start_time.split(':')
-    hours2, minutes2 = finish_time.split(':')
-    first_date = datetime(int(year1), int(month1), int(day1), int(hours1), int(minutes1))
-    sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
-    difference = relativedelta.relativedelta(sec_date, first_date)
-
+    
+    difference = _return_time_passed(start_date, start_time, finish_date, finish_time)
     # if start date is not equal to the finish date it means that user
     # started on one day and finish on another day
     if start_date != finish_date:
@@ -90,7 +98,45 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
         total_hours = difference.hours + hours # convert year, month or days to hours + regular hours
         return total_hours, difference.minutes
     return difference.hours, difference.minutes
+
+
+def when_is_shift_starting(start_date, start_time):
+    """when_is_shift_starting(str, str, str, str) -> returns(str)
+
+    Takes a current date and current time along with its 
+    the jobs start date and start time and calculates how 
+    long before the shift starts.
+
+    :parameters
+        - start_date : The date the job is starting.
+        - start_time : The time the job is starting.
+
+    >>> job_date = '2016-12-09'
+    >>> job_time = '13:30'
+    >>> when_is_shift_starting(job_date, job_time)
+    >>> 8 days, 22 hours, 58 minutes
+    """
+    date = datetime.utcnow()
+    curr_date = '{}-{}-{}'.format(date.year, date.month, date.day)
+    curr_time = '{}:{}'.format(date.hour, date.minute)
+    shift_start = []
+    date_obj = _return_time_passed(curr_date, curr_time, start_date, start_time)
+
+    if date_obj.years:
+        shift_start.append('{} years'.format(date_obj.years) if date_obj.years > 1 else '{} year'.format(date_obj.years))
+    if date_obj.months:
+        shift_startappend('{} months'.format(date_obj.months) if date_obj.months > 1 else '{} month'.format(date_obj.months))
+    if date_obj.days:
+        shift_start.append('{} days'.format(date_obj.days) if date_obj.days > 1 else '{} day'.format(date_obj.days))
+    if date_obj.hours:
+        shift_start.append('{} hours'.format(date_obj.hours) if date_obj.hours > 1 else '{} hour'.format(date_obj.hours))
+    if date_obj.minutes:
+        shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(f.minutes))
     
+    shift_start = ', '.join(shift_start)
+    last_part = shift_start.split(',')[-1]
+    return shift_start.replace(last_part, last_part)     
+
 def get_daily_rate(units, hourly_rate):
     """get_daily_rate(float, float) -> returns(float)
 
