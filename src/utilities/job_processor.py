@@ -131,7 +131,7 @@ def when_is_shift_starting(start_date, start_time):
     if date_obj.hours:
         shift_start.append('{} hours'.format(date_obj.hours) if date_obj.hours > 1 else '{} hour'.format(date_obj.hours))
     if date_obj.minutes:
-        shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(f.minutes))
+        shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
     shift_start = ', '.join(shift_start)
     last_part = shift_start.split(',')[-1]
