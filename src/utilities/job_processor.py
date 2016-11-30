@@ -85,7 +85,7 @@ def when_is_shift_starting(start_date, start_time):
     if date_obj.years:
         shift_start.append('{} years'.format(date_obj.years) if date_obj.years > 1 else '{} year'.format(date_obj.years))
     if date_obj.months:
-        shift_startappend('{} months'.format(date_obj.months) if date_obj.months > 1 else '{} month'.format(date_obj.months))
+        shift_start.append('{} months'.format(date_obj.months) if date_obj.months > 1 else '{} month'.format(date_obj.months))
     if date_obj.days:
         shift_start.append('{} days'.format(date_obj.days) if date_obj.days > 1 else '{} day'.format(date_obj.days))
     if date_obj.hours:
