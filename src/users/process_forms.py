@@ -11,7 +11,7 @@ class ProcessForm(object):
                  rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, day):
 
-         self.errors = {}  # pass to the user so they can see there errors
+         self.errors = {}  # store all errors
 
          if start_date and end_date:
             # check whether the dates has the right format

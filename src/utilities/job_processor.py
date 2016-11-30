@@ -8,7 +8,7 @@ import random
 
 def _return_time_passed(start_date, start_time, finish_date, finish_time):
     """A wrapper function that returned the years, month, hours, days, minutes
-    passed by two dateshift_start.
+    passed between two dates.
     """
 
     year1, month1, day1 = start_date.split('-')  
@@ -18,7 +18,6 @@ def _return_time_passed(start_date, start_time, finish_date, finish_time):
     first_date = datetime(int(year1), int(month1), int(day1), int(hours1), int(minutes1))
     sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
     return relativedelta.relativedelta(sec_date, first_date)
-
 
 def is_shift_now(start_hour, start_mins, end_hours, end_mins):
     """is_shift_now(str, str, str, str) -> return(bool)
@@ -45,9 +44,9 @@ def is_shift_now(start_hour, start_mins, end_hours, end_mins):
 def is_shift_over(end_hrs, end_mins):
     """is_shift_over(str, str) -> returns(bool)
 
-    Use the current time and checks it against the user
-    end shift time. Returns True if the shift is over 
-    and False if is not.
+    Checks whether the user current shift is over.
+    Returns True if the shift is over and False if 
+    it is not.
 
     parameters:
        - end_hours  : The hour part of the end time.
@@ -62,50 +61,11 @@ def is_shift_over(end_hrs, end_mins):
     shift_end_time = curr_time.replace(hour=int(end_hrs), minute=int(end_mins))
     return True if curr_time > shift_end_time else False
 
-def get_hours_worked(start_date, start_time, finish_date, finish_time):
-    """get_hours_worked(str, str, str, str) -> return(tuple)
-
-    Takes a starting date, starting time, ending date and a finishing time
-    and returns the number of hours, minutes that has elasped between the
-    two.
-
-    parameters 
-      - start_date : The beginning date in the form of dd/mm/yy
-      - end_date   : The ending date in the form of dd/mm/yy
-      - start_time : The starting time in the form of hh:mm
-      - finish_time: The starting time in the form of hh:mm
-      - returns    : A tuple where the first element is the 
-                     hours and second the minutes
-
-    >>> get_hours_worked('1/1/2016', '9:23', 1/1/2016', '21:26')
-    (12, 3)
-    >>> get_hours_worked('1/1/2016', '9:23', 1/4/2016', '21:26')
-    (83, 43)
-    """
-    
-    difference = _return_time_passed(start_date, start_time, finish_date, finish_time)
-    # if start date is not equal to the finish date it means that user
-    # started on one day and finish on another day
-    if start_date != finish_date:
-        years, months, days = difference.years, difference.months, difference.days
-        hours = 0
-        if years > 0:
-            hours += years * 8760
-        if months > 0:
-            hours += (730 * months)
-        if days > 0:
-            hours += days * 24           
-        total_hours = difference.hours + hours # convert year, month or days to hours + regular hours
-        return total_hours, difference.minutes
-    return difference.hours, difference.minutes
-
-
 def when_is_shift_starting(start_date, start_time):
     """when_is_shift_starting(str, str, str, str) -> returns(str)
 
-    Takes a current date and current time along with its 
-    the jobs start date and start time and calculates how 
-    long before the shift starts.
+    Takes the date the job is starting along with its start
+    time and returns how long it till the job starts.
 
     :parameters
         - start_date : The date the job is starting.
@@ -137,9 +97,47 @@ def when_is_shift_starting(start_date, start_time):
     last_part = shift_start.split(',')[-1]
     return shift_start.replace(last_part, last_part)     
 
+def get_hours_worked(start_date, start_time, finish_date, finish_time):
+    """get_hours_worked(str, str, str, str) -> return(tuple)
+
+    Takes a starting date and starting time as well as the
+    ending date and a finishing time and returns the number of hours, 
+    minutes that has elasped between the two.
+
+    parameters 
+      - start_date : The beginning date in the form of dd/mm/yy
+      - end_date   : The ending date in the form of dd/mm/yy
+      - start_time : The starting time in the form of hh:mm
+      - finish_time: The starting time in the form of hh:mm
+      - returns    : A tuple where the first element is the 
+                     hours and second the minutes
+
+    >>> get_hours_worked('1/1/2016', '9:23', 1/1/2016', '21:26')
+    (12, 3)
+    >>> get_hours_worked('1/1/2016', '9:23', 1/4/2016', '21:26')
+    (83, 43)
+    """
+    
+    difference = _return_time_passed(start_date, start_time, finish_date, finish_time)
+    # if start date is not equal to the finish date it means that user
+    # started on one day and finish on another day
+    if start_date != finish_date:
+        years, months, days = difference.years, difference.months, difference.days
+        hours = 0
+        if years > 0:
+            hours += years * 8760
+        if months > 0:
+            hours += (730 * months)
+        if days > 0:
+            hours += days * 24           
+        total_hours = difference.hours + hours # convert year, month or days to hours + regular hours
+        return total_hours, difference.minutes
+    return difference.hours, difference.minutes
+
 def get_daily_rate(units, hourly_rate):
     """get_daily_rate(float, float) -> returns(float)
 
+    Returns the daily rate.
     parameters: 
        - units       : The time in units
        - hourly_rate : The amount paid in hours
@@ -155,7 +153,10 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
         - user_obj   : user object module
         - session    : The session belonging to the user 
         - curr_date  : The current date
-        - returns    : None if not found or an object if found
+        - returns    : a tuple of lists where the first element is 
+                       an object, second is the total pay,
+                       sum of hours worked and a list of 
+                       jobs worked.
     """
     user = user_obj(session['username'], _id=session['user_id'])
     jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(), [], [], []

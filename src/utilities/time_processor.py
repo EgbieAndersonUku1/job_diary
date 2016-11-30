@@ -7,8 +7,8 @@ from datetime import datetime
 def convert_mins_to_hour(minutes):
 	"""convert_mins_to_hour(float) -> return(str)
 
-	Takes time in minutes/hrs and converts to its
-	string representation. 
+	Takes a time which is in either minutes or hours 
+	and converts to its string representation. 
 
 	:parameters
 	   - minutes : either minutes/hrs and converts
