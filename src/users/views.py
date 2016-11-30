@@ -97,7 +97,7 @@ def entry_page(row_ID):
         else:
             row_id = user_form.process_form(start_date, end_date, day)
         return redirect(url_for('success_page', row_id=row_id)) 
-    return render_template('forms/entry_page.html',
+    return render_template('forms/job_entry_page.html',
                            start_date=form.start_date, 
                            end_date=form.end_date, 
                            job_title=form.job_title, 

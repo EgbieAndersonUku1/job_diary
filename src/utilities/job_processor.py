@@ -93,10 +93,9 @@ def when_is_shift_starting(start_date, start_time):
     if date_obj.minutes:
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
-    shift_start = ', '.join(shift_start)
-    last_part = shift_start.split(',')[-1]
-    return shift_start.replace(last_part, last_part)     
-
+    time_elasped = ', '.join(shift_start)
+    return 'Shift in progress' if '-' in time_elasped else time_elasped 
+    
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
     """get_hours_worked(str, str, str, str) -> return(tuple)
 
@@ -177,14 +176,23 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
 
             # if job date is equal to current working date and is_shift_over equals True
             # it means that the users shift is currently finished.
-            elif datetime.strptime(job.date, "%Y-%m-%d") == \
-                           datetime.strptime(curr_date, "%Y-%m-%d") and \
-                           is_shift_over(job.finish_time.split(':')[0],
-                                         job.finish_time.split(':')[1]):
-                          get_jobs_helper(job.daily_rate, job._hours, job)    
+            elif datetime.strptime(job.date, "%Y-%m-%d") == datetime.strptime(curr_date, "%Y-%m-%d") \
+                             and not is_shift_over(job.finish_time.split(':')[0],
+                                               job.finish_time.split(':')[1]):
+                          get_jobs_helper(job.daily_rate, job._hours, job)  
+
+
         elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= \
-                          datetime.strptime(curr_date, "%Y-%m-%d") and \
-                          not is_shift_over(job.finish_time.split(':')[0], 
-                          job.finish_time.split(':')[1]):
-                get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift  
+                    datetime.strptime(curr_date, "%Y-%m-%d") and not \
+                    is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]):
+                get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
+
+        elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= datetime.strptime(curr_date, "%Y-%m-%d") \
+                             and not is_shift_now(job.start_time.split(':')[0],
+                                                  job.start_time.split(':')[1],
+                                                 job.finish_time.split(':')[0],
+                                               job.finish_time.split(':')[1]):
+                          get_jobs_helper(job.daily_rate, job._hours, job)  
+ 
+
     return jobs, total_pay, total_hrs, worked_jobs
