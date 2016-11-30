@@ -28,9 +28,7 @@
               <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
               </center>
           <tr>
-            <th>
-              Month
-            </th>
+           
             <th>
               Date
             </th>
@@ -70,9 +68,7 @@
           </tr>
           {% for job in jobs %}
                <tr>
-                 <td>
-                   {{ translate(job.month )[:3]}}
-                 </td>
+                
                  <td>
                    {{ job.date.replace('-', '/') }}
                  </td>
