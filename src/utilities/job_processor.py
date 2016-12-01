@@ -163,7 +163,7 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
     if active_jobs:
         jobs = user.get_by_user_id(1) # sort job by ascending ldest active job first
     else:
-        jobs = user.get_by_user_id(-1) # sort job in descending order newest first
+        jobs = user.get_by_user_id()  # sort job in descending order newest first
 
     def get_jobs_helper(daily_rate, hrs, job):
         """returns the daily rate and the hours worked for the processed jobs"""

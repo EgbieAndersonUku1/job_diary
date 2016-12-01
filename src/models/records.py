@@ -99,7 +99,7 @@ class Records(object):
                              'user_id':user_id})
 
     @classmethod
-    def find_by_user_id(cls, user_id, sort_by=-1):
+    def find_by_user_id(cls, user_id, sort_by):
         """find_by_user_id(str) -> returns(obj or none)
 
         Queries the database by the user id and returns all 
@@ -109,7 +109,10 @@ class Records(object):
 
         parameters:
            - user_id: The user ID
+           - sort_by: -1 sorts in descending order (10, 9, etc) and
+                       1 sorts in ascending order e.g 1,2
         """
+
         return cls._find({'user_id':user_id}, key=('date', sort_by))
 
     @classmethod
