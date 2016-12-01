@@ -158,7 +158,12 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
                        jobs worked.
     """
     user = user_obj(session['username'], _id=session['user_id'])
-    jobs, total_pay, total_hrs, worked_jobs =  user.get_by_user_id(), [], [], []
+    total_pay, total_hrs, worked_jobs = [], [], []
+
+    if active_jobs:
+        jobs = user.get_by_user_id(1) # sort job by ascending ldest active job first
+    else:
+        jobs = user.get_by_user_id(-1) # sort job in descending order newest first
 
     def get_jobs_helper(daily_rate, hrs, job):
         """returns the daily rate and the hours worked for the processed jobs"""
@@ -186,7 +191,5 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
                     datetime.strptime(curr_date, "%Y-%m-%d") and not \
                     is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]):
                 get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
-
-       
 
     return jobs, total_pay, total_hrs, worked_jobs

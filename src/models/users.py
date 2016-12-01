@@ -66,11 +66,11 @@ class User(object):
                         _id=None) 
         return (record.save() if not kwargs['update'] else record) # return obj if update is true else row id
 
-    def get_by_user_id(self):
-        """get_by_user_id(None) -> return(obj)
+    def get_by_user_id(self, sort_by):
+        """get_by_user_id(str) -> return(obj)
         Queries the records by user id and returns a job obj.
         """
-        return Records.find_by_user_id(self.id)
+        return Records.find_by_user_id(self.id, sort_by)
 
     def get_by_row_id(self, num):
         """get_by_row_id(None) -> return(obj)
