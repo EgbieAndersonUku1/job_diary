@@ -27,8 +27,8 @@ class ProcessForm(object):
             else:          
                 if datetime.strptime(str(end_date), "%Y-%m-%d") < datetime.strptime(str(start_date), "%Y-%m-%d"):
                     self.errors['days_error'] = 'The end date cannot be less then the start date'
-                if int(end_hours) == 0 and start_date == end_date:
-                    self.errors['next_day'] = 'It appears your shift ended the next day, increment the end date day by one'     
+                #if int(end_hours) == 0 and start_date == end_date:
+                #    self.errors['next_day'] = 'It appears your shift ended the next day, increment the end date day by one'     
          
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
@@ -194,7 +194,7 @@ class ProcessSearchForm(object):
             return self._user.get_by_finish_time(self._fix_time_str(str(self.finish_time)))
         elif self.hrs_worked:
             return self._user.get_by_hours(self.hrs_worked)
-        elif self.month and month_to_num(self.month):
+        elif self.month and month_to_num(self.month[0:3].title()):
             return self._user.get_by_month(str(self.month[0:3].title()))
         elif self.daily_rate:
             return self._user.get_by_daily_rate(self.daily_rate)
