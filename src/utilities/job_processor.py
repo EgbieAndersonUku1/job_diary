@@ -94,7 +94,7 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
     time_elasped = ', '.join(shift_start)
-    return 'Shift in progress' if '-' in time_elasped else time_elasped 
+    return 'Shift/job in progress' if '-' in time_elasped else time_elasped 
     
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
     """get_hours_worked(str, str, str, str) -> return(tuple)
@@ -188,7 +188,7 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
                 get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
 
         elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= datetime.strptime(curr_date, "%Y-%m-%d") \
-                             and not is_shift_now(job.start_time.split(':')[0],
+                             and not is_shift_over(job.start_time.split(':')[0],
                                                   job.start_time.split(':')[1],
                                                  job.finish_time.split(':')[0],
                                                job.finish_time.split(':')[1]):
