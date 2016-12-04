@@ -5,8 +5,12 @@ from flask import render_template, session, redirect, url_for, flash, request
 from _user_form_helper import login_user, register_user
 from src.users.process_forms import ProcessForm, ProcessSearchForm
 from src.models.users import User
-from src.utilities.job_processor import get_daily_rate, get_hours_worked, get_jobs, \
-                                         is_shift_now, is_shift_over, when_is_shift_starting
+from src.utilities.job_processor import (get_daily_rate, 
+                                         get_hours_worked, get_jobs, 
+                                         is_shift_now, 
+                                         is_shift_over,
+                                         when_is_shift_starting)
+
 from src.utilities.time_processor import time_to_str, convert_mins_to_hour
 from src.utilities.date_month_day_processor import month_to_str
 from src.users.decorators import login_required, admin_required

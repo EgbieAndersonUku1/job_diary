@@ -239,5 +239,12 @@ class User(object):
         """
         return Records.update_row(row_id, form)
 
+    def send_jobs_by_email(self):
+        """Sends the latest jobs by email. That is
+        jobs that are starting on the current working
+        day.
+        """
+        pass
+
     def __repr__(self):
         return '{}'.format(self.full_name)

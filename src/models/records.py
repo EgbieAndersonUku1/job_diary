@@ -112,7 +112,6 @@ class Records(object):
            - sort_by: -1 sorts in descending order (10, 9, etc) and
                        1 sorts in ascending order e.g 1,2
         """
-
         return cls._find({'user_id':user_id}, key=('date', sort_by))
 
     @classmethod
@@ -365,7 +364,7 @@ class Records(object):
         
         :parameters 
             - row_id : The row to update.
-            - form   : form object.
+            - form   : form object containing the new info.
         """
         query = {"loc"    : form.loc.title(),
                  "_hours" : form._hours,
@@ -397,7 +396,7 @@ class Records(object):
                               key=('date', -1), 
                               limit_num=0) # returns a cursor not not an obj
         
-        # creates the json object based on the data retreive from the database.
+        # creates a json object based on the data retreive from the database.
         for record in records:
             if record[u'date'] in user_records:
                 user_records[record[u'date']].append(record)
