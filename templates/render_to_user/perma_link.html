@@ -92,13 +92,13 @@
                      {% if is_shift_now(job.start_time.split(':')[0], job.start_time.split(':')[1], job.finish_time.split(':')[0], job.finish_time.split(':')[1]) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
                         Job in progress.
                       <!--check if the user shift is over-->
-                     {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]) %}
+                     {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
                          Yes
                       <!-- Checks if the day the user's shift was on is over -->
                      {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
                         Yes
                      {% else %}
-                         Starts in {{ when_is_shift_starting(job.date, job.start_time) }}.
+                        Starts in {{ when_is_shift_starting(job.date, job.start_time) }}.
                      {% endif %}
                      
                    </td>

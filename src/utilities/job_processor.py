@@ -41,28 +41,36 @@ def is_shift_now(start_hour, start_mins, end_hours, end_mins):
     shift_end_time = curr_time.replace(hour=int(end_hours), minute=int(end_mins))
     return True if shift_start_time <= curr_time <= shift_end_time else False
 
-def is_shift_over(end_hrs, end_mins):
-    """is_shift_over(str, str) -> returns(bool)
+def is_shift_over(job):
+    """is_shift_over(obj) -> returns(bool)
 
     Checks whether the user current shift is over.
     Returns True if the shift is over and False if 
     it is not.
 
     parameters:
-       - end_hours  : The hour part of the end time.
-       - end_mins   : The minutes part of the end time
+       - job : An object that contains the job information
+               such as the job start date, start and finish
+               time.
 
-    >>> is_shift_over(11, 30)
+    >>> is_shift_over(object(..))
     False
-    >>> is_shift_over(11, 21)
+    >>> is_shift_over(object(..))
     True
     """
     curr_time = datetime.now()
-    shift_end_time = curr_time.replace(hour=int(end_hrs), minute=int(end_mins))
+    start_time = job.finish_time.split(':')[0]
+    finish_time = job.finish_time.split(':')[1]
+    year, month, day = job.date.split('-')
+    shift_end_time = curr_time.replace(year=int(year),
+                                       month=int(month),
+                                       day=int(day),
+                                       hour=int(start_time), 
+                                       minute=int(finish_time))
     return True if curr_time > shift_end_time else False
 
 def when_is_shift_starting(start_date, start_time):
-    """when_is_shift_starting(str, str, str, str) -> returns(str)
+    """when_is_shift_starting(str, str) -> returns(str)
 
     Takes the date the job is starting along with its start
     time and returns how long it till the job starts.
@@ -161,7 +169,7 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
     total_pay, total_hrs, worked_jobs = [], [], []
 
     if active_jobs:
-        jobs = user.get_by_user_id(1) # sort job by ascending ldest active job first
+        jobs = user.get_by_user_id(sort_by=1) # sort job by ascending ldest active job first
     else:
         jobs = user.get_by_user_id()  # sort job in descending order newest first
 
@@ -181,15 +189,14 @@ def get_jobs(active_jobs, user_obj, session, curr_date):
 
             # if job date is equal to current working date and is_shift_over equals True
             # it means that the users shift is currently finished.
-            elif datetime.strptime(job.date, "%Y-%m-%d") == datetime.strptime(curr_date, "%Y-%m-%d") \
-                             and is_shift_over(job.finish_time.split(':')[0],
-                                               job.finish_time.split(':')[1]):
-                          get_jobs_helper(job.daily_rate, job._hours, job)  
+            elif datetime.strptime(job.date, "%Y-%m-%d") == \
+                 datetime.strptime(curr_date, "%Y-%m-%d") and is_shift_over(job):
+                 get_jobs_helper(job.daily_rate, job._hours, job)  
 
 
         elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= \
-                    datetime.strptime(curr_date, "%Y-%m-%d") and not \
-                    is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]):
+                             datetime.strptime(curr_date, "%Y-%m-%d") and\
+                             not is_shift_over(job):
                 get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
 
     return jobs, total_pay, total_hrs, worked_jobs

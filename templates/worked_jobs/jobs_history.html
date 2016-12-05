@@ -111,12 +111,11 @@
                         <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
                      {% else %}
                         <!-- As a normal user, user can only edit jobs if their shift is not over-->
-                        {% if dt(job.date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and not is_shift_over(job.finish_time.split(':')[0], job.finish_time.split(':')[1]) %}
-                        <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
-                        <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-                        {% else %}
-                          N/A
-                          {% endif %}
+                        {% if dt(job.date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and is_shift_over(job) %}
+                           N/A
+                        {% elif dt(job.date, "%Y-%m-%d") < dt(date, "%Y-%m-%d") %}
+                           N/A
+                        {% endif %}
                       {% endif %}
                    </td>
 
