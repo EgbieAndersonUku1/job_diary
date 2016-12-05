@@ -28,7 +28,7 @@
               {% if session['username'] == 'admin' %}
                   <caption class="text-center">As an admin you can edit any shift regardless whether the shift has over or not.</caption>
               {% else %}
-                    <caption class="text-center">Normal user can only edit shifts that are not over</caption>
+                    <caption class="text-center">Normal user can only edit shifts that are not over or has not began yet.</caption>
               {% endif %}
             <tr>
               <th>
@@ -122,5 +122,6 @@
             {% endfor %}
             {% endif %}
       </table>
+      {{ pagination.info }}
 {% endblock %}
 </tr>

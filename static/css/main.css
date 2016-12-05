@@ -17,6 +17,10 @@ body {
   background-color: FFE5CC;
 }
 
+em {
+  color: blue;
+}
+
 input[type='text'] {
   font-size: 16px;
   font-weight: bold;

@@ -15,6 +15,7 @@ from src.utilities.time_processor import time_to_str, convert_mins_to_hour
 from src.utilities.date_month_day_processor import month_to_str
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
+from flask_paginate import Pagination
 import json
 import datetime
 import uuid
@@ -153,6 +154,9 @@ def _display(html_link, active=False):
     Renders the jobs worked or not worked along with the hours and total pay.
     """
     jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, User, session, curr_date)
+    page = request.args.get('page', type=int, default=1)
+    pagination = Pagination(page=page, total=len(worked_jobs), 
+                            record_name='history', per_page=10, format_total=True, link_size='lg')
     return render_template(html_link, 
                            jobs=worked_jobs, 
                            date=curr_date,
@@ -163,7 +167,8 @@ def _display(html_link, active=False):
                            active=active, 
                            is_shift_over=is_shift_over,
                            converter=convert_mins_to_hour,
-                           when_is_shift_starting=when_is_shift_starting)
+                           when_is_shift_starting=when_is_shift_starting,
+                           pagination=pagination)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required

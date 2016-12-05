@@ -98,7 +98,7 @@
                      {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
                         Yes
                      {% else %}
-                        Starts in {{ when_is_shift_starting(job.date, job.start_time) }}.
+                        <em>No, starts in {{ when_is_shift_starting(job.date, job.start_time) }}.</em>
                      {% endif %}
                      
                    </td>

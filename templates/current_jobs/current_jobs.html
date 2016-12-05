@@ -102,7 +102,7 @@
                    {{ job.finish_time }}
                  </td>
                  <td>
-                    {{ when_is_shift_starting(job.date, job.start_time) }}
+                    <em>{{ when_is_shift_starting(job.date, job.start_time) }}</em>
                  </td>
                  <td>
                     <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
