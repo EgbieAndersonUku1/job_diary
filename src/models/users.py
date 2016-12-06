@@ -22,7 +22,7 @@ class User(object):
         self.end_date = end_date
         self.day = day
         self.id = uuid.uuid4().hex if _id is None else _id
-
+        
     def add_to_records(self, job_title, descr, loc, **kwargs):
         """add_to_records(str, str, str, str, str, str) -> return(obj or str)
 
@@ -43,6 +43,9 @@ class User(object):
             - hourly_rate: The hourly rate for the job.
             - update     : (Optional) parameter, if set to True, updates 
                             the row with with the new jobs info.
+            - confirm_shift: States whether the shift has been confirmed.
+                            Returns True if the shift has been confirmed
+                            and False otherwise.
         """
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
@@ -63,7 +66,8 @@ class User(object):
                          month=self.start_date.split('-')[1], # get the month part
                          year=None,
                          row_id=None,
-                        _id=None) 
+                        _id=None,
+                        is_shift_confirmed=kwargs['is_shift_confirmed']) 
         return (record.save() if not kwargs['update'] else record) # return obj if update is true else row id
 
     def get_by_user_id(self, sort_by=-1):
@@ -227,6 +231,7 @@ class User(object):
            - row_id: The row id to update.
         """
         Records.delete_row(row_id, self.id)
+        return ''
 
     def update_row(self, row_id, form):
         """update_row(str, obj) -> return(None)

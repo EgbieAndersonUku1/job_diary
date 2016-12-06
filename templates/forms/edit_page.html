@@ -246,6 +246,19 @@
           </div>
         </div>
         <hr />
+          <form class="form-inline">
+                  <fieldset>
+                    <div class="form-group">
+                      <label class="col-md-4 control-label" for="is_shift_confirmed">Confirmed shift</label>
+                      <div class="col-md-4">
+                        <select id="end_mins" class="form-control" name="is_shift_confirmed">
+                            <option selected="">{{ form.is_shift_confirmed }}</option>
+                             <option value="yes">Yes</option>
+                             <option value="no">No</option>
+                        </select>
+                      </div>
+                     </fieldset>
+          <hr/>
       <center>
           <button type="submit" class="btn btn-success">Update</button>
       </center>

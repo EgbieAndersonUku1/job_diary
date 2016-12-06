@@ -19,24 +19,57 @@ def _return_time_passed(start_date, start_time, finish_date, finish_time):
     sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
     return relativedelta.relativedelta(sec_date, first_date)
 
-def is_shift_now(start_hour, start_mins, end_hours, end_mins):
+def is_shift_confirmed(confirmation, job, func):
+    """is_shift_confirmed(str, obj) -> returns(str)
+
+    Checks whether the user's shift/job is confirmed.
+    If confirmation is not made before the start of the shift
+    then the module assumes that shift in question was cancelled
+    and thus deletes from the database.
+
+    Example:
+       Assume that user has just landed a job or shift or client job
+       starting in a few days and the client/boss has told the use to
+       wait for confirmation before the job can be started.
+
+       The day the job is starting is the 25/12/2016 at 10 am but the 
+       client/boss has not confirmed the job yet. Now if the current
+       day is equal to 25/12/2016 and the time is equal to 10 am the start
+       of the shift and the client/boss has not confirmed then the module
+       assumes that job has been cancelled and thus automatically deletes
+       from the database.
+
+
+    :parameters
+        - confirmation : either yes or no. Yes means the client/boss
+                         confirmed the job/shift.
+        - job: An object containg the user's job details.
+
+    """
+    if job.is_shift_confirmed.lower() == 'no' and is_shift_now(job):
+        func(job.row_id[1:])
+        return False
+    return True
+
+def is_shift_now(job):
     """is_shift_now(str, str, str, str) -> return(bool)
 
     Checks if the user shift has started. Returns True
     if it has or False if it has not.
 
     parameters:
-       - start_hour : the hour part of the start time.
-       - start_mins : The minute part of the hour time.
-       - end_hours  : The hour part of the end time.
-       - end_mins   : The minutes part of the end time
-
-    >>> is_shift_now(11, 30, 00, 30)
+       - job : An object that contains the job information.
+       
+    >>> is_shift_now(object(..))
     False
-    >>> is_shift_now(11, 30, 21, 30)
+    >>> is_shift_now((object(..)))
     True
     """
     curr_time = datetime.now()
+    start_hour = job.start_time.split(':')[0]
+    start_mins = job.start_time.split(':')[1]
+    end_hours =  job.finish_time.split(':')[0]
+    end_mins =   job.finish_time.split(':')[1]
     shift_start_time = curr_time.replace(hour=int(start_hour), minute=int(start_mins))
     shift_end_time = curr_time.replace(hour=int(end_hours), minute=int(end_mins))
     return True if shift_start_time <= curr_time <= shift_end_time else False
@@ -102,7 +135,10 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
     time_elasped = ', '.join(shift_start)
-    return 'Shift/job in progress' if '-' in time_elasped else time_elasped 
+
+    # if '' in time_elasped it means that countdown to start of the shift is 00:00
+    # if '-' in time_elasped it means that shift has already began.
+    return 'Shift/job in progress' if '-' or '' in time_elasped else time_elasped # if '-' in tim
     
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
     """get_hours_worked(str, str, str, str) -> return(tuple)

@@ -9,7 +9,7 @@ class ProcessForm(object):
     """Process the form and checks whether the details are correct"""
     def __init__(self, job_title, description, location,
                  rate, start_date, end_date, start_hours,
-                 start_mins, end_hours, end_mins, day):
+                 start_mins, end_hours, end_mins, day, is_shift_confirmed):
 
          self.errors = {}  # store all errors
 
@@ -57,7 +57,10 @@ class ProcessForm(object):
          self.end_hours   = cgi.escape(end_hours).title()
          self.end_mins = cgi.escape(end_mins).title()
          self.day      = cgi.escape(day)
+         self.is_shift_confirmed = cgi.escape(is_shift_confirmed)
          self._obj = None
+         print self.is_shift_confirmed,2566
+
 
     def verify_form(self):
         """Verify whether the form has any errors """
@@ -110,7 +113,8 @@ class ProcessForm(object):
                                            self._obj.location, 
                                            start_time=start_time, 
                                            finish_time=finish_time, 
-                                           hourly_rate=self._obj.rate, 
+                                           hourly_rate=self._obj.rate,
+                                           is_shift_confirmed=self.is_shift_confirmed,
                                            update=True)
             return user.update_row(row_id, form_obj) # update the row within the form
 
@@ -121,6 +125,7 @@ class ProcessForm(object):
                                    start_time=start_time, 
                                    finish_time=finish_time,
                                    hourly_rate=self._obj.rate,
+                                   is_shift_confirmed=self.is_shift_confirmed,
                                    update=False)
     def _get_json(self):
         """Returns the details of the form in json"""
@@ -135,7 +140,8 @@ class ProcessForm(object):
             'start_mins'  : self.start_mins,
             'end_hours'   : self.end_hours,
             'end_mins'    : self.end_mins,
-            'day'         : self.day
+            'day'         : self.day,
+            'is_shift_confirmed': self.is_shift_confirmed
             }
 
 class ProcessSearchForm(object):

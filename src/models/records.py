@@ -44,6 +44,9 @@ class Records(object):
             year       : Year optional parameter.
             row_id     : The row id for the table consisting of the data.
             _id        : The _id use to identify the user table.
+            is_shift_confirmed: Checks if the shift has been confirmed.
+                                Returns True if the shift is confirmed
+                                and False othewise
 
         """
         self.job_title  = kwargs['job_title']
@@ -63,6 +66,7 @@ class Records(object):
         self.row_id = gen_row_id() if kwargs['row_id'] is None else kwargs['row_id']
         self.month  = kwargs['month']
         self._id = uuid.uuid4().hex if kwargs['_id'] is None else kwargs['_id']
+        self.is_shift_confirmed = kwargs['is_shift_confirmed']
 
     def get_json(self):
         """returns a json represent of the class"""
@@ -84,7 +88,8 @@ class Records(object):
                  'row_id'     : self.row_id,
                  'day'        : self.day,
                  'year'       : self.year,
-                 '_id'        : self._id }
+                 '_id'        : self._id,
+                 'is_shift_confirmed' : self.is_shift_confirmed }
 
     def save(self):
         """Saves the data to the databases in the form of json"""
@@ -381,7 +386,8 @@ class Records(object):
                  "end_date": form.end_date,
                  "hourly_rate" : form.hourly_rate,
                  "day" : form.day.title(),
-                 "job_title" : form.job_title.title()}
+                 "job_title" : form.job_title.title(),
+                 'is_shift_confirmed': form.is_shift_confirmed}
 
         db.update_row('jobs_details', row_id, query)
         return form.row_id

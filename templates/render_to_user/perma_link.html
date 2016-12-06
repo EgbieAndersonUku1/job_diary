@@ -23,13 +23,13 @@
                 Day
               </th>
               <th>
-                Job title
+                Title
               </th>
               <th>
-                Job description
+                Role
               </th>
               <th>
-                Job location
+                Location
               </th>
               <th>
                 Hourly rate (£)
@@ -45,6 +45,9 @@
               </th>
               <th>
                 Finish time
+              </th>
+              <th>
+               Shift/job confirmation
               </th>
               <th>
                 Worked shift (?)
@@ -88,8 +91,11 @@
                      {{ job.finish_time }}
                    </td>
                    <td>
+                      <em> {{ job.is_shift_confirmed.title() }} </em>
+                   </td>
+                   <td>
                      <!--Checks if the user is currently working their shift -->
-                     {% if is_shift_now(job.start_time.split(':')[0], job.start_time.split(':')[1], job.finish_time.split(':')[0], job.finish_time.split(':')[1]) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
+                     {% if is_shift_now(job) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
                         Job in progress.
                       <!--check if the user shift is over-->
                      {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}

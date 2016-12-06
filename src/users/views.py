@@ -9,6 +9,7 @@ from src.utilities.job_processor import (get_daily_rate,
                                          get_hours_worked, get_jobs, 
                                          is_shift_now, 
                                          is_shift_over,
+                                         is_shift_confirmed,
                                          when_is_shift_starting)
 
 from src.utilities.time_processor import time_to_str, convert_mins_to_hour
@@ -68,6 +69,7 @@ def entry_page(row_ID):
     start_mins  = request.form.get('start_mins')
     end_hours   = request.form.get('end_hours')
     end_mins    = request.form.get('end_mins')
+    is_shift_confirmed = request.form.get('is_shift_confirmed')
 
     if request.method == 'GET':
         return render_template('forms/job_entry_page.html',
@@ -83,13 +85,14 @@ def entry_page(row_ID):
                                 end_hours=end_hours,
                                 end_mins=end_mins, 
                                 errors='',
-                                success='')
+                                success='',
+                                is_shift_confirmed=is_shift_confirmed)
 
     user_form = ProcessForm(title, descr, loc, 
                             hourly_rate, start_date, 
                             end_date, start_hours, 
                             start_mins, end_hours, 
-                            end_mins, day)
+                            end_mins, day, is_shift_confirmed)
     success, errors, form = user_form.verify_form() 
     if success:
         # row_ID comes from the form so False is expressed as unicode
@@ -98,7 +101,7 @@ def entry_page(row_ID):
         # By expressing it as str(row_ID) != 'False' it makes the if-statement
         # False when the string returned is not equal to the string False.
         if str(row_ID) != 'False': # means the row should be updated.
-            row_id = user_form.process_form(start_date, end_date, day, row_ID, True)
+            row_id = user_form.process_form(start_date, end_date, day, row_ID, update=True)
         else:
             row_id = user_form.process_form(start_date, end_date, day)
         return redirect(url_for('success_page', row_id=row_id)) 
@@ -114,7 +117,8 @@ def entry_page(row_ID):
                            rate=form.rate,
                            end_hours=form.end_hours,
                            end_mins=form.end_mins, 
-                           errors=errors)
+                           errors=errors,
+                           is_shift_confirmed=is_shift_confirmed)
 @app.route('/logout')
 @login_required
 def logout():
@@ -154,9 +158,14 @@ def _display(html_link, active=False):
     Renders the jobs worked or not worked along with the hours and total pay.
     """
     jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, User, session, curr_date)
+    user = User(session['username'], _id=session['user_id'])
     page = request.args.get('page', type=int, default=1)
     pagination = Pagination(page=page, total=len(worked_jobs), 
-                            record_name='history', per_page=10, format_total=True, link_size='lg')
+                            record_name='history', 
+                            per_page=10, 
+                            format_total=True, 
+                            link_size='lg')
+    
     return render_template(html_link, 
                            jobs=worked_jobs, 
                            date=curr_date,
@@ -168,6 +177,10 @@ def _display(html_link, active=False):
                            is_shift_over=is_shift_over,
                            converter=convert_mins_to_hour,
                            when_is_shift_starting=when_is_shift_starting,
+                           is_shift_now=is_shift_now,
+                           is_shift_confirmed=is_shift_confirmed,
+                           delete=user.delete_row,
+                           len=len,
                            pagination=pagination)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
