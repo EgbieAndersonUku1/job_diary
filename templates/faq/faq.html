@@ -53,16 +53,12 @@ a shift confirmation field at the bottom. This enables you to confirm whether th
 or not.
 
 <p>
-    The <b>shift confirmation field </b>checks whether the user's shift/job has been confirmed. If confirmation is not made before the time the shift/job starts then the applications assumes that shift/job in question was cancelled by the client or by the boss and thus automatically deletes it from the database whenever the user refreshes the page. This makes it easier on the user so he/she does not have to manually delete cancelled jobs from the application.
+    The <b>shift confirmation field </b>checks whether the user's shift/job has been confirmed. If confirmation is not made before the time the shift/job starts then the applications assumes that shift/job in question was cancelled by the client or by the boss. And thus automatically deletes it from the database whenever the user refreshes the page. This makes it easier on the user so he/she does not have to manually delete cancelled jobs from the application.
     <br>
     <br>
     <b>Example:</b>
     <br>
-       Assume that user has just landed a job or shift or client job starting in a few days and the client/boss has told the use to wait for confirmation before the job can be started.
-
-       The day the job is starting is the 25/12/2016 at 10 am but the  client/boss has not confirmed the job yet. Now if the current day is equal to 25/12/2016 and the time is equal to 10 am the start
-       of the shift and the client/boss has not confirmed then the module assumes that job has been cancelled and thus automatically deletes
-       from the database.
+       Assume that user has just landed a job or shift or a client job starting in a few days but the client has not yet confirmed the job. Let us further assume that job in question is on the 25/12/2016 at 10 am. Now if the current day is now equal to 25/12/2016 the day of the shift and the current time is now  equal to 10 am the start of the shift and the client/boss has not confirmed then the application assumes that job has been cancelled and thus automatically deletes it from the database.
 </p>
 
 </p>
