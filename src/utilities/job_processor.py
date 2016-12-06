@@ -25,25 +25,13 @@ def is_shift_confirmed(confirmation, job, func):
     Checks whether the user's shift/job is confirmed.
     If confirmation is not made before the start of the shift
     then the module assumes that shift in question was cancelled
-    and thus deletes from the database.
-
-    Example:
-       Assume that user has just landed a job or shift or client job
-       starting in a few days and the client/boss has told the use to
-       wait for confirmation before the job can be started.
-
-       The day the job is starting is the 25/12/2016 at 10 am but the 
-       client/boss has not confirmed the job yet. Now if the current
-       day is equal to 25/12/2016 and the time is equal to 10 am the start
-       of the shift and the client/boss has not confirmed then the module
-       assumes that job has been cancelled and thus automatically deletes
-       from the database.
-
+    and thus automatically deletes it from the database.
 
     :parameters
         - confirmation : either yes or no. Yes means the client/boss
                          confirmed the job/shift.
         - job: An object containg the user's job details.
+        - func: Delete function deletes the row job in question.
 
     """
     if job.is_shift_confirmed.lower() == 'no' and is_shift_now(job):
