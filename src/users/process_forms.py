@@ -59,9 +59,7 @@ class ProcessForm(object):
          self.day      = cgi.escape(day)
          self.is_shift_confirmed = cgi.escape(is_shift_confirmed)
          self._obj = None
-         print self.is_shift_confirmed,2566
-
-
+         
     def verify_form(self):
         """Verify whether the form has any errors """
         self._obj = ProcessForm(**self._get_json()) # set the obj to the ProcessForm
