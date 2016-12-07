@@ -138,8 +138,6 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
     time_elasped = ', '.join(shift_start)
-    print time_elasped
-
     # if ',' not in time_elasped it means that countdown to start of the shift is 00:00
     # if '-' in time_elasped it means that shift has already began.
     return 'Shift/job in progress' if '-' in time_elasped or not ',' in time_elasped else time_elasped 
