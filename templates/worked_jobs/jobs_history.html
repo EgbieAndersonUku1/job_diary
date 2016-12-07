@@ -19,6 +19,107 @@
              </div>
              <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
         </div>
+
+        {% elif len(jobs) == 1 %}
+               <!--if the shift is not confirmed before the start of that shift then the 
+               application assumes that that user shift is cancelled.
+              
+               -->
+               {% if not is_shift_confirmed(jobs[0], delete) %}
+                    <div id='error_msg'>
+                        <h5>This is not an error this page has loaded correct.</h5>
+                    <div>
+                      <h5>You currently have no active jobs !!!</h5>
+                    </div>
+                      <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
+                {% else %}
+                      <!--get the data from the job-->
+                <h2>Days and times of jobs yet to work </h2>
+              <center>
+              <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
+              </center>
+                <tr>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Day
+                </th>
+                <th>
+                  Title
+                </th>
+                <th>
+                  Role
+                </th>
+                <th>
+                  Location
+                </th>
+                <th>
+                  Hourly rate (£)
+                </th>
+                <th>
+                  Expected hours to work
+                </th>
+                <th>
+                  Expected daily rate (£)
+                </th>
+                <th>
+                  Start time
+                </th>
+                <th>
+                  Finish time
+                </th>
+                <th>
+                  Update/Delete
+                </th>
+              </tr>
+              <tr>
+               <td>
+                 {{ jobs[0].date.replace('-', '/') }}
+               </td>
+               <td>
+                 {{ jobs[0].day[:3] }}
+               </td>
+
+               <td>
+                 {{ jobs[0].job_title }}
+               </td>
+               <td>
+                  {{ jobs[0].descr }}
+               </td>
+               <td>
+                 {{ jobs[0].loc }}
+               </td>
+               <td>
+                 £{{ jobs[0].hourly_rate}}
+               </td>
+               <td>
+                 {{ jobs[0].total_hours}}
+               </td>
+               <td>
+                 £{{ jobs[0].daily_rate }}
+               </td>
+               <td>
+                 {{ jobs[0].start_time }}
+               </td>
+               <td>
+                 {{ jobs[0].finish_time }}
+               </td>
+               <td>
+                  {% if session['username'] == 'admin' %}
+                        <a href="{{ url_for('edit', value=jobs[0].row_id) }}">Edit</a> /
+                        <a href="{{ url_for('delete', row=jobs[0].row_id[1:]) }}">Delete</a>
+                     {% else %}
+                        <!-- As a normal user, user can only edit jobs if their shift is not over-->
+                        {% if dt(jobs[0].date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and is_shift_over(jobs[0]) %}
+                           N/A
+                        {% elif dt(jobs[0].date, "%Y-%m-%d") < dt(date, "%Y-%m-%d") %}
+                           N/A
+                        {% endif %}
+                      {% endif %}
+               </td>
+                {% endif %}
+      
       {% else %}
               <h2>Dates of days and times worked </h2>
               <center>
@@ -69,6 +170,9 @@
               </th>
             </tr>
             {% for job in jobs %}
+                {% if job.is_shift_confirmed.lower() == 'no'  %}
+                   {{ delete(job.row_id[1:]) }}
+                {% else %}
                  <tr>
                    <td>
                      {{ translate(job.month )[:3]}}
@@ -118,13 +222,10 @@
                         {% endif %}
                       {% endif %}
                    </td>
-
+                {% endif %}
             {% endfor %}
             {% endif %}
       </table>
-      <div class='pagination'>
-      {{ pagination.info }}
-      {{ pagination.links }}
-      </div>
+      
 {% endblock %}
 </tr>

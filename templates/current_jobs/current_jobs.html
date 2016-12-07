@@ -26,7 +26,7 @@
                application assumes that that user shift is cancelled.
               
                -->
-               {% if not is_shift_confirmed(jobs[0].is_shift_confirmed, jobs[0], delete) %}
+               {% if not is_shift_confirmed(jobs[0], delete) %}
                     <div id='error_msg'>
                         <h5>This is not an error this page has loaded correct.</h5>
                     <div>

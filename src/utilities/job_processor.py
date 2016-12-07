@@ -19,7 +19,7 @@ def _return_time_passed(start_date, start_time, finish_date, finish_time):
     sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
     return relativedelta.relativedelta(sec_date, first_date)
 
-def is_shift_confirmed(confirmation, job, func):
+def is_shift_confirmed(job, func):
     """is_shift_confirmed(str, obj) -> returns(str)
 
     Checks whether the user's shift/job is confirmed.
@@ -28,17 +28,27 @@ def is_shift_confirmed(confirmation, job, func):
     and thus automatically deletes it from the database.
 
     :parameters
-        - confirmation : either yes or no. Yes means the client/boss
-                         confirmed the job/shift.
         - job: An object containg the user's job details.
         - func: Delete function deletes the row job in question.
 
     """
-    if job.is_shift_confirmed.lower() == 'no' and is_shift_now(job):
+    if job.is_shift_confirmed.lower() == 'yes':
+        return True
+    elif job.is_shift_confirmed.lower() == 'no' and is_shift_now(job): # checks against present day shift
         func(job.row_id[1:])
         return False
-    return True
-
+    else:
+         year, month, day = job.date.split('-')
+         curr_date = datetime.now()
+         past_date = curr_date.replace(year=int(year), 
+                                       month=int(month), 
+                                       day=int(day),
+                                       hour=int(job.start_time.split(':')[0]),
+                                       minute=int(job.start_time.split(':')[1]))
+         if past_date < curr_date and job.is_shift_confirmed.lower() == 'no': # checks against past shift
+            func(job.row_id[1:])
+            return False
+   
 def is_shift_now(job):
     """is_shift_now(str, str, str, str) -> return(bool)
 
@@ -58,8 +68,13 @@ def is_shift_now(job):
     start_mins = job.start_time.split(':')[1]
     end_hours =  job.finish_time.split(':')[0]
     end_mins =   job.finish_time.split(':')[1]
+    year, month, day = job.date.split('-')
     shift_start_time = curr_time.replace(hour=int(start_hour), minute=int(start_mins))
-    shift_end_time = curr_time.replace(hour=int(end_hours), minute=int(end_mins))
+    shift_end_time = curr_time.replace(year=int(year),
+                                       month=int(month),
+                                       day=int(day),
+                                       hour=int(end_hours), 
+                                       minute=int(end_mins))
     return True if shift_start_time <= curr_time <= shift_end_time else False
 
 def is_shift_over(job):
