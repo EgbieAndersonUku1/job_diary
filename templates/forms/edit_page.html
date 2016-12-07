@@ -27,7 +27,7 @@
           <form class="form-inline">
           <fieldset>
             <div class="form-group">
-              <label class="col-md-5 control-label" for="start_hours">Start hours (HH)</label>
+              <label class="col-md-4 control-label" for="start_hours">Start hours</label>
               <div class="col-md-4">
                 <select id="start_hours" class="form-control" name="start_hours">
                   <option selected="">{{form.start_time.split(":")[0]}}</option>
@@ -61,7 +61,7 @@
             <form class="form-inline">
             <fieldset>
               <div class="form-group">
-                <label id="start_mins_id" class="col-md-5 control-label" for="start_mins">Start Mins (MM)</label>
+                <label id="start_mins_id" class="col-md-4 control-label" for="start_mins">Start Mins</label>
                 <div class="col-md-4">
                   <select id="start_mins" class="form-control" name="start_mins">
                     <option selected="">{{form.start_time.split(":")[1]}}</option>
@@ -130,7 +130,8 @@
               <form class="form-inline">
                 <fieldset>
                   <div class="form-group">
-                    <label class="col-md-5 control-label" for="end_hours">Finish hours (HH)</label>
+                    <label class="col-md-4 control-label" for="end_hours">Finish hours</label>
+
                     <div class="col-md-4">
                       <select id="end_hours" class="form-control" name="end_hours" >
                         <option selected="">{{form.finish_time.split(":")[0]}}</option>
@@ -164,7 +165,7 @@
                 <form class="form-inline">
                   <fieldset>
                     <div class="form-group">
-                      <label id="start_mins_id" class="col-md-5 control-label" for="end_mins">Finish mins (MM)</label>
+                      <label id="start_mins_id" class="col-md-4 control-label" for="end_mins">Finish mins</label>
                       <div class="col-md-4">
                         <select id="start_mins" class="form-control" name="end_mins">
                           <option selected="">{{form.finish_time.split(":")[1]}}</option>
@@ -249,7 +250,7 @@
           <form class="form-inline">
                   <fieldset>
                     <div class="form-group">
-                      <label class="col-md-4 control-label" for="is_shift_confirmed">Shift confirm</label>
+                      <label class="col-md-4 control-label" for="is_shift_confirmed">Shift confirmed</label>
                       <div class="col-md-4">
                         <select id="end_mins" class="form-control" name="is_shift_confirmed">
                             <option selected="">{{ form.is_shift_confirmed }}</option>
