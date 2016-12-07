@@ -20,7 +20,7 @@ def _return_time_passed(start_date, start_time, finish_date, finish_time):
     return relativedelta.relativedelta(sec_date, first_date)
 
 def is_shift_confirmed(job, func):
-    """is_shift_confirmed(str, obj) -> returns(bool)
+    """is_shift_confirmed(obj, func) -> returns(bool)
 
     Checks whether the user's shift/job is confirmed.
     If confirmation is not made before the start of the shift
