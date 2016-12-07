@@ -7,8 +7,6 @@
 </div>
 
 {% block title %}Active jobs {% endblock %}
-
-
 {% block content %}
 
     <table class="table table-striped">
@@ -114,7 +112,7 @@
                  {{ jobs[0].finish_time }}
                </td>
                <td>
-                  <em> {{ jobs[0].is_shift_confirmed }} </em>
+                  <em> {{ jobs[0].is_shift_confirmed.title() }} </em>
                </td>
                <td>
                   <em>{{ when_is_shift_starting(jobs[0].date, jobs[0].start_time) }}</em>
@@ -175,7 +173,7 @@
           </tr>
           {% for job in jobs %}
                 {% if job.is_shift_confirmed.lower() == 'no' and is_shift_now(job) %}
-                   {{ delete(job.row_id[1:]) }}
+                   {{ delete(job.row_id[1:])  }}
                 {% else %}
                    <tr>
                      <td>

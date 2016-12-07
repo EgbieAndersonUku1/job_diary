@@ -49,6 +49,7 @@ def is_shift_confirmed(job, func):
          if past_date < curr_date and job.is_shift_confirmed.lower() == 'no': # checks against past shift
             func(job.row_id[1:])
             return False
+         return True
    
 def is_shift_now(job):
     """is_shift_now(str, str, str, str) -> return(bool)
@@ -139,9 +140,7 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
     time_elasped = ', '.join(shift_start)
-    # if ',' not in time_elasped it means that countdown to start of the shift is 00:00
-    # if '-' in time_elasped it means that shift has already began.
-    return 'Shift/job in progress' if '-' in time_elasped or not ',' in time_elasped else time_elasped 
+    return time_elasped if time_elasped and int(time_elasped.split()[0]) > 0 else 'Job/shift in progress'
     
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
     """get_hours_worked(str, str, str, str) -> return(tuple)
