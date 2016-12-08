@@ -134,7 +134,7 @@ def logout():
 @login_required
 def reset():
     """reset the value in the form for the application"""
-    return render_template('forms/entry_page.html', 
+    return render_template('forms/job_entry_page.html', 
                             start_date=curr_date, 
                             end_date=curr_date, 
                             day=curr_day)
