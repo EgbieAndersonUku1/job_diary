@@ -19,10 +19,11 @@ def check_date(date):
 
      :parameters:
        - date: The date to check.
-       
-    Returns a tuple where the first part and second part
-    is a boolean True if date is correct. And returns False
-    along with an error message indicating the error.
+       - returns: A tuple consisting of two elements. If the date is correct
+                  the first and second element which consists of the boolean value
+                  True is returned to the user. 
+                  Otherwise returns two parts, where the first element
+                  is False and the second element is an error message.
 
     >>> check_date(2016-02-29)
     >>> (False, 'They can only be 28 days in February since this year is  not a leap year.')
@@ -31,7 +32,7 @@ def check_date(date):
     (False, 'They can only be 29 days in February since this year is a leap year.')
     >>>
     >>> check_date('2016-04-31')
-    (False, 'check month, April has only 30 days!!')
+    (False, 'check month, April as it has only 30 days!!')
     >>>
     >>> check_date('2016-04/31')
     >>> (False, 'replace the delimeter with "-" e.g. YYYY-MM-DD')
@@ -53,8 +54,8 @@ def check_date(date):
                  if year.isdigit() and len(year) == 4:
                      if month.isdigit() and len(month) == 2 and  0 < int(month) <= 12:
                         if day.isdigit() and len(day) == 2:
-                            # April(4), June(6), september(9) and November(11) months with 30 days
-                            thirty_days = [4, 6, 9, 11]
+  
+                            thirty_days = [4, 6, 9, 11] # April(4), June(6), september(9) and November(11) months with 30 days
                             day = int(day)
                             month = int(month)
                             if month == 2:  # check whether the month is feb and whether is a leap year
@@ -69,11 +70,11 @@ def check_date(date):
                             elif month in thirty_days:
                                     if 1 <= day <= 30:
                                         return True, True
-                                    return False, 'check month, ' + month_to_str(month) + ' has only 30 days!!'
+                                    return False, 'check month, ' + month_to_str(month) + ' as it has only 30 days!!'
                             elif month not in thirty_days and month != 2:
                                     if 1 <= day <= 31:
                                         return True, True
-                                    return False, 'check month ' + month_to_str(month) +' has only 31 days.'
+                                    return False, 'check month ' + month_to_str(month) +' as it has only 31 days.'
 
                         return False,'day must be in the format of DD'
                      return False, 'month must be in the format of MM and between 1-12'
