@@ -27,7 +27,7 @@ def login_user(**kw):
                 # encode the session with users details
                 session[kw['session_name']] = login_obj.username
                 session['user_id'] = login_obj._id
-                session['session_name'] = login_obj.username 
+                session['session_name'] = login_obj.username
                 if 'next' in session:
                     url = session.pop('next')
                     return redirect(url)
@@ -35,6 +35,7 @@ def login_user(**kw):
             else:
                 msg = 'Incorrect username and password'
         return render_template(kw['template'], form=kw['form'], error=msg)
+
 
 def register_user(**kw):
     """
@@ -47,7 +48,7 @@ def register_user(**kw):
         - redirect_link: The page to redirect to after success login
     """
     if request.method == 'GET':
-        return render_template(kw['template'], form=kw['form'], error=kw['error'])
+        return render_template(kw['template'], form=kw['form'], error='')
     if request.method == 'GET' and request.args.get('next'):
         session['next'] = request.args.get('next')
 
@@ -56,12 +57,12 @@ def register_user(**kw):
     # login the user in to application and encode their details in a session.
     if kw['form'].validate_on_submit():
         user = Registration(kw['form'].email.data, kw['form'].password.data)
-        if user.register():                         
-            user = Login(user.email, user.password) 
-            user.save()                             
-            session['username'] = user.username     
-            session['user_id']  = user._id
-            session['session_name'] = user.username 
+        if user.register():
+            user = Login(user.email, user.password)
+            user.save()
+            session['username'] = user.username
+            session['user_id'] = user._id
+            session['session_name'] = user.username
             if 'next' in session:
                 return redirect(session.pop('next'))
             return redirect(url_for(kw['redirect_link']))
