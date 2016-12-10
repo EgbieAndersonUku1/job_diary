@@ -37,7 +37,7 @@ class ProcessForm(object):
                except UnboundLocalError:
                   self.errors['next_day'] = """It appears that your shift started the day
                                                before and ended the next day. In that case
-                                               increment the end date day by one.
+                                               increment the end working date day by one.
                                            """
                else:
                     self.start_mins, self.start_hours = start_mins, start_hours
