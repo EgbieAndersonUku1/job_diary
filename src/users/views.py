@@ -96,7 +96,7 @@ def entry_page(row_ID):
     success, errors, form = user_form.verify_form() 
     if success:
         # row_ID comes from the form so False is expressed as unicode
-        # instead of a boolean which would make the if-condition 
+        # instead of a boolean. This make the if-condition 
         # if row_ID == False always True instead of False.
         # By expressing it as str(row_ID) != 'False' it makes the if-statement
         # False when the string returned is not equal to the string False.
@@ -232,6 +232,7 @@ def search():
     
     # FIX THE CODE SO THAT IT USES VALUES FROM THE RADIO BUTTONS AND NOT ALL VALUES
     #title  = request.form.get('jobInfo')
+    user = User(session['username'], _id=session['user_id'])
     form = SearchForm()
     error = ''
     if request.method == 'POST':
@@ -253,7 +254,10 @@ def search():
                                         is_shift_now=is_shift_now,
                                         is_shift_over=is_shift_over,
                                         converter=convert_mins_to_hour,
-                                        when_is_shift_starting=when_is_shift_starting)
+                                        when_is_shift_starting=when_is_shift_starting,
+                                        is_shift_confirmed=is_shift_confirmed,
+                                        delete=user.delete_row,
+                                        len=len)
             error = 'No records find by that entry'
             return render_template('forms/search_page.html', form=form, error=error)
     return render_template('forms/search_page.html', form=form)

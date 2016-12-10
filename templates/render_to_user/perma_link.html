@@ -9,107 +9,115 @@
 {% block title %} Total jobs {% endblock %}
 
 {% block content %}
-    <table class="table table-striped">
-              <h2>Jobs past, present and future</h2>
-              <h4>The total pay accumlated is £{{ total_pay }} over a period of {{ converter(total_hrs) }}.</h4>
-            <tr>
-              <th>
-                Month
-              </th>
-              <th>
-                Date
-              </th>
-              <th>
-                Day
-              </th>
-              <th>
-                Title
-              </th>
-              <th>
-                Role
-              </th>
-              <th>
-                Location
-              </th>
-              <th>
-                Hourly rate (£)
-              </th>
-              <th>
-                Total hours worked
-              </th>
-              <th>
-                Daily rate (£)
-              </th>
-              <th>
-                Start time
-              </th>
-              <th>
-                Finish time
-              </th>
-              <th>
-               Shift/Job confirmation
-              </th>
-              <th>
-                Worked shift (?)
-              </th>
 
-            </tr>
-            {% for job in jobs %}
-                 <tr>
-                   <td>
-                     {{ translate(job.month )[:3]}}
-                   </td>
-                   <td>
-                     {{ job.date.replace('-', '/') }}
-                   </td>
-                   <td>
-                     {{ job.day[:3] }}
-                   </td>
+    {% if not is_shift_confirmed(jobs[0], delete) %}
+        <center><h5> Record not found </h5></center>
+     {% else %}
+        <table class="table table-striped">
+                  <h2>Jobs past, present and future</h2>
+                  <h4>The total pay accumlated is £{{ total_pay }} over a period of {{ converter(total_hrs) }}.</h4>
+                <tr>
+                  <th>
+                    Month
+                  </th>
+                  <th>
+                    Date
+                  </th>
+                  <th>
+                    Day
+                  </th>
+                  <th>
+                    Title
+                  </th>
+                  <th>
+                    Role
+                  </th>
+                  <th>
+                    Location
+                  </th>
+                  <th>
+                    Hourly rate (£)
+                  </th>
+                  <th>
+                    Total hours worked
+                  </th>
+                  <th>
+                    Daily rate (£)
+                  </th>
+                  <th>
+                    Start time
+                  </th>
+                  <th>
+                    Finish time
+                  </th>
+                  <th>
+                   Shift/Job confirmation
+                  </th>
+                  <th>
+                    Worked shift (?)
+                  </th>
 
-                   <td>
-                     {{ job.job_title }}
-                   </td>
-                   <td>
-                      {{ job.descr }}.
-                   </td>
-                   <td>
-                     {{ job.loc }}
-                   </td>
-                   <td>
-                     £{{ job.hourly_rate}}
-                   </td>
-                   <td>
-                     {{ job.total_hours}}
-                   </td>
-                   <td>
-                     £{{ job.daily_rate }}
-                   </td>
-                   <td>
-                     {{ job.start_time }}
-                   </td>
-                   <td>
-                     {{ job.finish_time }}
-                   </td>
-                   <td>
-                      <em> {{ job.is_shift_confirmed.title() }} </em>
-                   </td>
-                   <td>
-                     <!--Checks if the user is currently working their shift -->
-                     {% if is_shift_now(job) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
-                        Job in progress.
-                      <!--check if the user shift is over-->
-                     {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
-                         Yes
-                      <!-- Checks if the day the user's shift was on is over -->
-                     {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
-                        Yes
-                     {% else %}
-                        <em>No, starts in {{ when_is_shift_starting(job.date, job.start_time) }}.</em>
+                </tr>
+                {% for job in jobs %}
+                     {% if is_shift_confirmed(job, delete) %}
+                     <tr>
+                       <td>
+                         {{ translate(job.month )[:3]}}
+                       </td>
+                       <td>
+                         {{ job.date.replace('-', '/') }}
+                       </td>
+                       <td>
+                         {{ job.day[:3] }}
+                       </td>
+
+                       <td>
+                         {{ job.job_title }}
+                       </td>
+                       <td>
+                          {{ job.descr }}.
+                       </td>
+                       <td>
+                         {{ job.loc }}
+                       </td>
+                       <td>
+                         £{{ job.hourly_rate}}
+                       </td>
+                       <td>
+                         {{ job.total_hours}}
+                       </td>
+                       <td>
+                         £{{ job.daily_rate }}
+                       </td>
+                       <td>
+                         {{ job.start_time }}
+                       </td>
+                       <td>
+                         {{ job.finish_time }}
+                       </td>
+                       <td>
+                          <em> {{ job.is_shift_confirmed.title() }} </em>
+                       </td>
+                       <td>
+                         <!--Checks if the user is currently working their shift -->
+                         {% if is_shift_now(job) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
+                            Job in progress.
+                          <!--check if the user shift is over-->
+                         {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
+                             Yes
+                          <!-- Checks if the day the user's shift was on is over -->
+                         {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
+                            Yes
+                         {% else %}
+                            <em>No, starts in {{ when_is_shift_starting(job.date, job.start_time) }}.</em>
+                         {% endif %}
+                         
+                       </td>
                      {% endif %}
-                     
-                   </td>
 
-            {% endfor %}
+                {% endfor %}
+                {% endif %}
+     
     </table>
     <center><caption><em>Refresh to get the lastest information</em></caption></center>
 {% endblock %}

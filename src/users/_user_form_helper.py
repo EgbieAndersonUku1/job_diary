@@ -2,7 +2,6 @@ from flask import render_template, redirect, session, url_for, request, abort
 from src.models.login import Login
 from src.models.registration import Registration
 
-
 def login_user(**kw):
     """
     Helper function: that assists the user entry to the applicaton
