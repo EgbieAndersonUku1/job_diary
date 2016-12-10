@@ -3,6 +3,7 @@ from src.models.users import User
 from datetime import datetime
 from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
 from src.utilities.job_processor import get_hours_worked
+from src.utilities.time_processor import time_to_str 
 import cgi
 
 class ProcessForm(object):
@@ -24,12 +25,24 @@ class ProcessForm(object):
                 self.errors['date'] = 'end-date : {}'.format(msg2)
             elif not val and val_two:
                 self.errors['date'] = 'start_date : {}'.format(msg)
-            else:          
-                if datetime.strptime(str(end_date), "%Y-%m-%d") < datetime.strptime(str(start_date), "%Y-%m-%d"):
-                    self.errors['days_error'] = 'The end date cannot be less then the start date'
-                #if int(end_hours) == 0 and start_date == end_date:
-                #    self.errors['next_day'] = 'It appears your shift ended the next day, increment the end date day by one'     
-         
+            else:  
+               # checks whether the user's shift/job started on the day before
+               # and finished on the next day.        
+               try:
+                    start_time, finish_time = self.__concatenate_times(start_mins, 
+                                                                       start_hours, 
+                                                                        end_hours, 
+                                                                        end_mins)
+                    time_to_str(get_hours_worked(start_date, start_time, end_date, finish_time))
+               except UnboundLocalError:
+                  self.errors['next_day'] = """It appears that your shift started the day
+                                               before and ended the next day. In that case
+                                               increment the end date day by one.
+                                           """
+               else:
+                    self.start_mins, self.start_hours = start_mins, start_hours
+                    self.end_mins, self.end_hours = end_mins, end_hours
+                
          if not day or translate_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:
@@ -44,7 +57,7 @@ class ProcessForm(object):
              self.errors['start_date'] = 'The start date field must be not be empty'
          if not end_date:
              self.errors['end_date'] = 'The end date field must be not be empty'
-        
+       
          # escape the html
          self.job_title   = cgi.escape(job_title).title()
          self.description = cgi.escape(description).title()
@@ -67,24 +80,24 @@ class ProcessForm(object):
             return False, self.errors, self._obj
         return True, self.errors, self._obj
 
-    def get_start_and_finish_time(self):
+    def __concatenate_times(self, start_mins, start_hours, end_hours, end_mins):
     	"""Returns the start and finish time"""
 
-        # guarantees that time is expressed as hh:mm
-        if len(self._obj.start_mins) == 1 and 1 <= int(self._obj.start_mins) < 10:
-    	       start_time  = self._obj.start_hours + ':0' + self._obj.start_mins
-        if len(self._obj.end_mins) == 1 and 1 <= int(self._obj.end_mins) < 10:
-    	      finish_time = self._obj.end_hours   + ":0" + self._obj.end_mins
-        if len(self._obj.start_mins) == 1 and not int(self._obj.start_mins):
-            start_time  = self._obj.start_hours + ':00'
-        if len(self._obj.end_mins) == 1 and not int(self._obj.end_mins):
-    	      finish_time = self._obj.end_hours   + ":00"
-        if len(self._obj.start_hours) == 2 and len(self._obj.end_hours) == 2:
-            start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
-            finish_time = self._obj.end_hours   + ":" + self._obj.end_mins
+        # guarantees that time is expessed as hh:mm
+        if len(start_mins) == 1 and 1 <= int(start_mins) < 10:
+    	       start_time  = start_hours + ':0' + start_mins
+        if len(end_mins) == 1 and 1 <= int(end_mins) < 10:
+    	      finish_time = end_hours   + ":0" + end_mins
+        if len(start_mins) == 1 and not int(start_mins):
+            start_time  = start_hours + ':00'
+        if len(end_mins) == 1 and not int(end_mins):
+    	      finish_time = end_hours   + ":00"
+        if len(start_hours) == 2 and len(end_hours) == 2:
+            start_time  = start_hours + ':' + start_mins # concatcenate the start hours and mins into hh:mm
+            finish_time = end_hours   + ":" + end_mins
         else:
-            start_time  = self._obj.start_hours + ':' + self._obj.start_mins # concatcenate the start hours and mins into hh:mm
-            finish_time = self._obj.end_hours   + ":" + self._obj.end_mins   # concatcenate the end hours and mins into hh:mm
+            start_time  = start_hours + ':' + start_mins # concatcenate the start hours and mins into hh:mm
+            finish_time = end_hours   + ":" + end_mins   # concatcenate the end hours and mins into hh:mm
     	return start_time, finish_time
 
     def process_form(self, start_date, end_date, day, row_id=None, update=False):
@@ -103,7 +116,10 @@ class ProcessForm(object):
        
         Process the form and adds the user details to the database.
         """
-        start_time, finish_time = self.get_start_and_finish_time()
+        start_time, finish_time = self.__concatenate_times(self.start_mins, 
+                                                           self.start_hours, 
+                                                           self.end_hours, 
+                                                           self.end_mins)
         if update:   # if update flag is set to true the row is updated.
             user = User(session['username'], start_date, end_date, day, _id=session['user_id'])
             form_obj = user.add_to_records(self._obj.job_title, 
@@ -142,6 +158,7 @@ class ProcessForm(object):
             'is_shift_confirmed': self.is_shift_confirmed
             }
 
+# Process the search form.
 class ProcessSearchForm(object):
     """ProcessSearchForm(class)
     Checks and process the search form template.
