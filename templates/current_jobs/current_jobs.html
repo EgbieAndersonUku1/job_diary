@@ -5,7 +5,7 @@
   <span class="glyphicon glyphicon-user"></span> {{ session['username']}}
   </a>
 </div>
-
+<meta http-equiv="refresh" content='60'>
 {% block title %}Active jobs {% endblock %}
 {% block content %}
 
@@ -223,7 +223,7 @@
         {% endfor %}
         {% endif %}
   </table>
-  <center><caption><em>Refresh to get the latest job/shift start information</em></caption></center>
+  <center><caption><em>Gets the latest information automatically every 60 seconds</em></caption></center>
 
 
 
