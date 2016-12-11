@@ -9,13 +9,7 @@
 
 <script type="text/javascript" language='javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
   
-  $(document).ready(function) {
-      var idleInterval = setInterval('reloadPage()', 3000);
-  })
-  function reloadPage() {
-    location.reload();
-  }
-
+  
 {% block title %} Total jobs {% endblock %}
 
 {% block content %}
@@ -106,6 +100,7 @@
                          {{ job.finish_time }}
                        </td>
                        <td>
+                          
                           <em> {{ job.is_shift_confirmed.title() }} </em>
                        </td>
                        <td>
@@ -129,7 +124,7 @@
                 {% endif %}
      
     </table>
-    <center><caption><em>Refresh to get the lastest information</em></caption></center>
+    <center><caption><em>Automatically refreshes every 60 seconds</em></caption></center>
 {% endblock %}
 
 

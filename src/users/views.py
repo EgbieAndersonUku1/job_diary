@@ -24,6 +24,7 @@ import uuid
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
+SEARCH_FORM_JOBS = ''
 
 @app.before_first_request
 def initialize():
@@ -224,15 +225,40 @@ def user_login():
     session['username'] = session['session_name']
     return redirect(url_for('history'))
 
-@app.route('/index', methods=('GET', 'POST'))
+
+@app.route('/search/permalink/jobs')
+def perma_link():
+    """Displays the jobs retreived from the search function"""
+
+    user = User(session['username'], _id=session['user_id'])
+    total_hrs, total_pay = [], []
+
+    for job in SEARCH_FORM_JOBS: # calculate the hours and wages from the jobs retreived.
+        total_pay.append(float(job.daily_rate))
+        total_hrs.append(float(job._hours))
+    return render_template("render_to_user/perma_link.html", 
+                            jobs=SEARCH_FORM_JOBS,
+                            translate=month_to_str, 
+                            total_pay=sum(total_pay),
+                            total_hrs=sum(total_hrs), 
+                            curr_date=curr_date,
+                            dt=datetime.datetime.strptime,
+                            is_shift_now=is_shift_now,
+                            is_shift_over=is_shift_over,
+                            converter=convert_mins_to_hour,
+                            when_is_shift_starting=when_is_shift_starting,
+                            is_shift_confirmed=is_shift_confirmed,
+                            delete=user.delete_row,
+                            len=len)
+
 @app.route('/search', methods=('GET', 'POST'))
 @login_required
 def search():
     """Search form that allows the user to search the form based on the job attributes"""
     
-    # FIX THE CODE SO THAT IT USES VALUES FROM THE RADIO BUTTONS AND NOT ALL VALUES
+    # FIX THE CODE REQUIRING THE RADIO BUTTONS
     #title  = request.form.get('jobInfo')
-    user = User(session['username'], _id=session['user_id'])
+    
     form = SearchForm()
     error = ''
     if request.method == 'POST':
@@ -240,26 +266,12 @@ def search():
             search_form = ProcessSearchForm(form)
             jobs = search_form.get_data()
             if jobs:
-                total_hrs, total_pay = [], []
-                for job in jobs:
-                    total_pay.append(float(job.daily_rate))
-                    total_hrs.append(float(job._hours))
-                return render_template("render_to_user/perma_link.html", 
-                                        jobs=jobs,
-                                        translate=month_to_str, 
-                                        total_pay=sum(total_pay),
-                                        total_hrs=sum(total_hrs), 
-                                        curr_date=curr_date,
-                                        dt=datetime.datetime.strptime,
-                                        is_shift_now=is_shift_now,
-                                        is_shift_over=is_shift_over,
-                                        converter=convert_mins_to_hour,
-                                        when_is_shift_starting=when_is_shift_starting,
-                                        is_shift_confirmed=is_shift_confirmed,
-                                        delete=user.delete_row,
-                                        len=len)
-            error = 'No records find by that entry'
-            return render_template('forms/search_page.html', form=form, error=error)
+                global SEARCH_FORM_JOBS
+                SEARCH_FORM_JOBS = jobs
+                return redirect(url_for('perma_link'))
+            
+        error = 'No records find by that entry'
+        return render_template('forms/search_page.html', form=form, error=error)
     return render_template('forms/search_page.html', form=form)
 
 @app.route('/.json')
