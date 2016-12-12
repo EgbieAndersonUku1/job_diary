@@ -140,7 +140,7 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
     
     time_elasped = ', '.join(shift_start)
-    return '{}'.format(time_elasped) if time_elasped and int(time_elasped.split()[0]) > 0 else 'Job/shift in progress'
+    return 'Starts in {}'.format(time_elasped) if time_elasped and int(time_elasped.split()[0]) > 0 else 'Job/shift in progress'
     
 def get_hours_worked(start_date, start_time, finish_date, finish_time):
     """get_hours_worked(str, str, str, str) -> return(tuple)
