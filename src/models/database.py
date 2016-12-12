@@ -32,6 +32,7 @@ class DataBase(object):
         job_details.create_index([('date', pymongo.DESCENDING)])
         job_details.create_index([('year', pymongo.DESCENDING)])
         job_details.create_index([('month', pymongo.DESCENDING)])
+        job_details.create_index([('is_shift_confirmed', pymongo.DESCENDING)])
                                    
     @staticmethod
     def insert_one(collection, data):

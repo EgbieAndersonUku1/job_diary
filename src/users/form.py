@@ -1,4 +1,4 @@
-##################################################################
+#################################################################
 # Author : Egbie Uku
 # Creates the tables or rows necessary for the Web interface
 ##################################################################
@@ -46,5 +46,6 @@ class SearchForm(Form):
     daily_rate  = DecimalField('Daily rate', rounding=2)
     month_one = StringField('From', [validators.Length(max=17)])
     month_two = StringField('To', [validators.Length(max=17)])
+    job_confirmation = StringField('Shift/Job Confirmation (yes/no)', [validators.Length(max=3)])
 
     

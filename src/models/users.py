@@ -244,6 +244,21 @@ class User(object):
         """
         return Records.update_row(row_id, form)
 
+    def get_by_confirmation(self, confirmation):
+        """get_by_confirmation(str) -> return(obj or None) 
+
+        Returns all job confirmed or not confirmed.
+
+        :parameters
+           - confirmation : either 'yes' or 'no'
+
+        >>> get_by_confirmation('yes')
+        objectID(...)
+        >>> get_by_confirmation('no')
+        
+        """
+        return Records.find_by_confirmation(self.id, confirmation)
+
     def send_jobs_by_email(self):
         """Sends the latest jobs by email. That is
         jobs that are starting on the current working

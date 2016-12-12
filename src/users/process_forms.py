@@ -176,6 +176,7 @@ class ProcessSearchForm(object):
         self.daily_rate  = form.daily_rate.data
         self.val_one = form.month_one.data
         self.val_two = form.month_two.data
+        self.confirmation = form.job_confirmation.data
         self._user = user = User(session['username'], _id=session['user_id'])
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday', 
                      'Wed': 'Wednesday','Thu':'Thursday', 
@@ -223,4 +224,5 @@ class ProcessSearchForm(object):
             return self.process_dates(self.val_one, self.val_two)
         elif self.year:
             return self._user.get_by_year(self.year)
-        
+        elif self.confirmation:
+            return self._user.get_by_confirmation(self.confirmation.lower())

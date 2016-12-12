@@ -392,6 +392,14 @@ class Records(object):
         db.update_row('jobs_details', row_id, query)
         return form.row_id
 
+    @classmethod
+    def find_by_confirmation(cls, user_id, confirmation):
+        """return all jobs based on their confirmation"""
+        return cls._find(query={"is_shift_confirmed": confirmation,
+                               'user_id':user_id}, 
+                                key=('date', -1))
+   
+
     @staticmethod
     def get_records_in_json(user_id):
         """Returns the records in the database as json"""

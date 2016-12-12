@@ -88,12 +88,21 @@ The search form contains <b>twelve fields</b>. The first ten fields enables the 
 <p><b>To query by start time or finish time </b>one must enter it as an hour seperated by colon followed by minutes. For example if one was query the start or finish time one would enter it as h:m e.g 9 am would be represented as 9:0
 </p>
 
+<p>
+ To query by <b>shift confirmation</b> enter either yes or no within the field.
+ Yes meaning that the shift/job was confirmed and No mean otherwise.
+</p>
+
+<p>
+</p>
 <p><b>To query by date <b>one must enter it as </b>YYYY-MM-DD</b>.
 </p>
 
 <br>
 <p>
 The bottom two field enables the user to search for job based on the ranges of two dates. This can either been as <em>months</em> or as <em>dates</em> but not a combination of both. For example you cannot use <b>month</b> in the first field and <b>date</b> in the second field or vice versa as this will result in the application returning a <b>not found on the data</b> even though the data might exist. The values for both fields must be the <b>same type</b>. <br>If months are used the application will return all the days worked between those two months including the starting and ending months. If date is used instead (which must be in the form of <b>YYYY-MM-DD</b> ) the application returns all days worked between those two dates including the starting and ending date.
+</p>
+
 </p>
 </div>
 {% endblock %}
