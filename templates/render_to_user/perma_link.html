@@ -5,11 +5,12 @@
   <span class="glyphicon glyphicon-user"></span> {{ session['username']}}
   </a>
 </div>
+
 <meta http-equiv="refresh" content='60'>
 
-<script type="text/javascript" language='javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" </script>
   
-  
+
 {% block title %} Total jobs {% endblock %}
 
 {% block content %}
@@ -58,7 +59,7 @@
                    Shift/Job confirmation
                   </th>
                   <th>
-                    Worked shift (?)
+                    Shift
                   </th>
 
                 </tr>
@@ -101,20 +102,32 @@
                        </td>
                        <td>
                           
-                          <em> {{ job.is_shift_confirmed.title() }} </em>
+                          {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
+                            <div id='confirmed'>
+                                <em><b>{{ jobs[0].is_shift_confirmed.title() }} </b></em>
+                            </div>
+                         {% else %}
+                            <div id='confirmation_required'>
+                               <b>{{ jobs[0].is_shift_confirmed.title() }} </b>
+                            </div>
+                         {% endif %}
                        </td>
                        <td>
-                         <!--Checks if the user is currently working their shift -->
-                         {% if is_shift_now(job) and dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") %}
-                            Job in progress.
-                          <!--check if the user shift is over-->
-                         {% elif dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
-                             Yes
+                         
+                         {% if dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
+                             <div id='worked'>
+                                  Yes
+                              </div>
                           <!-- Checks if the day the user's shift was on is over -->
                          {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
-                            Yes
+                            <div id='worked'>
+                                 Yes
+                            </div>
                          {% else %}
-                            <em>No, starts in {{ when_is_shift_starting(job.date, job.start_time) }}.</em>
+                            <div id='time'>
+                                <em>{{ when_is_shift_starting(job.date, job.start_time) }}.</em>
+                                
+                            </div>
                          {% endif %}
                          
                        </td>

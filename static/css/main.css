@@ -17,10 +17,14 @@ body {
   background-color: FFE5CC;
 }
 
-em {
+#time {
   color: blue;
 }
 
+#confirmed {
+   color:green;
+   font-weight: bold;
+}
 input[type='text'] {
   font-size: 16px;
   font-weight: bold;
@@ -90,6 +94,25 @@ a:visited {
   text-align: center;
   padding-bottom: 3px;
 
+}
+
+#shift_starting_time {
+  color: blue;
+}
+
+#confirmation_required {
+  color: red;
+  font-weight: bold;
+}
+
+#worked {
+  color: green;
+  font-weight: bold;
+}
+
+#progress {
+  color: orange;
+  font-weight: bold;
 }
 
 #helper {

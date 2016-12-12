@@ -112,10 +112,20 @@
                  {{ jobs[0].finish_time }}
                </td>
                <td>
-                  <em> {{ jobs[0].is_shift_confirmed.title() }} </em>
+                  {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
+                      <div id='confirmed'>
+                          <em><b>{{ jobs[0].is_shift_confirmed.title() }} </b></em>
+                      </div>
+                  {% else %}
+                      <div id='confirmation_required'>
+                         <b>{{ jobs[0].is_shift_confirmed.title() }} </b>
+                      </div>
+                  {% endif %}
                </td>
                <td>
-                  <em>{{ when_is_shift_starting(jobs[0].date, jobs[0].start_time) }}</em>
+                  <div id='time'>
+                     <em>{{ when_is_shift_starting(jobs[0].date, jobs[0].start_time) }} </em>
+                  </div>
                </td>
                <td>
                   <a href="{{ url_for('edit', value=jobs[0].row_id) }}">Edit</a> /
@@ -208,10 +218,20 @@
                        {{ job.finish_time }}
                      </td>
                      <td>
-                       <em>{{ job.is_shift_confirmed.title() }} </em>
+                       {% if job.is_shift_confirmed.title() == 'Yes' %}
+                          <div id='confirmed'>
+                            <em>{{ job.is_shift_confirmed.title() }} </em>
+                          </div>
+                       {% else %}
+                          <div id='confirmation_required'>
+                              <em>{{ job.is_shift_confirmed.title() }} </em>
+                          </div>
+                        {% endif %}
                      </td>
                      <td>
-                        <em>{{ when_is_shift_starting(job.date, job.start_time) }}</em>
+                        <div id='time'>
+                            {{ when_is_shift_starting(job.date, job.start_time) }}
+                        </div>
                      </td>
                      <td>
                         <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
