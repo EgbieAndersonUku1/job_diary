@@ -131,14 +131,11 @@ def logout():
     session.pop('session_name')
     return (redirect(url_for('login')))
 
-@app.route('/reset')
+@app.route('/jobs/reset')
 @login_required
 def reset():
     """reset the value in the form for the application"""
-    return render_template('forms/job_entry_page.html', 
-                            start_date=curr_date, 
-                            end_date=curr_date, 
-                            day=curr_day)
+    return redirect(url_for('entry_page', row_ID=False))
 
 @app.route('/successful/<row_id>')
 @login_required

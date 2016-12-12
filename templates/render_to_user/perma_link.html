@@ -6,16 +6,16 @@
   </a>
 </div>
 
+
 <meta http-equiv="refresh" content='60'>
 
-<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" </script>
-  
+
 
 {% block title %} Total jobs {% endblock %}
 
 {% block content %}
 
-    {% if len(job) ==1 and  not is_shift_confirmed(jobs[0], delete) %}
+    {% if len(jobs) ==1 and  not is_shift_confirmed(jobs[0], delete) %}
         <center><h5> Record not found </h5></center>
      {% else %}
         <table class="table table-striped">
