@@ -20,10 +20,9 @@ def create_passwd_hash(password):
 def get_questions():
 	"""
 	"""
-	QUESTION_ONE = 'Enter your login username'
-	QUESTION_TWO = "what is your mother's maiden name"
-	QUESTION_THREE = "where was your born"
-	QUESTION_FOUR =  "who was your best friend at school"
-	QUESTION_FIVE =  "what is your favourite activity"
-	return QUESTION_ONE, QUESTION_TWO, QUESTION_THREE, QUESTION_FOUR, QUESTION_FIVE
+	QUESTION_ONE = "what is your mother's maiden name"
+	QUESTION_TWO = "where was your born"
+	QUESTION_THREE =  "who was your best friend at school"
+	QUESTION_FOUR =  "what is your favourite activity"
+	return QUESTION_ONE, QUESTION_TWO, QUESTION_THREE, QUESTION_FOUR
 	

@@ -418,11 +418,11 @@ class Records(object):
        """
        question_one, question_two, question_three, question_four, question_five = get_questions()
        hash_passwd = Registration.create_passwd_hash # create a function
-       secret_answers = [ {question_one: hash_passwd(form.username.data)},
-                          {question_two: hash_passwd(form.maiden_name.data)},
-                          {question_three: hash_passwd(form.born.data)},
-                          {question_four: hash_passwd(form.school_friend.data)},
-                          {question_five: hash_passwd(form.leisure.data)},
+       secret_answers = [ {'username' : hash_passwd(session['username'])},
+                          {question_one: hash_passwd(form.maiden_name.data)},
+                          {question_two: hash_passwd(form.born.data)},
+                          {question_three: hash_passwd(form.school_friend.data)},
+                          {question_four: hash_passwd(form.leisure.data)},
                           {'user_id': user_id}]
        db.insert_many(collection='forgotten_password', data=secret_answers)
 
