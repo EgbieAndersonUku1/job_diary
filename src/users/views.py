@@ -1,5 +1,9 @@
 #-*- coding: utf-8 -*-
-from src.users.form import RegisterForm, LoginForm, SearchForm
+from src.users.form import (RegisterForm, 
+                            LoginForm, 
+                            SearchForm, 
+                            ForgottenPasswordForm,
+                            NewPasswordForm)
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
 from _user_form_helper import login_user, register_user
@@ -14,6 +18,7 @@ from src.utilities.job_processor import (get_daily_rate,
 
 from src.utilities.time_processor import time_to_str, convert_mins_to_hour
 from src.utilities.date_month_day_processor import month_to_str
+from src.models.registration import Registration
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
 from flask_paginate import Pagination
@@ -294,3 +299,32 @@ def home():
 def faq():
     """renders the FAQ to the user"""
     return render_template('faq/faq.html')
+
+@app.route('/secret/questions/<new_password>', methods=('GET', 'POST'))
+def secret_questions(new_password):
+
+    form = ForgottenPasswordForm()
+    print str(new_password) == 'False'
+    if form.validate_on_submit():
+        if str(new_password) == 'False':
+            user = User(session['username'], _id=session['user_id'])
+            user.save_secret_answers(form)
+            return redirect('login')
+
+        print 'outside 314 view.py'
+
+        # function here to verify the user details before sending them to new password.
+        return redirect(url_for('new_password'))
+    return render_template('forms/username.html', form=form)
+
+@app.route('/newpassword', methods=('GET', 'POST'))
+def new_password():
+    
+    form = NewPasswordForm()
+    if form.validate_on_submit():
+        hash_password = Registration.create_passwd_hash(password)
+        user = User(sessions['username'], _id=sessions['user_id'])
+        user.update_password(form.password.data)
+        return redirect('login')
+    return render_template('passwords/new_password_form.html', form=form)
+

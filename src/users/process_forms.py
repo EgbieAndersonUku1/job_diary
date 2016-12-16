@@ -3,7 +3,8 @@ from src.models.users import User
 from datetime import datetime
 from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
 from src.utilities.job_processor import get_hours_worked
-from src.utilities.time_processor import time_to_str 
+from src.utilities.time_processor import time_to_str
+from src.models.registration import Registration 
 import cgi
 
 class ProcessForm(object):
@@ -226,3 +227,5 @@ class ProcessSearchForm(object):
             return self._user.get_by_year(self.year)
         elif self.confirmation:
             return self._user.get_by_confirmation(self.confirmation.lower())
+
+

@@ -19,6 +19,11 @@ class Registration(object):
            return False
         return True
 
+    @staticmethod
+    def create_passwd_hash(password):
+        """Takes a str and turns it into a hash"""
+        return bcrypt.hashpw(password, bcrypt.gensalt(log_rounds=14))
+
     def register(self):
         """register the user
         Returns False if users details was not registered correctly.
@@ -27,7 +32,7 @@ class Registration(object):
 
         if not self._is_user_name_unique(self.email):
             return False
-        self.password = bcrypt.hashpw(self.password, bcrypt.gensalt(log_rounds=14))
+        self.password = Registration.create_passwd_hash(self.password) # hash password
         self._save() 
         return True  
 

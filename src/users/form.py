@@ -6,7 +6,6 @@
 from flask_wtf import Form
 from wtforms import validators, StringField, PasswordField, DecimalField, RadioField
 from wtforms.fields.html5 import EmailField
-from flask_uploads import UploadSet, configure_uploads, IMAGES
 from flask_wtf.file import FileField, FileAllowed
 
 class RegisterForm(Form):
@@ -49,3 +48,29 @@ class SearchForm(Form):
     job_confirmation = StringField('Shift/Job Confirmation (yes/no)', [validators.Length(max=3)])
 
     
+class ForgottenPasswordForm(Form):
+    """ForgottenForm(class)
+    Allows the user to retreive their forgotten password.
+    """
+    username = StringField('Enter your login username.', 
+                          [validators.Required(), 
+                          validators.Length(max=80)])
+    maiden_name = StringField('What is your mother maiden name ?', 
+                               [validators.Required(), 
+                               validators.Length(max=80)])
+    born = StringField('where was you born ?', [validators.Required(), 
+                                                validators.Length(max=80)])
+    school_friend = StringField('Who was your best friend at school ?', [validators.Required(), 
+                                                                        validators.Length(max=80)])
+    leisure = StringField('What is your favourite activity ?', [validators.Required(), 
+                                                                validators.Length(max=80)])
+    
+
+class NewPasswordForm(Form):
+    """NewPasswordForm(class)
+    """
+    password = PasswordField('New password', 
+                           [validators.Required(),
+                           validators.Length(min=4, max=80),
+                           validators.EqualTo('confirm', message='password does not match')])
+    confirm = PasswordField('Repeat password')

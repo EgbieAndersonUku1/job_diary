@@ -42,6 +42,13 @@ class DataBase(object):
         DataBase.DATABASE[collection].insert_one(data)
 
     @staticmethod
+    def insert_many(collection, data):
+        """insert_many(str) -> return(none)
+        Inserts multiple data into the database.
+        """
+        DataBase.DATABASE[collection].insert_many(data)
+
+    @staticmethod
     def search(collections, query, key, limit_num):
         """search(str, value, value, tuple) -> return(cursor)
 
@@ -85,14 +92,18 @@ class DataBase(object):
         DataBase.DATABASE[collections].find_one_and_delete(query)
 
     @staticmethod
-    def update_row(collections, row_id, query):
+    def update(collections, key, value, query):
         """update_row(str, str, dict) -> return(None)
 
         Updates a single row in the table.
 
         parameters:
            - collections: A table name from the database
+           - key        : The key returns the value to update_row
+           - value      : Replaces the old value with the new value.
            - query      : The information to query from the database
+
         """
-        DataBase.DATABASE[collections].update_one({'row_id': row_id}, {'$set':query})
-        
+        DataBase.DATABASE[collections].update_one({key: value}, {'$set':query})
+    
+    

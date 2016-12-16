@@ -13,6 +13,8 @@ from src.utilities.date_month_day_processor import month_to_num
 from src.utilities.common import gen_row_id
 from src.utilities.job_processor import get_hours_worked
 from database import DataBase as db
+from src.utilities.common import get_questions
+from src.models.registration import Registration 
 
 class Records(object):
     """Records (class)
@@ -362,7 +364,14 @@ class Records(object):
                                 key=('date', -1))
    
     @classmethod
-    def update_row(cls, row_id, form):
+    def update_password(cls, username, password):
+        """
+        """
+        query = {"username": username, "password" : password}
+        db.update('login_credentials', 'password', password, query)
+
+    @classmethod
+    def update(cls, row_id, form, update_row=True):
         """update_row(str, form_obj) -> return(str)
 
         Updates the old row with new information.
@@ -389,8 +398,9 @@ class Records(object):
                  "job_title" : form.job_title.title(),
                  'is_shift_confirmed': form.is_shift_confirmed}
 
-        db.update_row('jobs_details', row_id, query)
-        return form.row_id
+        db.update('jobs_details', 'row_id', row_id, query)
+        if update_row:
+            return form.row_id
 
     @classmethod
     def find_by_confirmation(cls, user_id, confirmation):
@@ -398,7 +408,26 @@ class Records(object):
         return cls._find(query={"is_shift_confirmed": confirmation,
                                'user_id':user_id}, 
                                 key=('date', -1))
-   
+
+    @classmethod
+    def save_secret_answers(cls, form, user_id):
+       """save_secret_answers(obj, str) -> return(None)
+
+       Saves the user's secret answers for the forgotten
+       password to the database.
+       """
+       question_one, question_two, question_three, question_four, question_five = get_questions()
+       hash_passwd = Registration.create_passwd_hash # create a function
+       secret_answers = [ {question_one: hash_passwd(form.username.data)},
+                          {question_two: hash_passwd(form.maiden_name.data)},
+                          {question_three: hash_passwd(form.born.data)},
+                          {question_four: hash_passwd(form.school_friend.data)},
+                          {question_five: hash_passwd(form.leisure.data)},
+                          {'user_id': user_id}]
+       db.insert_many(collection='forgotten_password', data=secret_answers)
+
+
+    
 
     @staticmethod
     def get_records_in_json(user_id):

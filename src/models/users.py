@@ -242,7 +242,7 @@ class User(object):
            - form  : Form object contains the new
                      data to update the old row with.
         """
-        return Records.update_row(row_id, form)
+        return Records.update(row_id, form)
 
     def get_by_confirmation(self, confirmation):
         """get_by_confirmation(str) -> return(obj or None) 
@@ -265,6 +265,21 @@ class User(object):
         day.
         """
         pass
+
+    def save_secret_answers(self, form):
+        """save_secret_answers(obj) -> return(None)
+
+        Stores the user secret answers and questions
+        to the database.
+        """
+        Records.save_secret_answers(form, self.id)
+
+    def update_password(self, password):
+        """update_password
+
+        Updates the old password to the new password.
+        """
+        Record.update(password)
 
     def __repr__(self):
         return '{}'.format(self.full_name)

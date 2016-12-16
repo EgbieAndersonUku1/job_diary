@@ -57,12 +57,10 @@ def register_user(**kw):
     if kw['form'].validate_on_submit():
         user = Registration(kw['form'].email.data, kw['form'].password.data)
         if user.register():
-            user = Login(user.email, user.password)
+            user = Login(user.email, user.password) # logs the user in.
             user.save()
             session['username'] = user.username
             session['user_id'] = user._id
             session['session_name'] = user.username
-            if 'next' in session:
-                return redirect(session.pop('next'))
-            return redirect(url_for(kw['redirect_link']))
+            return redirect(url_for('secret_questions', new_password=False))
     return render_template(kw['template'], form=kw['form'], error=kw['error'])
