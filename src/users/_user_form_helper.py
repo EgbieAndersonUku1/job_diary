@@ -62,5 +62,5 @@ def register_user(**kw):
             session['username'] = user.username
             session['user_id'] = user._id
             session['session_name'] = user.username
-            return redirect(url_for('secret_questions', new_password=False))
+            return redirect(url_for('register_secret_questions_answers'))
     return render_template(kw['template'], form=kw['form'], error=kw['error'])

@@ -8,6 +8,7 @@ from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
 from _user_form_helper import login_user, register_user
 from src.users.process_forms import ProcessForm, ProcessSearchForm
+from src.utilities.common import create_passwd_hash
 from src.models.users import User
 from src.utilities.job_processor import (get_daily_rate, 
                                          get_hours_worked, get_jobs, 
@@ -300,30 +301,37 @@ def faq():
     """renders the FAQ to the user"""
     return render_template('faq/faq.html')
 
-@app.route('/secret/questions/<new_password>', methods=('GET', 'POST'))
-def secret_questions(new_password):
+
+@app.route('/secret/questions', methods=('GET', 'POST'))
+def register_secret_questions_answers():
 
     form = ForgottenPasswordForm()
-    print str(new_password) == 'False'
     if form.validate_on_submit():
-        if str(new_password) == 'False':
-            user = User(session['username'], _id=session['user_id'])
-            user.save_secret_answers(form)
-            return redirect('login')
+        user = User(session['username'], _id=session['user_id'])
+        user.save_secret_answers(form)
+        return redirect('login')        
+    return render_template('forms/secret_questions_registration.html', 
+                           form=form, 
+                           username=session['username'])
 
-        print 'outside 314 view.py'
-
-        # function here to verify the user details before sending them to new password.
+@app.route('/secret/questions/answers', methods=('GET', 'POST'))
+def forgotten_password():
+    """
+    """
+    form = ForgottenPasswordForm()
+    if form.validate_on_submit():
         return redirect(url_for('new_password'))
-    return render_template('forms/username.html', form=form)
+    return render_template('forms/secret_questions_answers.html', form=form)
 
 @app.route('/newpassword', methods=('GET', 'POST'))
 def new_password():
+    """
+    """
     
     form = NewPasswordForm()
     if form.validate_on_submit():
-        hash_password = Registration.create_passwd_hash(password)
-        user = User(sessions['username'], _id=sessions['user_id'])
+        hash_password = create_passwd_hash(form.password.data)
+        user = User(session['username'], _id=session['user_id'])
         user.update_password(form.password.data)
         return redirect('login')
     return render_template('passwords/new_password_form.html', form=form)

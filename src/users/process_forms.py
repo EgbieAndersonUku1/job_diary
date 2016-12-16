@@ -6,6 +6,7 @@ from src.utilities.job_processor import get_hours_worked
 from src.utilities.time_processor import time_to_str
 from src.models.registration import Registration 
 import cgi
+from src.models.records import Records
 
 class ProcessForm(object):
     """Process the form and checks whether the details are correct"""

@@ -3,6 +3,7 @@
 #####################################################################
 
 import random
+import bcrypt
 
 def gen_row_id():
 	"""_gen_row_id(void) -> return(str)
@@ -12,7 +13,10 @@ def gen_row_id():
 	return '#' + ''.join(['{}'.format(random.randint(1, 9)) for i in xrange(5)])
 
 
-        
+def create_passwd_hash(password):
+     """Takes a str and turns it into a hash"""
+     return bcrypt.hashpw(password, bcrypt.gensalt(log_rounds=14))
+   
 def get_questions():
 	"""
 	"""

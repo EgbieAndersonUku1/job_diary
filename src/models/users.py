@@ -10,6 +10,7 @@ import uuid
 from records import Records
 from src.utilities.time_processor import time_to_str, time_to_units
 from src.utilities.job_processor import get_daily_rate, get_hours_worked
+from src.users.validate_secret_questions import ValidiateSecretQuestions
 
 class User(object):
     """User(class)
@@ -274,12 +275,26 @@ class User(object):
         """
         Records.save_secret_answers(form, self.id)
 
+    def validate_answers(self, form):
+        """validate_answers(obj) -> return(bool)
+
+        Validate the answers for for the secret
+        answers and returns True if the answers
+        are correct and False otherwise.
+
+        :parameters
+           - form: A form object containing the users
+                   secret answers
+        """
+        return ValidiateSecretQuestions(form)
+
+
     def update_password(self, password):
         """update_password
 
         Updates the old password to the new password.
         """
-        Record.update(password)
+        Records.update(password)
 
     def __repr__(self):
         return '{}'.format(self.full_name)

@@ -426,8 +426,10 @@ class Records(object):
                           {'user_id': user_id}]
        db.insert_many(collection='forgotten_password', data=secret_answers)
 
-
-    
+    @classmethod
+    def get_secret_answers(cls, collection, user_name):
+        """ """
+        pass
 
     @staticmethod
     def get_records_in_json(user_id):
