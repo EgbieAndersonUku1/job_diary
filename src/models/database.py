@@ -38,16 +38,14 @@ class DataBase(object):
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
         Inserts data into a collection(table) for a given database.
+
+        :parameters
+            - collection: The table name for the data to be inserted into.
+            - data: The data will be inserted into the collection.
+
         """
         DataBase.DATABASE[collection].insert_one(data)
-
-    @staticmethod
-    def insert_many(collection, data):
-        """insert_many(str) -> return(none)
-        Inserts multiple data into the database.
-        """
-        DataBase.DATABASE[collection].insert_many(data)
-
+        
     @staticmethod
     def search(collections, query, key, limit_num):
         """search(str, value, value, tuple) -> return(cursor)

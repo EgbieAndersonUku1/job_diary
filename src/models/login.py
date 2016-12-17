@@ -1,6 +1,7 @@
 from src.models.database import DataBase as db
 from datetime import datetime
 from uuid import uuid4
+from src.utilities.common import create_passwd_hash, check_passwd_hash
 import bcrypt
 
 class Login(object):
@@ -32,8 +33,8 @@ class Login(object):
         """
         login_obj = self._get_user_login_details()
         if not login_obj:
-            return False # users details does not exist
-        elif bcrypt.hashpw(self.password, login_obj.password) == login_obj.password:
+           return False # users details does not exist
+        elif check_passwd_hash(self.password, login_obj.password):
            return login_obj
         return False 
 

@@ -1,7 +1,6 @@
 import uuid
 from database import DataBase as db
-from src.utilities.common import create_passwd_hash
-import bcrypt
+from src.utilities.common import create_passwd_hash, check_passwd_hash
 import time
 
 class Registration(object):

@@ -5,6 +5,7 @@ from src.users.form import (RegisterForm,
                             ForgottenPasswordForm,
                             NewPasswordForm)
 from job_diary import app
+from src.models.records import Records
 from flask import render_template, session, redirect, url_for, flash, request
 from _user_form_helper import login_user, register_user
 from src.users.process_forms import ProcessForm, ProcessSearchForm
@@ -23,6 +24,7 @@ from src.models.registration import Registration
 from src.users.decorators import login_required, admin_required
 from src.models.database import DataBase
 from flask_paginate import Pagination
+from src.users.validate_secret_questions import ValidiateSecretQuestions
 import json
 import datetime
 import uuid
@@ -308,8 +310,8 @@ def register_secret_questions_answers():
     form = ForgottenPasswordForm()
     if form.validate_on_submit():
         user = User(session['username'], _id=session['user_id'])
-        user.save_secret_answers(form)
-        return redirect('login')        
+        user.save_secret_answers(form, session['username'])
+        return redirect('login')    
     return render_template('forms/secret_questions_registration.html', 
                            form=form, 
                            username=session['username'])
@@ -318,21 +320,29 @@ def register_secret_questions_answers():
 def forgotten_password():
     """
     """
-    form = ForgottenPasswordForm()
+    form  = ForgottenPasswordForm()
+    error = ''
     if form.validate_on_submit():
-        return redirect(url_for('new_password'))
-    return render_template('forms/secret_questions_answers.html', form=form)
+        user_answers = ValidiateSecretQuestions(form)
+        if user_answers.validate_answers():
+            session['username'] = form.username.data.lower()
+            return redirect(url_for('new_password'))
+        error = 'The user was not found'
+    return render_template('forms/secret_questions_answers.html', form=form, error=error)
 
 @app.route('/newpassword', methods=('GET', 'POST'))
 def new_password():
     """
     """
-    
     form = NewPasswordForm()
     if form.validate_on_submit():
-        hash_password = create_passwd_hash(form.password.data)
-        user = User(session['username'], _id=session['user_id'])
-        user.update_password(form.password.data)
+        user = User(session['username'])
+        hash_password = create_passwd_hash(str(form.password.data))
+        user.update_password(session['username'], hash_password)
+        user_id = user.get_user_id(session['username'])
+        print user_id
+        session['user_id'] = user_id
+        session['session_name'] = session['username']
         return redirect('login')
     return render_template('passwords/new_password_form.html', form=form)
 

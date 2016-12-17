@@ -267,13 +267,13 @@ class User(object):
         """
         pass
 
-    def save_secret_answers(self, form):
+    def save_secret_answers(self, form, username):
         """save_secret_answers(obj) -> return(None)
 
         Stores the user secret answers and questions
         to the database.
         """
-        Records.save_secret_answers(form, self.id)
+        Records.save_secret_answers(form, self.id, username)
 
     def validate_answers(self, form):
         """validate_answers(obj) -> return(bool)
@@ -289,12 +289,16 @@ class User(object):
         return ValidiateSecretQuestions(form)
 
 
-    def update_password(self, password):
+    def update_password(self, username, password):
         """update_password
 
         Updates the old password to the new password.
         """
-        Records.update(password)
+        Records.update_password(username, password)
+
+    def get_user_id(self, username):
+        return Records.get_user_id(username)
+
 
     def __repr__(self):
         return '{}'.format(self.full_name)

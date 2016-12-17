@@ -13,7 +13,7 @@ from src.utilities.date_month_day_processor import month_to_num
 from src.utilities.common import gen_row_id
 from src.utilities.job_processor import get_hours_worked
 from database import DataBase as db
-from src.utilities.common import get_questions
+from src.utilities.common import get_questions, create_passwd_hash
 from src.models.registration import Registration 
 
 class Records(object):
@@ -143,6 +143,14 @@ class Records(object):
         return cls._find(query={query_by: {'$gte': date, "$lte":date_two},
                         'user_id':user_id}, 
                          key=('date', -1))
+
+    @classmethod
+    def get_user_id(cls, username):
+        """ """
+        login_obj = cls._find_one(collection='login_credentials',
+                                  query={'username': username.lower()},
+                                  return_obj=False)
+        return login_obj['_id']
     @classmethod
     def _find(cls, query, key):
         """_find(dict, tuple) -> return (list of obj or None)
@@ -161,7 +169,7 @@ class Records(object):
                                                    key=key, 
                                                    limit_num=0)]
     @classmethod
-    def _find_one(cls, query):
+    def _find_one(cls, collection='jobs_details', query=None, return_obj=True):
         """_find_one(dict) -> return(obj or None)
 
         A private helper function that queries the 
@@ -170,10 +178,16 @@ class Records(object):
         None if the parameters are not matched.
 
         :parameters
-           - query  : query to be used to query the database        
+           - query  : query to be used to query the database.
+           - return_obj: If return_obj is set to True returns
+                         an object else returns a dictionary.        
         """
-        data = db.find_one('jobs_details', query)
-        return cls(**data) if data is not None else None
+        data = db.find_one(collection, query)
+        if return_obj and data != None:
+            return cls(**data)
+        elif not return_obj and data != None:
+            return data
+        return None
 
     @classmethod
     def find_by_date_range(cls, date, date_two, user_id):
@@ -236,7 +250,7 @@ class Records(object):
             - year   : The year in which to query
             - user_id: The user ID to use for the query.
         """
-        return cls._find(query={'date': date, 
+        return cls._find(query={'year': int(year), 
                                 'user_id': user_id}, 
                                 key=('date', -1))
        
@@ -362,13 +376,12 @@ class Records(object):
         return cls._find(query={'loc': loc.title(),
                                'user_id':user_id}, 
                                 key=('date', -1))
-   
     @classmethod
-    def update_password(cls, username, password):
+    def update_password(cls, username, new_passwd):
         """
         """
-        query = {"username": username, "password" : password}
-        db.update('login_credentials', 'password', password, query)
+        query = {"username": username, "password" : new_passwd}
+        db.update(collections='login_credentials', key='password', value=new_passwd, query=query)
 
     @classmethod
     def update(cls, row_id, form, update_row=True):
@@ -410,26 +423,23 @@ class Records(object):
                                 key=('date', -1))
 
     @classmethod
-    def save_secret_answers(cls, form, user_id):
+    def save_secret_answers(cls, form, user_id, username):
        """save_secret_answers(obj, str) -> return(None)
 
        Saves the user's secret answers for the forgotten
        password to the database.
        """
-       question_one, question_two, question_three, question_four, question_five = get_questions()
-       hash_passwd = Registration.create_passwd_hash # create a function
-       secret_answers = [ {'username' : hash_passwd(session['username'])},
-                          {question_one: hash_passwd(form.maiden_name.data)},
-                          {question_two: hash_passwd(form.born.data)},
-                          {question_three: hash_passwd(form.school_friend.data)},
-                          {question_four: hash_passwd(form.leisure.data)},
-                          {'user_id': user_id}]
-       db.insert_many(collection='forgotten_password', data=secret_answers)
+       question_one, question_two = get_questions()
+       secret_answers = {'username' : username.lower() ,
+                          question_one: create_passwd_hash(str(form.maiden_name.data.lower())),
+                          question_two: create_passwd_hash(str(form.leisure.data.lower())),
+                          'user_id': user_id }
+       db.insert_one(collection='forgotten_password', data=secret_answers)
 
     @classmethod
-    def get_secret_answers(cls, collection, user_name):
+    def get_secret_answers(cls, collection, query):
         """ """
-        pass
+        return cls._find_one(collection, query, False)
 
     @staticmethod
     def get_records_in_json(user_id):

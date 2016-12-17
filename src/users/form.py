@@ -46,26 +46,18 @@ class SearchForm(Form):
     month_one = StringField('From', [validators.Length(max=17)])
     month_two = StringField('To', [validators.Length(max=17)])
     job_confirmation = StringField('Shift/Job Confirmation (yes/no)', [validators.Length(max=3)])
-
     
 class ForgottenPasswordForm(Form):
     """ForgottenForm(class)
     Allows the user to retreive their forgotten password.
     """
     username = StringField('Enter your login username.', 
-                          [validators.Required(), 
-                          validators.Length(max=80)])
+                          [validators.Length(max=80)])
     maiden_name = StringField('What is your mother maiden name ?', 
                                [validators.Required(), 
                                validators.Length(max=80)])
-    born = StringField('where was you born ?', [validators.Required(), 
-                                                validators.Length(max=80)])
-    school_friend = StringField('Who was your best friend at school ?', [validators.Required(), 
-                                                                        validators.Length(max=80)])
     leisure = StringField('What is your favourite activity ?', [validators.Required(), 
                                                                 validators.Length(max=80)])
-    
-
 class NewPasswordForm(Form):
     """NewPasswordForm(class)
     """
