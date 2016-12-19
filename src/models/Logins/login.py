@@ -1,4 +1,4 @@
-from src.models.database import DataBase as db
+from src.models.Databases.database import DataBase as db
 from datetime import datetime
 from uuid import uuid4
 from src.utilities.common import create_passwd_hash, check_passwd_hash
@@ -19,10 +19,10 @@ class Login(object):
 
     def _get_user_login_details(self):
         """func : _get_user_login_details(None) -> return(obj or None)
-        Helper function: Checks whether the user details 
+        Helper function: Checks whether the user details
         exists returns obj or False otherwise.
         """
-        login_data = db.find_one(collections='login_credentials', 
+        login_data = db.find_one(collections='login_credentials',
                                 query={'username': self.username})
         return False if not login_data else Login(**login_data)
 
@@ -36,7 +36,7 @@ class Login(object):
            return False # users details does not exist
         elif check_passwd_hash(self.password, login_obj.password):
            return login_obj
-        return False 
+        return False
 
     def save(self):
         """Saves the form to the database in json format"""

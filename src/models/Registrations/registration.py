@@ -1,5 +1,5 @@
 import uuid
-from database import DataBase as db
+from src.models.Databases.database import DataBase as db
 from src.utilities.common import create_passwd_hash, check_passwd_hash
 import time
 
@@ -28,8 +28,8 @@ class Registration(object):
         if not self._is_user_name_unique(self.email):
             return False
         self.password = create_passwd_hash(self.password) # hash password
-        self._save() 
-        return True  
+        self._save()
+        return True
 
     def _save(self):
         """Saves the registration details to the database in json format"""
