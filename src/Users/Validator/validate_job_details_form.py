@@ -1,12 +1,11 @@
 from flask import session
-from src.Users.Jobs.job import Job
+from src.Users.user import User
 from datetime import datetime
 from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
 from src.utilities.job_processor import get_hours_worked
 from src.utilities.time_processor import time_to_str
 from src.models.Registrations.registration import Registration
 import cgi
-from src.models.Records.record import Records
 
 class ValidateJobDetailsForm(object):
     """Process the form and checks whether the details are correct"""
@@ -122,26 +121,26 @@ class ValidateJobDetailsForm(object):
                                                            self.end_hours,
                                                            self.end_mins)
         if update:   # if update flag is set to true the row is updated.
-            job = Job(session['username'], start_date, end_date, day, _id=session['user_id'])
-            record = job.add_job_to_records(self._job.job_title,
-                                           self._job.description,
-                                           self._job.location,
-                                           start_time=start_time,
-                                           finish_time=finish_time,
-                                           hourly_rate=self._job.rate,
-                                           is_shift_confirmed=self.is_shift_confirmed,
-                                           update=True)
-            return job.update_job(row_id, record) # update the row within the form
+            user = User(session['username'], start_date, end_date, day, _id=session['user_id'])
+            record = user.add_job_to_records(self._job.job_title,
+                                             self._job.description,
+                                             self._job.location,
+                                             start_time=start_time,
+                                             finish_time=finish_time,
+                                             hourly_rate=self._job.rate,
+                                             is_shift_confirmed=self.is_shift_confirmed,
+                                             update=True)
+            return user.update_job(row_id, record) # update the row within the form
 
-        job = Job(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
-        return job.add_job_to_records(self._job.job_title,
-                                   self._job.description,
-                                   self._job.location,
-                                   start_time=start_time,
-                                   finish_time=finish_time,
-                                   hourly_rate=self._job.rate,
-                                   is_shift_confirmed=self.is_shift_confirmed,
-                                   update=False)
+        user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
+        return user.add_job_to_records(self._job.job_title,
+                                       self._job.description,
+                                       self._job.location,
+                                       start_time=start_time,
+                                       finish_time=finish_time,
+                                       hourly_rate=self._job.rate,
+                                       is_shift_confirmed=self.is_shift_confirmed,
+                                       update=False)
     def _get_json(self):
         """Returns the details of the form in json"""
         return {

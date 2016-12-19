@@ -1,5 +1,5 @@
 from flask import session
-from src.Users.Jobs.job import Job
+from src.Users.user import User
 from datetime import datetime
 from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
 from src.utilities.job_processor import get_hours_worked
@@ -27,7 +27,7 @@ class ValidateSearchForm(object):
         self.val_one = form.month_one.data
         self.val_two = form.month_two.data
         self.confirmation = form.job_confirmation.data
-        self._jobs = Job(session['username'], _id=session['user_id'])
+        self._user = User(session['username'], _id=session['user_id'])
         self.days = {'Mon': 'Monday', 'Tue': 'Tuesday',
                      'Wed': 'Wednesday','Thu':'Thursday',
                      'Fri': 'Friday', 'Sat': 'Saturday',
@@ -46,33 +46,33 @@ class ValidateSearchForm(object):
         """turn the dates into their month representives"""
         if self._is_date_str(val) and self._is_date_str(val2):
             if month_to_num(val[:3].title()) and month_to_num(val2[:3].title()):
-                return self._jobs.get_by_month_range(val, val2)
+                return self._user.get_by_month_range(val, val2)
         elif not self._is_date_str(val) and not self._is_date_str(val2):
-            return self._jobs.get_by_date_range(val, val2)
+            return self._user.get_job_by_date_range(val, val2)
 
     def get_data(self):
         """retreive and process the data from the search form template"""
         if self.job_title:
-            return self._jobs.get_by_job_title(self.job_title.title())
+            return self._user.get_by_job_title(self.job_title.title())
         elif self.location:
-            return self._jobs.get_by_job_location(self.location)
+            return self._user.get_by_job_location(self.location)
         elif self.date:
-            return self._jobs.get_by_job_date(str(self.date))
+            return self._user.get_by_job_date(str(self.date))
         elif self.day and translate_day(self.day):
-            return self._jobs.get_job_by_day(self.days.get(self.day.title()[:3], None))
+            return self._user.get_job_by_day(self.days.get(self.day.title()[:3], None))
         elif self.start_time:
-            return self._jobs.get_job_by_start_time(self._fix_time_str(str(self.start_time)))
+            return self._user.get_job_by_start_time(self._fix_time_str(str(self.start_time)))
         elif self.finish_time:
-            return self._jobs.get_job_by_finish_time(self._fix_time_str(str(self.finish_time)))
+            return self._user.get_job_by_finish_time(self._fix_time_str(str(self.finish_time)))
         elif self.hrs_worked:
-            return self._jobs.get_by_job_hours(self.hrs_worked)
+            return self._user.get_by_job_hours(self.hrs_worked)
         elif self.month and month_to_num(self.month[0:3].title()):
-            return self._jobs.get_job_by_month(str(self.month[0:3].title()))
+            return self._user.get_job_by_month(str(self.month[0:3].title()))
         elif self.daily_rate:
-            return self._jobs.get_by_daily_rate(self.daily_rate)
+            return self._user.get_by_daily_rate(self.daily_rate)
         elif self.val_one and self.val_two:
             return self.process_dates(self.val_one, self.val_two)
         elif self.year:
-            return self._jobs.get_job_by_year(self.year)
+            return self._user.get_job_by_year(self.year)
         elif self.confirmation:
-            return self._jobs.get_job_by_confirmation(self.confirmation.lower())
+            return self._user.get_job_by_confirmation(self.confirmation.lower())

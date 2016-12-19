@@ -6,14 +6,16 @@
 ###############################################################################
 
 from src.models.Records.record import Records
+from src.Users.Jobs.job import Job
 
-class User(object):
+class User(Job):
     """User(class)
     Enables the user to make changes to their account.
     For example change the password, delete the account,
-    etc
+    add jobs, modify or edit jobs or even delete jobs.
     """
-    def __init__(self, username, _id):
+    def __init__(self, username, start_date=None, end_date=None, day=None, _id=None):
+        Job.__init__(self, username, start_date, end_date, day, _id)
         self.id = _id
         self.username = username
 

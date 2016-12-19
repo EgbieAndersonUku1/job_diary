@@ -21,7 +21,6 @@ from flask import render_template, session, redirect, url_for, flash, request
 from _form_helper import login_user, register_user
 from src.Users.Validator.validate_job_details_form import ValidateJobDetailsForm
 from src.utilities.common import create_passwd_hash
-from src.Users.Jobs.job import Job
 from src.Users.user import User
 from src.utilities.job_processor import (get_daily_rate,
                                          get_hours_worked, get_jobs,
@@ -98,10 +97,10 @@ def entry_page(row_ID):
                                 is_shift_confirmed=is_shift_confirmed)
 
     job_form = ValidateJobDetailsForm(title, descr, loc,
-                            hourly_rate, start_date,
-                            end_date, start_hours,
-                            start_mins, end_hours,
-                            end_mins, day, is_shift_confirmed)
+                                      hourly_rate, start_date,
+                                      end_date, start_hours,
+                                      start_mins, end_hours,
+                                      end_mins, day, is_shift_confirmed)
     success, errors, form = job_form.verify_form()
     if success:
         # row_ID comes from the form so False is expressed as unicode
@@ -149,9 +148,9 @@ def reset():
 @login_required
 def success_page(row_id):
    """redirects the user to successful page entry after successful input"""
-   jobs = Job('',_id=session['user_id'])
+   user = User(session['username'],_id=session['user_id'])
    flash('The data below has been added to the database.')
-   return render_template('render_to_user/table.html', rows=jobs.get_job_by_row_id(row_id))
+   return render_template('render_to_user/table.html', rows=user.get_job_by_row_id(row_id))
 
 def _display(html_link, active=False):
     """_display(str, str) -> return(value)
@@ -163,15 +162,9 @@ def _display(html_link, active=False):
 
     Renders the jobs worked or not worked along with the hours and total pay.
     """
-    jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, Job, session, curr_date)
-    jobs = Job(session['username'], _id=session['user_id'])
+    jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, User, session, curr_date)
+    user = User(session['username'], _id=session['user_id'])
     page = request.args.get('page', type=int, default=1)
-    pagination = Pagination(page=page, total=len(worked_jobs),
-                            record_name='history',
-                            per_page=10,
-                            format_total=True,
-                            link_size='lg')
-
     return render_template(html_link,
                            jobs=worked_jobs,
                            date=curr_date,
@@ -185,9 +178,8 @@ def _display(html_link, active=False):
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
-                           delete=jobs.delete_job,
-                           len=len,
-                           pagination=pagination)
+                           delete=user.delete_job,
+                           len=len)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required
@@ -205,15 +197,15 @@ def active_jobs():
 @login_required
 def edit(value):
     """Allows the jobs to be edited"""
-    user_jobs = Job(session['username'], _id=session['user_id'])
-    return render_template('forms/edit_page.html', form=user_jobs.get_job_by_row_id(str(value)))
+    user = User(session['username'], _id=session['user_id'])
+    return render_template('forms/edit_page.html', form=user.get_job_by_row_id(str(value)))
 
 @app.route('/delete/<row>')
 @login_required
 def delete(row):
     """deletes data from the a specific row"""
-    user_jobs = Job(session['username'], _id=session['user_id'])
-    user_jobs.delete_job(row)
+    user = User(session['username'], _id=session['user_id'])
+    user.delete_job(row)
     return redirect(request.referrer)
 
 @app.route('/admin')
@@ -230,12 +222,11 @@ def user_login():
     session['username'] = session['session_name']
     return redirect(url_for('history'))
 
-
 @app.route('/search/permalink/jobs')
 def perma_link():
     """Displays the jobs retreived from the search function"""
 
-    user_jobs = Job(session['username'], _id=session['user_id'])
+    user = User(session['username'], _id=session['user_id'])
     total_hrs, total_pay = [], []
 
     for job in SEARCH_FORM_JOBS: # calculate the hours and wages from the jobs retreived.
@@ -253,7 +244,7 @@ def perma_link():
                             converter=convert_mins_to_hour,
                             when_is_shift_starting=when_is_shift_starting,
                             is_shift_confirmed=is_shift_confirmed,
-                            delete=user_jobs.delete_job,
+                            delete=user.delete_job,
                             len=len)
 
 @app.route('/search', methods=('GET', 'POST'))
@@ -288,8 +279,8 @@ def search():
 @login_required
 def get_json():
     """gets the json representation of the data"""
-    user_jobs = Job(session['username'], _id=session['user_id'])
-    return render_template('json/json.html', records=user_jobs.to_json(), json=json.dumps)
+    user = User(session['username'], _id=session['user_id'])
+    return render_template('json/json.html', records=user.to_json(), json=json.dumps)
 
 @app.route('/home')
 @login_required
@@ -302,7 +293,6 @@ def home():
 def faq():
     """renders the FAQ to the user"""
     return render_template('faq/faq.html')
-
 
 @app.route('/secret/questions', methods=('GET', 'POST'))
 def register_secret_questions_answers():
