@@ -16,7 +16,6 @@ from src.Users.Forms.search_form import SearchForm
 from src.Users.Forms.forgotten_password_form import ForgottenPasswordForm
 from src.Users.Forms.new_password_form import NewPasswordForm
 from job_diary import app
-from src.models.Records.record import Records
 from flask import render_template, session, redirect, url_for, flash, request
 from _form_helper import login_user, register_user
 from src.Users.Validator.validate_job_details_form import ValidateJobDetailsForm

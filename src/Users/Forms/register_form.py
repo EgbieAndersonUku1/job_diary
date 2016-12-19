@@ -9,8 +9,7 @@ from wtforms.fields.html5 import EmailField
 
 class RegisterForm(Form):
     """RegisterForm(class)
-    Allows the user of the application to register their
-    details to the database.
+    Allows a first time user to register their details to the database.
     """
     email     = EmailField('Email', [validators.Required()])
     password  = PasswordField('New Password', [validators.Required(),

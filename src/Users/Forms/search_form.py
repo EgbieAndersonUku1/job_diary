@@ -8,8 +8,8 @@ from wtforms import validators, StringField, DecimalField
 
 class SearchForm(Form):
     """SearchForm(class)
-    Allows the user to search the database based on the job attributes e.g. title,
-    location, month, etc via a form interface.
+    Allows the user to search the database using the job attributes
+    e.g. title, location, month via a GUI input field.
     """
     year = StringField('Year', [validators.Length(max=4)])
     job_title = StringField('Job title',[validators.Length(max=255)])
@@ -24,4 +24,3 @@ class SearchForm(Form):
     month_one = StringField('From', [validators.Length(max=17)])
     month_two = StringField('To', [validators.Length(max=17)])
     job_confirmation = StringField('Shift/Job Confirmation (yes/no)', [validators.Length(max=3)])
-    

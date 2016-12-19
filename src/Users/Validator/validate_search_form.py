@@ -5,7 +5,6 @@ from src.utilities.date_month_day_processor import month_to_num, check_date, tra
 from src.utilities.job_processor import get_hours_worked
 from src.utilities.time_processor import time_to_str
 from src.models.Registrations.registration import Registration
-from src.models.Records.record import Records
 import cgi
 
 # Process the search form.
@@ -57,7 +56,7 @@ class ValidateSearchForm(object):
         elif self.location:
             return self._user.get_by_job_location(self.location)
         elif self.date:
-            return self._user.get_by_job_date(str(self.date))
+            return self._user.get_job_by_date(str(self.date))
         elif self.day and translate_day(self.day):
             return self._user.get_job_by_day(self.days.get(self.day.title()[:3], None))
         elif self.start_time:

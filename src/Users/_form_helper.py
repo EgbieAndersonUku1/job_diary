@@ -35,12 +35,11 @@ def login_user(**kw):
                 msg = 'Incorrect username and password'
         return render_template(kw['template'], form=kw['form'], error=msg)
 
-
 def register_user(**kw):
     """
     Register the user to the application.
 
-    parameters:
+    :parameters
         - obj: either a normal registration or admin registration obj
         - msg: msg to display to the user
         - template: The template to use

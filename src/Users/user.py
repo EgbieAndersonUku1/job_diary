@@ -1,6 +1,5 @@
 ###############################################################################
 # author : Egbie Uku
-#
 # Enables the user to make changes to their account.
 # For example change the password, delete the account, etc
 ###############################################################################
@@ -11,8 +10,8 @@ from src.Users.Jobs.job import Job
 class User(Job):
     """User(class)
     Enables the user to make changes to their account.
-    For example change the password, delete the account,
-    add jobs, modify or edit jobs or even delete jobs.
+    For example change their password, delete their account,
+    add jobs, modify, edit or delete jobs.
     """
     def __init__(self, username, start_date=None, end_date=None, day=None, _id=None):
         Job.__init__(self, username, start_date, end_date, day, _id)

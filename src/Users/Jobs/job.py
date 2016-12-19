@@ -10,7 +10,6 @@ import uuid
 from src.models.Records.record import Records
 from src.utilities.time_processor import time_to_str, time_to_units
 from src.utilities.job_processor import get_daily_rate, get_hours_worked
-from src.Users.Validator.validate_secret_questions import ValidiateSecretQuestions
 
 class Job(object):
     """User(class)
@@ -82,9 +81,11 @@ class Job(object):
            - sort_by : Takes two parameters in the form of
                        either (-1 or 1).
                       -1: Sorts in descending order
-                          e.g. 10, 9, 8, 7....1
+                          e.g. 10, 9, 8, 7,....,1
                        1: Sorts in ascending order
-                          e.g. 1,2,3,4,...10
+                          e.g. 1,2,3,4,...,10.
+            - returns : Returns all jobs objects that
+                        belonging to the user.
         """
         return Records.find_by_user_id(self.id, sort_by)
 
@@ -95,8 +96,10 @@ class Job(object):
         the form of a job object.
 
         :parameters
-           - row_id : Searches the database using a specific
-                      row id and returns a job object.
+           - row_id  : Searches the database using a specific
+                       row id and returns a job object.
+           - returns : Returns a single job object corresponding
+                       to that row id.
         """
         return Records.find_by_row_id(row_id, self.id)
 
@@ -120,9 +123,9 @@ class Job(object):
     def get_job_by_day(self, day):
         """get_by_date_and_day(str) -> return(str)
 
-        Queries the records by a specific day and
-        returns a job object containing all the jobs worked
-        and none otherwise.
+        Queries the records by a specific day.
+        Returns a job object containing all the jobs worked
+        for that date and none otherwise.
 
         :parameters
            - day : Searches the records for all
@@ -138,7 +141,7 @@ class Job(object):
         date. Returns a job object if the parameters
         match and None.
 
-        parameters:
+        :parameters
             - date: The starting date.
             - date_two: The end date.
         """
@@ -166,7 +169,7 @@ class Job(object):
         specific month. Returns a job object if found or None
         otherwise.
 
-        parameters:
+        :parameters
            - month  : The month to query by.
            - returns: A job object if found and none otherwise.
         """
@@ -178,9 +181,10 @@ class Job(object):
         Queries the records based on the time the job starts
         and returns a job object if found or None otherwise.
 
-        parameters:
+        :parameters
            - start_time: The start time to query by.
-                         Time must be entered as hh:mm
+                         Time must be entered as a
+                         string in the form of hh:mm
 
         >>> get_by_start_time('11:00')
         objectID(..)
@@ -192,8 +196,8 @@ class Job(object):
     def get_job_by_finish_time(self, finish_time):
         """get_by_time(str) -> return(obj)
 
-        Queries the records based on the time the job finishs
-        and returns a job object if found or None.
+        Queries the records based on the time the job finishes.
+        Returns a job object if found or None otherwise.
 
         :parameters
            - finish_time: The ending time for the job.
@@ -213,7 +217,7 @@ class Job(object):
         for a job. Returns a job job object if the
         parmameter match or none otherwise.
 
-        parameters:
+        :parameters
            - hours: Queries by hours. Hours must be entered
                     as float. For example 2 hrs and 10 mins
                     must be entered as 2.10.
@@ -242,8 +246,8 @@ class Job(object):
     def get_by_daily_rate(self, daily_rate):
         """get_by_daily_rate(float) -> return(obj or none)
 
-        Queries the records by the total daily rate for the job
-        and returns a job object if found or None.
+        Queries the records by the total daily rate for the job.
+        Returns a job object if found or None.
 
         parameters:
           - daily_rate: The daily rate (float) to query by.
@@ -268,7 +272,7 @@ class Job(object):
         return Records.get_records_in_json(self.id)
 
     def delete_job(self, row_id):
-        """delete_job_row(str) -> return(None)
+        """delete_job_row(str) -> return('')
         Deletes a job row from the database using the row id.
 
         parameters:
@@ -300,7 +304,6 @@ class Job(object):
         >>> get_by_confirmation('yes')
         objectID(...)
         >>> get_by_confirmation('no')
-
         """
         return Records.find_by_confirmation(self.id, confirmation)
 
