@@ -45,7 +45,7 @@ def login():
     return login_user(form=form,
                       session_name='username',
                       redirect_link='home',
-                      template='login_and_registration/login.html',
+                      template='forms/loginRegistrationForm/login.html',
                       index='home')
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -54,7 +54,7 @@ def user_register():
     form = RegisterForm()
     return register_user(form=form,
                          error='username must be unique',
-                         template='login_and_registration/registration.html',
+                         template='forms/loginRegistrationForm/registration.html',
                          redirect_link='home')
 
 @app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
@@ -79,7 +79,7 @@ def entry_page(row_ID):
     is_shift_confirmed = request.form.get('is_shift_confirmed')
 
     if request.method == 'GET':
-        return render_template('forms/job_entry_page.html',
+        return render_template('forms/JobEntryForm/job_entry_page.html',
                                 start_date=start_date,
                                 end_date=end_date,
                                 day=day,
@@ -112,7 +112,7 @@ def entry_page(row_ID):
         else:
             row_id = job_form.process_form(start_date, end_date, day)
         return redirect(url_for('success_page', row_id=row_id))
-    return render_template('forms/job_entry_page.html',
+    return render_template('forms/JobEntryForm/job_entry_page.html',
                            start_date=form.start_date,
                            end_date=form.end_date,
                            job_title=form.job_title,
@@ -149,7 +149,7 @@ def success_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User(session['username'],_id=session['user_id'])
    flash('The data below has been added to the database.')
-   return render_template('permalink/table.html', rows=user.get_job_by_row_id(row_id))
+   return render_template('forms/permalinks/perma_table.html', rows=user.get_job_by_row_id(row_id))
 
 def _display(html_link, active=False):
     """_display(str, str) -> return(value)
@@ -184,20 +184,20 @@ def _display(html_link, active=False):
 @login_required
 def history():
     """renders the entire job history active and none active"""
-    return _display('worked_jobs/jobs_history.html')
+    return _display('forms/worked_jobs/jobs_history.html')
 
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def active_jobs():
     """renders the all jobs that are active (not worked)"""
-    return _display('current_jobs/current_jobs.html', True)
+    return _display('forms/current_jobs/current_jobs.html', True)
 
 @app.route('/job/edit/<value>')
 @login_required
 def edit(value):
     """Allows the jobs to be edited"""
     user = User(session['username'], _id=session['user_id'])
-    return render_template('forms/edit_page.html', form=user.get_job_by_row_id(str(value)))
+    return render_template('forms/EditForm/edit_page.html', form=user.get_job_by_row_id(str(value)))
 
 @app.route('/delete/<row>')
 @login_required
@@ -221,7 +221,7 @@ def user_login():
     session['username'] = session['session_name']
     return redirect(url_for('history'))
 
-@app.route('/search/permalink/jobs')
+@app.route('/search/permalinks/jobs')
 def perma_link():
     """Displays the jobs retreived from the search function"""
 
@@ -231,7 +231,7 @@ def perma_link():
     for job in SEARCH_FORM_JOBS: # calculate the hours and wages from the jobs retreived.
         total_pay.append(float(job.daily_rate))
         total_hrs.append(float(job._hours))
-    return render_template("permalink/perma_link.html",
+    return render_template("forms/permalinks/perma_link.html",
                             jobs=SEARCH_FORM_JOBS,
                             translate=month_to_str,
                             total_pay=sum(total_pay),
@@ -265,8 +265,8 @@ def search():
                 SEARCH_FORM_JOBS = jobs
                 return redirect(url_for('perma_link'))
         error = 'No records find by that entry'
-        return render_template('forms/search_page.html', form=form, error=error)
-    return render_template('forms/search_page.html', form=form)
+        return render_template('forms/SearchPageForm/search_page.html', form=form, error=error)
+    return render_template('forms/SearchPageForm/search_page.html', form=form)
 
 @app.route('/.json')
 @app.route('/home.json')
@@ -300,7 +300,7 @@ def register_secret_questions_answers():
         user = User(session['username'], _id=session['user_id'])
         user.save_secret_answers(form, session['username'])
         return redirect('login')
-    return render_template('forms/secret_questions_registration.html',
+    return render_template('forms/SecretQuestions/secret_questions_registration.html',
                            form=form,
                            username=session['username'])
 
@@ -316,7 +316,7 @@ def forgotten_password():
             session['username'] = form.username.data.lower()
             return redirect(url_for('new_password'))
         error = 'The user was not found'
-    return render_template('forms/secret_questions_answers.html', form=form, error=error)
+    return render_template('forms/SecretQuestions/secret_questions_answers.html', form=form, error=error)
 
 @app.route('/newpassword', methods=('GET', 'POST'))
 def new_password():
@@ -331,4 +331,4 @@ def new_password():
         session['user_id'] = user_id
         session['session_name'] = session['username']
         return redirect('login')
-    return render_template('passwords/new_password_form.html', form=form)
+    return render_template('forms/NewPasswordsForm/new_password_form.html', form=form)
