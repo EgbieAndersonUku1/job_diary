@@ -45,7 +45,7 @@ def login():
     return login_user(form=form,
                       session_name='username',
                       redirect_link='home',
-                      template='forms/loginRegistrationForm/login.html',
+                      template='forms/LoginRegistrationForm/login.html',
                       index='home')
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -54,7 +54,7 @@ def user_register():
     form = RegisterForm()
     return register_user(form=form,
                          error='username must be unique',
-                         template='forms/loginRegistrationForm/registration.html',
+                         template='forms/LoginRegistrationForm/registration.html',
                          redirect_link='home')
 
 @app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
@@ -184,7 +184,7 @@ def _display(html_link, active=False):
 @login_required
 def history():
     """renders the entire job history active and none active"""
-    return _display('forms/worked_jobs/jobs_history.html')
+    return _display('forms/WorkedJobs/jobs_history.html')
 
 @app.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
