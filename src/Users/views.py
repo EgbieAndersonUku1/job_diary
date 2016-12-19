@@ -190,7 +190,7 @@ def history():
 @login_required
 def active_jobs():
     """renders the all jobs that are active (not worked)"""
-    return _display('forms/current_jobs/current_jobs.html', True)
+    return _display('forms/CurrentJobs/current_jobs.html', True)
 
 @app.route('/job/edit/<value>')
 @login_required
