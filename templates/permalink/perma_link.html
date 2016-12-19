@@ -54,7 +54,7 @@
                    Shift/Job confirmation
                   </th>
                   <th>
-                    Shift
+                    Worked Shift/Job
                   </th>
 
                 </tr>
@@ -96,7 +96,7 @@
                          {{ job.finish_time }}
                        </td>
                        <td>
-                          
+
                           {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
                             <div id='confirmed'>
                                 <em><b>{{ jobs[0].is_shift_confirmed.title() }} </b></em>
@@ -108,7 +108,7 @@
                          {% endif %}
                        </td>
                        <td>
-                         
+
                          {% if dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
                              <div id='worked'>
                                   Yes
@@ -121,16 +121,16 @@
                          {% else %}
                             <div id='time'>
                                 <em>{{ when_is_shift_starting(job.date, job.start_time) }}.</em>
-                                
+
                             </div>
                          {% endif %}
-                         
+
                        </td>
                      {% endif %}
 
                 {% endfor %}
                 {% endif %}
-     
+
     </table>
     <center><caption><em>Updates every 60 seconds</em></caption></center>
 {% endblock %}

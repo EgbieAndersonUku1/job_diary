@@ -149,15 +149,15 @@ def success_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User(session['username'],_id=session['user_id'])
    flash('The data below has been added to the database.')
-   return render_template('render_to_user/table.html', rows=user.get_job_by_row_id(row_id))
+   return render_template('permalink/table.html', rows=user.get_job_by_row_id(row_id))
 
 def _display(html_link, active=False):
     """_display(str, str) -> return(value)
 
-    @params:
-    html_link: The link of the page to render
-    active   : Whether the jobs are active e.g not worked yet.
-    returns  : Render object.
+    :parameters
+        - html_link: The link of the page to render
+        - active   : Whether the jobs are active e.g not worked yet.
+        - returns  : Render object.
 
     Renders the jobs worked or not worked along with the hours and total pay.
     """
@@ -231,7 +231,7 @@ def perma_link():
     for job in SEARCH_FORM_JOBS: # calculate the hours and wages from the jobs retreived.
         total_pay.append(float(job.daily_rate))
         total_hrs.append(float(job._hours))
-    return render_template("render_to_user/perma_link.html",
+    return render_template("permalink/perma_link.html",
                             jobs=SEARCH_FORM_JOBS,
                             translate=month_to_str,
                             total_pay=sum(total_pay),
@@ -264,7 +264,6 @@ def search():
                 global SEARCH_FORM_JOBS
                 SEARCH_FORM_JOBS = jobs
                 return redirect(url_for('perma_link'))
-
         error = 'No records find by that entry'
         return render_template('forms/search_page.html', form=form, error=error)
     return render_template('forms/search_page.html', form=form)
