@@ -8,7 +8,7 @@ from src.models.Registrations.registration import Registration
 import cgi
 
 class ValidateJobDetailsForm(object):
-    """Process the form and checks whether the details are correct"""
+    """Process the form and checks whether the job details entered by the user are correct"""
     def __init__(self, job_title, description, location,
                  rate, start_date, end_date, start_hours,
                  start_mins, end_hours, end_mins, day, is_shift_confirmed):
@@ -74,15 +74,44 @@ class ValidateJobDetailsForm(object):
          self._job = None
 
     def verify_form(self):
-        """Verify whether the form has any errors """
+        """verify_form(None) -> return(tuple)
+
+        Verify whether the form itself has any errors.
+        Returns a tuple of three elements. The first element
+        is a boolean(True) if the form has no errors and False
+        otherwise. The second element is a dictionary containing
+        all errors found, an empty dictionary if no errors are found.
+        Finally the third element is the job form containing the user's job
+        object that contains the user's details e.g title, description, etc
+        """
         self._job = ValidateJobDetailsForm(**self._get_json()) # set the obj to the ProcessForm
         if self.errors:
             return False, self.errors, self._job
         return True, self.errors, self._job
 
     def __concatenate_times(self, start_mins, start_hours, end_hours, end_mins):
-    	"""Returns the start and finish time"""
+    	"""__concatenate_times(str, str, str, str) -> return (tuple)
 
+        A private function that takes four parameters the start time hours(hh),
+        the start minutes(mm), the end time hours (hh) and the end time minutes (mm)
+        and concatcenates the the start hours with the start minutes, the
+        end hours with the end minutes. The final result is two string
+        the start time and end time in the form of i.e hh:mm.
+
+        :parameters
+            - start_hours: The hour part of the start time.
+            - start_mins : The minutes part of the start time.
+            - end_hours  : The hour part of the end time.
+            - end_mins   : The minutes part of the end time.
+            - returns    : Returns a tuple where the first element
+                           is the start time and last element is
+                           the finish time.
+
+        >>> start_hours, start_mins = 19, 43
+        >>> end_hours, end_mins = 20, 26
+        >>> __concatenate_times(start_mins, start_hours, end_hours, end_mins)
+        >>> (19:43, 20:26)
+        """
         # guarantees that time is expessed as hh:mm
         if len(start_mins) == 1 and 1 <= int(start_mins) < 10:
     	       start_time  = start_hours + ':0' + start_mins
@@ -101,20 +130,21 @@ class ValidateJobDetailsForm(object):
     	return start_time, finish_time
 
     def process_form(self, start_date, end_date, day, row_id=None, update=False):
-        """process_form(str, str, str, optional str, optional bool) -> return(str)
+        """process_form(str, str, str, optional str, optional bool) -> return(obj or None)
 
-        @params
-        start_date: A start date string
-        end_date  : The end date string
-        day       : The day string
-        returns   : returns a row id if update flag is on and None if update flag is off
+        Processes the form and adds the user job details to the database.
 
-        optional flags
+        :parameters
+           - start_date: A start date string.
+           - end_date  : The end date string.
+           - day       : The day string.
+           - returns   : returns a row id if update flag is on and an object
+                         if update flag is off.
+
+        Optional flags
         -------------
-        row_id: The row id which corresponds to a row in database
-        update: When update is True the row will be updated with new data
-
-        Process the form and adds the user details to the database.
+        row_id: The row id which corresponds to a job row in database.
+        update: When update is True the row will be updated with new data.
         """
         start_time, finish_time = self.__concatenate_times(self.start_mins,
                                                            self.start_hours,
@@ -142,7 +172,7 @@ class ValidateJobDetailsForm(object):
                                        is_shift_confirmed=self.is_shift_confirmed,
                                        update=False)
     def _get_json(self):
-        """Returns the details of the form in json"""
+        """Returns the jobs attributes in json format"""
         return {
             'job_title'   : self.job_title,
             'location'    : self.location,
