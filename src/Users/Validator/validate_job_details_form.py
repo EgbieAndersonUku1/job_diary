@@ -78,11 +78,11 @@ class ValidateJobDetailsForm(object):
 
         Verify whether the form itself has any errors.
         Returns a tuple of three elements. The first element
-        is a boolean(True) if the form has no errors and False
+        is a boolean value True if the form has no errors and False
         otherwise. The second element is a dictionary containing
         all errors found, an empty dictionary if no errors are found.
-        Finally the third element is the job form containing the user's job
-        object that contains the user's details e.g title, description, etc
+        Finally the third element is the job object containing the user's
+        details e.g title, description, etc.
         """
         self._job = ValidateJobDetailsForm(**self._get_json()) # set the obj to the ProcessForm
         if self.errors:
@@ -93,10 +93,10 @@ class ValidateJobDetailsForm(object):
     	"""__concatenate_times(str, str, str, str) -> return (tuple)
 
         A private function that takes four parameters the start time hours(hh),
-        the start minutes(mm), the end time hours (hh) and the end time minutes (mm)
-        and concatcenates the the start hours with the start minutes, the
+        the start minutes(mm), the end time hours (hh) and the end time minutes (mm).
+        It then concatcenates the start hours with the start minutes, the
         end hours with the end minutes. The final result is two string
-        the start time and end time in the form of i.e hh:mm.
+        the start time and end time which has the form hh:mm.
 
         :parameters
             - start_hours: The hour part of the start time.
