@@ -15,7 +15,7 @@ from src.Users.Validator.validate_secret_questions import ValidiateSecretQuestio
 class Job(object):
     """User(class)
     The Job class allows the user to add, modify and
-    delete jobs from database via the records class.
+    delete jobs from database.
     """
     def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
         self.full_name = full_name
