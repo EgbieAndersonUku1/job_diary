@@ -1,9 +1,9 @@
 from flask import session
 from src.Users.user import User
 from datetime import datetime
-from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
-from src.utilities.job_processor import get_hours_worked
-from src.utilities.time_processor import time_to_str
+from src.Users.Validator.validate_date import check_day, check_date
+from src.utilities.converter import month_to_num, time_to_str
+from src.Users.Jobs.job_processor import get_hours_worked
 from src.models.Registrations.registration import Registration
 import cgi
 
@@ -57,7 +57,7 @@ class ValidateSearchForm(object):
             return self._user.get_by_job_location(self.location)
         elif self.date:
             return self._user.get_job_by_date(str(self.date))
-        elif self.day and translate_day(self.day):
+        elif self.day and check_day(self.day):
             return self._user.get_job_by_day(self.days.get(self.day.title()[:3], None))
         elif self.start_time:
             return self._user.get_job_by_start_time(self._fix_time_str(str(self.start_time)))

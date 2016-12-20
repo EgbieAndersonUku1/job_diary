@@ -1,7 +1,8 @@
 ###############################################################################
 # author : Egbie Uku
 # Enables the user to make changes to their account.
-# For example change the password, delete the account, etc
+# For example change the password, delete the account,
+# modify their jobs, etc
 ###############################################################################
 
 from src.models.Records.record import Records

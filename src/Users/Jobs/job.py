@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 ####################################################################
 # Author : Egbie Uku
-# The User class access the database through the
-# record class and returns the attributes of the job such
-# as title, location, etc.
+# The Job class allows the user to add, modify and
+# delete jobs from records.
 ####################################################################
 
 import uuid
 from src.models.Records.record import Records
-from src.utilities.time_processor import time_to_str, time_to_units
-from src.utilities.job_processor import get_daily_rate, get_hours_worked
+from src.utilities.converter import time_to_str, time_to_units
+from src.Users.Jobs.job_processor import get_daily_rate, get_hours_worked
 
 class Job(object):
-    """User(class)
+    """Job(class)
     The Job class allows the user to add, modify and
     delete jobs from database.
     """
