@@ -33,11 +33,13 @@ class ValidateJobDetailsForm(object):
                                                                        start_hours,
                                                                        end_hours,
                                                                        end_mins)
-                    time_to_str(get_hours_worked(start_date, start_time, end_date, finish_time))
+                    time_to_str(get_hours_worked(start_date, start_time,
+                                                end_date,finish_time))
                except UnboundLocalError:
-                  self.errors['next_day'] = """It appears that your shift started the day
-                                               before and ended the next day. In that case
-                                               increment the end date day by one.
+                  self.errors['next_day'] = """It appears that your shift started
+                                               the day before and ended the next
+                                               day. In that case increment the
+                                               end date day by one.
                                            """
                else:
                     self.start_mins, self.start_hours = start_mins, start_hours
@@ -122,12 +124,28 @@ class ValidateJobDetailsForm(object):
         if len(end_mins) == 1 and not int(end_mins):
     	      finish_time = end_hours   + ":00"
         if len(start_hours) == 2 and len(end_hours) == 2:
-            start_time  = start_hours + ':' + start_mins # concatcenate the start hours and mins into hh:mm
+            start_time  = start_hours + ':' + start_mins
             finish_time = end_hours   + ":" + end_mins
         else:
-            start_time  = start_hours + ':' + start_mins # concatcenate the start hours and mins into hh:mm
-            finish_time = end_hours   + ":" + end_mins   # concatcenate the end hours and mins into hh:mm
+            start_time  = start_hours + ':' + start_mins
+            finish_time = end_hours   + ":" + end_mins
     	return start_time, finish_time
+
+    def __process_form_helper(self, user, row_id=None, update=False):
+        """A private helper method that helps the process form method"""
+
+        start_time, finish_time = self.__concatenate_times(self.start_mins,
+                                                           self.start_hours,
+                                                           self.end_hours,
+                                                           self.end_mins)
+        return user.add_job_to_records(self._job.job_title,
+                                       self._job.description,
+                                       self._job.location,
+                                       start_time=start_time,
+                                       finish_time=finish_time,
+                                       hourly_rate=self._job.rate,
+                                       is_shift_confirmed=self.is_shift_confirmed,
+                                       update=update, row_id=row_id)
 
     def process_form(self, start_date, end_date, day, row_id=None, update=False):
         """process_form(str, str, str, optional str, optional bool) -> return(obj or None)
@@ -143,33 +161,17 @@ class ValidateJobDetailsForm(object):
 
         Optional flags
         -------------
-        row_id: The row id which corresponds to a job row in database.
-        update: When update is True the row will be updated with new data.
+        row_id: The row id corresponds to a job row in database.
+        update: When update is True the old row will be updated with new data.
         """
         user = User(session['username'], start_date, end_date,
                     check_day(day), _id=session['user_id'])
-        start_time, finish_time = self.__concatenate_times(self.start_mins,
-                                                           self.start_hours,
-                                                           self.end_hours,
-                                                           self.end_mins)
-        if update:
-            return user.add_job_to_records(self._job.job_title,
-                                             self._job.description,
-                                             self._job.location,
-                                             start_time=start_time,
-                                             finish_time=finish_time,
-                                             hourly_rate=self._job.rate,
-                                             is_shift_confirmed=self.is_shift_confirmed,
-                                             update=True, row_id=row_id)
 
-        return user.add_job_to_records(self._job.job_title,
-                                       self._job.description,
-                                       self._job.location,
-                                       start_time=start_time,
-                                       finish_time=finish_time,
-                                       hourly_rate=self._job.rate,
-                                       is_shift_confirmed=self.is_shift_confirmed,
-                                       update=False)
+        if update:
+            return self.__process_form_helper(user, row_id, True)
+        return self.__process_form_helper(user=user, update=False)
+
+
     def _get_json(self):
         """Returns the jobs attributes in json format"""
         return {
