@@ -22,13 +22,13 @@ class Job(object):
         self.id = uuid.uuid4().hex if _id is None else _id
 
     def add_job_to_records(self, job_title, descr, loc, **kwargs):
-        """add_job_to_records(str, str, str, **kwargs) -> Returns(obj or str)
+        """add_job_to_records(str, str, str, **kwargs) -> Returns(str)
 
         This method has two primary functions. The first allows the user to
         add/save the new job's details e.g title, description, job location to
-        the database.
+        the database table.
 
-        The second function allows the user to overide existing data within a
+        The second function allows the user to overide an existing data within a
         particular job row or field with new job information. This can only be
         done when the flag update is set to True.
 
@@ -73,12 +73,12 @@ class Job(object):
                         _id=None,
                         is_shift_confirmed=kwargs['is_shift_confirmed'])
 
-        # if update is set to False save the new job details to the database.
+        # if update is set to False saves the new job details to the database.
         # if update is set to True overide an existing job row with the new
         # job details.
         if not kwargs['update']:
             return record.save()
-        return record.update(kwargs['row_id'], record)
+        return self.update_job(kwargs['row_id'], record)
 
     def get_all_jobs(self, sort_by=-1):
         """get_by_user_id(int) -> return(list[objID(..),..,objID(..)])
