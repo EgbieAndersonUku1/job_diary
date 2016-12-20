@@ -146,31 +146,29 @@ class ValidateJobDetailsForm(object):
         row_id: The row id which corresponds to a job row in database.
         update: When update is True the row will be updated with new data.
         """
+        user = User(session['username'], start_date, end_date,
+                    check_day(day), _id=session['user_id'])
         start_time, finish_time = self.__concatenate_times(self.start_mins,
                                                            self.start_hours,
                                                            self.end_hours,
                                                            self.end_mins)
-        if update:   # if update flag is set to true the row is updated.
-            user = User(session['username'], start_date, end_date, day, _id=session['user_id'])
-            record = user.add_job_to_records(self._job.job_title,
+        if update:
+            return user.add_job_to_records(self._job.job_title,
                                              self._job.description,
                                              self._job.location,
                                              start_time=start_time,
                                              finish_time=finish_time,
                                              hourly_rate=self._job.rate,
                                              is_shift_confirmed=self.is_shift_confirmed,
-                                             update=True)
-            return user.update_job(row_id, record) # update the row within the form
+                                             update=True, row_id=row_id)
 
-        user = User(session['username'], start_date, end_date, check_day(day), _id=session['user_id']) # create a user object and add details to database
         return user.add_job_to_records(self._job.job_title,
                                        self._job.description,
                                        self._job.location,
                                        start_time=start_time,
                                        finish_time=finish_time,
                                        hourly_rate=self._job.rate,
-                                       is_shift_confirmed=self.is_shift_confirmed,
-                                       update=False)
+                                       is_shift_confirmed=self.is_shift_confirmed)
     def _get_json(self):
         """Returns the jobs attributes in json format"""
         return {

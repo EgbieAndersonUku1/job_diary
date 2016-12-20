@@ -386,7 +386,7 @@ class Records(object):
 
     @classmethod
     def update(cls, row_id, form, update_row=True):
-        """update_row(str, form_obj) -> return(str)
+        """update(str, form_obj) -> return(str)
 
         Updates the old row with new information.
 

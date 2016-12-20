@@ -46,6 +46,8 @@ class Job(object):
             - hourly_rate: The hourly rate for the job.
             - update     : (Optional) parameter, if set to True, updates
                             the row with with the new jobs info.
+            - row_id     : Default (None). To be used when updating a
+                           specific row.
             - confirm_shift: States whether the shift has been confirmed.
                             Returns True if the shift has been confirmed
                             and False otherwise.
@@ -71,8 +73,13 @@ class Job(object):
                          row_id=None,
                         _id=None,
                         is_shift_confirmed=kwargs['is_shift_confirmed'])
-        # return obj if update is true else row id
-        return (record.save() if not kwargs['update'] else record)
+
+        # if update is set to False save the new job details to the database.
+        # if update is set to True overide an existing job row with the new
+        # job details.
+        if not kwargs['update']:
+            return record.save()
+        return record.update(kwargs['row_id'], record)
 
     def get_all_jobs(self, sort_by=-1):
         """get_by_user_id(int) -> return(list[objID(..),..,objID(..)])
