@@ -29,11 +29,10 @@ class Job(object):
         the database.
 
         The second function allows the user to overide existing data within a
-        particular job row with new job information. This can only be done when
-        the flag update is set to True.
+        particular job row or field with new job information. This can only be
+        done when the flag update is set to True.
 
-        Returns a new job object if update flag is set to true or a row id
-        if update is false.
+        Returns a row id.
 
         :parameters
             - job_title  : The title of the job.

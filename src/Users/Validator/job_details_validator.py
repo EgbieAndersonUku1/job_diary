@@ -168,7 +168,8 @@ class ValidateJobDetailsForm(object):
                                        start_time=start_time,
                                        finish_time=finish_time,
                                        hourly_rate=self._job.rate,
-                                       is_shift_confirmed=self.is_shift_confirmed)
+                                       is_shift_confirmed=self.is_shift_confirmed,
+                                       update=False)
     def _get_json(self):
         """Returns the jobs attributes in json format"""
         return {
