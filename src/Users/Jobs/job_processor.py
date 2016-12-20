@@ -162,7 +162,6 @@ def get_hours_worked(start_date, start_time, finish_date, finish_time):
     >>> get_hours_worked('1/1/2016', '9:23', 1/4/2016', '21:26')
     (83, 43)
     """
-
     difference = _return_time_passed(start_date, start_time, finish_date, finish_time)
     # if start date is not equal to the finish date it means that user
     # started on one day and finish on another day

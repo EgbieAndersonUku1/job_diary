@@ -24,13 +24,14 @@ class Job(object):
     def add_job_to_records(self, job_title, descr, loc, **kwargs):
         """add_job_to_records(str, str, str, **kwargs) -> Returns(str)
 
-        This method has two primary functions. The first allows the user to
-        add/save the new job's details e.g title, description, job location to
-        the database table.
+        This method has two primary functions. The first allows
+        the user to add/save the new job's details e.g title,
+        description, job location to the database table.
 
-        The second function allows the user to overide an existing data within a
-        particular job row or field with new job information. This can only be
-        done when the flag update is set to True.
+        The second function allows the user to overide an existing
+        data within a particular job row or field with new job
+        information. This can only be done when the flag update is
+        set to True.
 
         Returns a row id.
 
@@ -43,13 +44,18 @@ class Job(object):
             - start_time : The time shift/job starting.
             - finish_time: The time shift/job is ending
             - hourly_rate: The hourly rate for the job.
-            - update     : (Optional) parameter, if set to True, updates
-                            the row with with the new jobs info.
-            - row_id     : Default (None). To be used when updating a
-                           specific row.
-            - confirm_shift: States whether the shift has been confirmed.
-                            Returns True if the shift has been confirmed
-                            and False otherwise.
+            - update     : (Optional: default False) parameter.
+                           If set to True allows updating to be done
+                           on a specific row.
+            - row_id     : Default (None). The row_id is a string
+                           which represents a specific job row in
+                           the database.
+                           When the 'update' flag is set to True
+                           the old data in that row is overidden
+                           with any new data.
+            - confirm_shift: States whether the shift/job has been
+                            confirmed. Returns True if the shift/job
+                            has been confirmed and False otherwise.
         """
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
@@ -70,7 +76,6 @@ class Job(object):
                          month=self.start_date.split('-')[1], # get the month part
                          year=None,
                          row_id=None,
-                        _id=None,
                         is_shift_confirmed=kwargs['is_shift_confirmed'])
 
         # if update is set to False saves the new job details to the database.
@@ -92,6 +97,7 @@ class Job(object):
                        1: Sorts in ascending order  .e.g. 1,2,3,4 ,..., 10.
         """
         return Records.find_by_user_id(self.id, sort_by)
+        _id=None,
 
     def get_job_by_row_id(self, row_id):
         """get_job_by_row_id(None) -> return(list[obj(..)])
@@ -215,8 +221,8 @@ class Job(object):
         """get_by_hours(float) -> return(list[obj(..),..,obj(..)] or none)
 
         Queries the records based on the number of hours worked for a job.
-        Returns a list of job objects that match the given parameter. Return None
-        if not found.
+        Returns a list of job objects that match the given parameter.
+        Return None if not found.
 
         :parameters
            - hours: Queries by hours. Hours must be entered as float.
