@@ -11,9 +11,8 @@ from src.utilities.converter import time_to_str, time_to_units
 from src.Users.Jobs.job_processor import get_daily_rate, get_hours_worked
 
 class Job(object):
-    """Job(class)
-    The Job class allows the user to add, modify and
-    delete jobs from database.
+    """Job:(Class).
+    The Job class allows the user to add, modify and delete jobs from database.
     """
     def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
         self.full_name = full_name
@@ -23,14 +22,18 @@ class Job(object):
         self.id = uuid.uuid4().hex if _id is None else _id
 
     def add_job_to_records(self, job_title, descr, loc, **kwargs):
-        """add_job_to_records(str, str, str, str, str, str) -> return(obj or str)
+        """add_job_to_records(str, str, str, **kwargs) -> Returns(obj or str)
 
-        This method has two functions. The first primary function
-        allows the user to save the job's attributes e.g title, description,
-        job location to the database.
+        This method has two primary functions. The first allows the user to
+        add/save the new job's details e.g title, description, job location to
+        the database.
 
-        The second function allows the user to overide an existing
-        job row with new information when the flag update to True.
+        The second function allows the user to overide existing data within a
+        particular job row with new job information. This can only be done when
+        the flag update is set to True.
+
+        Returns a new job object if update flag is set to true or a row id
+        if update is false.
 
         :parameters
             - job_title  : The title of the job.
@@ -68,31 +71,26 @@ class Job(object):
                          row_id=None,
                         _id=None,
                         is_shift_confirmed=kwargs['is_shift_confirmed'])
-        return (record.save() if not kwargs['update'] else record) # return obj if update is true else row id
+        # return obj if update is true else row id
+        return (record.save() if not kwargs['update'] else record)
 
     def get_all_jobs(self, sort_by=-1):
-        """get_by_user_id(int) -> return(obj)
+        """get_by_user_id(int) -> return(list[objID(..),..,objID(..)])
 
-        Returns all the jobs the users has worked
-        in descending order (default).
+        Returns a list all the jobs worked by the users in descending
+        order (default mode).
 
         :parameters
-           - sort_by : Takes two parameters in the form of
-                       either (-1 or 1).
-                      -1: Sorts in descending order
-                          e.g. 10, 9, 8, 7,....,1
-                       1: Sorts in ascending order
-                          e.g. 1,2,3,4,...,10.
-            - returns : Returns all jobs objects that
-                        belonging to the user.
+           - sort_by : Takes two parameters in the form of either (-1 or 1).
+                      -1: Sorts in descending order .e.g. 10, 9, 8, 7,....,1.
+                       1: Sorts in ascending order  .e.g. 1,2,3,4 ,..., 10.
         """
         return Records.find_by_user_id(self.id, sort_by)
 
     def get_job_by_row_id(self, row_id):
-        """get_job_by_row_id(None) -> return(obj)
+        """get_job_by_row_id(None) -> return(list[obj(..)])
 
-        Returns a specific job row from the database in
-        the form of a job object.
+        Returns a list containing a single job object.
 
         :parameters
            - row_id  : Searches the database using a specific
@@ -103,15 +101,18 @@ class Job(object):
         return Records.find_by_row_id(row_id, self.id)
 
     def get_job_by_year(self, year):
-        """Returns all the jobs worked in that year"""
+        """get_job_by_year(str) -> returns(list[obj(..), .., obj(..)] or None))
+
+        Returns a list of job objects worked in that year or None if
+        not found.
+        """
         return Records.find_by_year(year, self.id)
 
     def get_job_by_date(self, date):
-        """get_job_by_date(str) -> return(str)
+        """get_job_by_date(str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records and returns all jobs
-        based on a specific date. Returns a job
-        object if found and None if not found.
+        Queries the records by a single date and returns a list of job object
+        based on that specific date. Returns None if not found.
 
         :parameters
            - date : Returns all the jobs worked for
@@ -122,68 +123,62 @@ class Job(object):
     def get_job_by_day(self, day):
         """get_by_date_and_day(str) -> return(str)
 
-        Queries the records by a specific day.
-        Returns a job object containing all the jobs worked
-        for that date and none otherwise.
+        Queries the records by a specific day. Returns a list of job objects
+        containing all jobs found for that day and none otherwise.
 
         :parameters
-           - day : Searches the records for all
-                   jobs worked on that day.
+           - day : Searches the records for all jobs worked on that specific day.
         """
         return Records.find_by_day(day, self.id)
 
-    def get_job_by_date_range(self, date, date_two):
-        """get_by_date_range(str, str) -> return(obj or None)
+    def get_job_by_date_range(self, date_one, date_two):
+        """get_by_date_range(str, str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records for days worked between two dates
-        which include the starting date and the ending
-        date. Returns a job object if the parameters
-        match and None.
+        Queries the records for the days worked between two dates. This includes
+        both the starting and ending date. Returns a list of job objects if the
+        parameters match and None otherwise.
 
         :parameters
-            - date: The starting date.
+            - date_one: The starting date.
             - date_two: The end date.
         """
-        return Records.find_by_date_range(date, date_two, self.id)
+        return Records.find_by_date_range(date_one, date_two, self.id)
 
     def get_job_by_month_range(self, month_one, month_two):
-        """get_job_by_month_range(str, str) -> return(obj or None)
+        """get_job_by_month_range(str, str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Return the all jobs worked between two given months.
+        Returns a list containing all jobs worked between two given months.
         The jobs include the ones worked for the starting month (month_one)
-        and the ones for the ending month (month_two).
+        and the ones for the ending month (month_two). None is returned if
+        no jobs are found.
 
         :parameters
             - month_one: The first month to query by.
             - month_two: The second month to query by.
-            - returns  : Returns None or an object if
-                         parameters are found.
          """
         return Records.find_by_month_range(month_one, month_two, self.id)
 
     def get_job_by_month(self, month):
-        """get_by_month(str) -> return(None or obj)
+        """get_by_month(str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records for all jobs worked for a
-        specific month. Returns a job object if found or None
-        otherwise.
+        Queries the records for all jobs worked for a specific month.
+        Returns a list of job objects containing all jobs worked for that month
+        and None otherwise.
 
         :parameters
            - month  : The month to query by.
-           - returns: A job object if found and none otherwise.
         """
         return Records.find_by_month(month, self.id)
 
     def get_job_by_start_time(self, start_time):
-        """get_job_by_start_time(str) -> return(obj or None)
+        """get_job_by_start_time(str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records based on the time the job starts
-        and returns a job object if found or None otherwise.
+        Queries the records based on the time the job starts and returns a list
+        of job objects that match the parameter or None otherwise.
 
         :parameters
-           - start_time: The start time to query by.
-                         Time must be entered as a
-                         string in the form of hh:mm
+           - start_time: The start time to query by. Time must be entered as a
+                         string in the form of hh:mm.
 
         >>> get_by_start_time('11:00')
         objectID(..)
@@ -193,10 +188,11 @@ class Job(object):
         return Records.find_by_start_time(start_time, self.id)
 
     def get_job_by_finish_time(self, finish_time):
-        """get_by_time(str) -> return(obj)
+        """get_by_time(str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records based on the time the job finishes.
-        Returns a job object if found or None otherwise.
+        Queries the records based on the time the job finishes.Returns a list of
+        job objects that match the given parameter. None is returned if the
+        parameters are not matched.
 
         :parameters
            - finish_time: The ending time for the job.
@@ -210,16 +206,15 @@ class Job(object):
         return Records.find_by_finish_time(finish_time, self.id)
 
     def get_by_job_hours(self, hours):
-        """get_by_hours(float) -> return(obj or None)
+        """get_by_hours(float) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records based on the number of hours
-        for a job. Returns a job job object if the
-        parmameter match or none otherwise.
+        Queries the records based on the number of hours worked for a job.
+        Returns a list of job objects that match the given parameter. Return None
+        if not found.
 
         :parameters
-           - hours: Queries by hours. Hours must be entered
-                    as float. For example 2 hrs and 10 mins
-                    must be entered as 2.10.
+           - hours: Queries by hours. Hours must be entered as float.
+                    For example 2 hrs and 10 mins must be entered as 2.10.
 
         >>> get_by_hours(2.10)
         objectID(...)
@@ -227,54 +222,47 @@ class Job(object):
         return Records.find_by_hours_worked(hours, self.id)
 
     def get_by_job_title(self, job_title):
-        """get_by_job_title(str) -> return(obj or none)
+        """get_by_job_title(str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records by the job title and returns
-        a list of job object that match the job title.
-        Returns None if the parameter for the jobs are
-        not matched and job object otherwise.
+        Queries the records by the job title and returns a list of job objects
+        that match the parameter job title. Returns None if not matched.
 
-        parameters:
+        :parameters
            - job_title : The job title to query by.
-           - returns   : A list of job obect that match
-                         the job title parameter or
-                         none otherwise.
         """
         return Records.find_by_job_title(job_title, self.id)
 
     def get_by_daily_rate(self, daily_rate):
-        """get_by_daily_rate(float) -> return(obj or none)
+        """get_by_daily_rate(float) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records by the total daily rate for the job.
-        Returns a job object if found or None.
+        Queries the records by the daily rate. Returns a list of job objects
+        if found or None otherwise.
 
-        parameters:
+        :parameters
           - daily_rate: The daily rate (float) to query by.
-          - returns   : A job object if found or None otherwise.
         """
         return Records.find_by_daily_rate(float(daily_rate), user_id=self.id)
 
     def get_by_job_location(self, loc):
-        """get_by_location(str) -> return(obj)
+        """get_by_location(str) -> return(list[obj(..),..,obj(..)] or none)
 
-        Queries the records by location of the job
-        and returns a job object if found or None.
+        Queries by job location and returns a list of job object
+        if found or None otherwise.
 
-        parameters:
+        :parameters
             - loc: The location of job to query by.
-            - returns: An object if found and none otherwise.
         """
         return Records.find_by_location(loc, self.id)
 
     def to_json(self):
-        """return the records in json format."""
+        """return all jobs belonging to user in json format."""
         return Records.get_records_in_json(self.id)
 
     def delete_job(self, row_id):
         """delete_job_row(str) -> return('')
         Deletes a job row from the database using the row id.
 
-        parameters:
+        :parameters
            - row_id: The job row to delete.
         """
         Records.delete_row(row_id, self.id)
@@ -283,19 +271,22 @@ class Job(object):
     def update_job(self, row_id, form):
         """update_job_row(str, obj) -> return(None)
 
-        Updates a particular job row with new information.
+        Updates a particular job row with new job information.
+        Returns None.
 
-        parameters:
+        :parameters
            - row_id: The row id assigin to a job within a database.
-           - form  : Form object contains the new
-                     data to update the old row with.
+           - form  : Form contains the new job information which would be used
+                     to overide the information in the old row id with the
+                     information from the new the form object.
         """
         return Records.update(row_id, form)
 
     def get_job_by_confirmation(self, confirmation):
-        """get_job_by_confirmation(str) -> return(obj or None)
+        """get_job_by_confirmation(str) -> return(list[obj(..),..,obj(..)])
 
-        Returns all job that either confirmed or not confirmed.
+        Depending on the confirmation given by the user returns
+        a list of job object that are either confirmed or not confirmed.
 
         :parameters
            - confirmation : either 'yes' or 'no'.
@@ -307,9 +298,8 @@ class Job(object):
         return Records.find_by_confirmation(self.id, confirmation)
 
     def send_jobs_by_email(self):
-        """Sends the latest jobs by email. That is
-        jobs that are starting on the current working
-        day.
+        """Sends the latest jobs by email. That is jobs that are starting on
+        the current working day.
         """
         pass
 
