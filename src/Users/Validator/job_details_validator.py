@@ -166,11 +166,9 @@ class ValidateJobDetailsForm(object):
         """
         user = User(session['username'], start_date, end_date,
                     check_day(day), _id=session['user_id'])
-
         if update:
             return self.__process_form_helper(user, row_id, True)
         return self.__process_form_helper(user=user, update=False)
-
 
     def _get_json(self):
         """Returns the jobs attributes in json format"""
