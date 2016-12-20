@@ -21,9 +21,9 @@
         </div>
 
         {% elif len(jobs) == 1 %}
-               <!--if the shift is not confirmed before the start of that shift then the 
+               <!--if the shift is not confirmed before the start of that shift then the
                application assumes that that user shift is cancelled.
-              
+
                -->
                {% if not is_shift_confirmed(jobs[0], delete) %}
                     <div id='error_msg'>
@@ -119,7 +119,7 @@
                       {% endif %}
                </td>
                 {% endif %}
-      
+
       {% else %}
               <h2>Dates of days and times worked </h2>
               <center>
@@ -226,6 +226,6 @@
             {% endfor %}
             {% endif %}
       </table>
-      
+
 {% endblock %}
 </tr>

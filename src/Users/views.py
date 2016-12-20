@@ -2,14 +2,14 @@
 import json
 import datetime
 import uuid
-from src.utilities.time_processor import time_to_str, convert_mins_to_hour
-from src.utilities.date_month_day_processor import month_to_str
+from src.utilities.converter import time_to_str, mins_to_hours, month_to_str
 from src.models.Registrations.registration import Registration
 from src.models.Databases.database import DataBase
 from src.Users.decorators import login_required, admin_required
 from flask_paginate import Pagination
-from src.Users.Validator.validate_secret_questions import ValidiateSecretQuestions
-from src.Users.Validator.validate_search_form import ValidateSearchForm
+from src.Users.Validator.secret_question_validator import ValidiateSecretQuestions
+from src.Users.Validator.search_form_validator import ValidateSearchForm
+from src.Users.Validator.job_details_validator import ValidateJobDetailsForm
 from src.Users.Forms.register_form import RegisterForm
 from src.Users.Forms.login_form import LoginForm
 from src.Users.Forms.search_form import SearchForm
@@ -18,8 +18,7 @@ from src.Users.Forms.new_password_form import NewPasswordForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, flash, request
 from _form_helper import login_user, register_user
-from src.Users.Validator.validate_job_details_form import ValidateJobDetailsForm
-from src.utilities.common import create_passwd_hash
+from src.utilities.password_hasher import create_passwd_hash
 from src.Users.user import User
 from src.utilities.job_processor import (get_daily_rate,
                                          get_hours_worked, get_jobs,
@@ -173,7 +172,7 @@ def _display(html_link, active=False):
                            total_hrs=round(sum(total_hrs), 2),
                            active=active,
                            is_shift_over=is_shift_over,
-                           converter=convert_mins_to_hour,
+                           converter=mins_to_hours,
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
@@ -240,7 +239,7 @@ def perma_link():
                             dt=datetime.datetime.strptime,
                             is_shift_now=is_shift_now,
                             is_shift_over=is_shift_over,
-                            converter=convert_mins_to_hour,
+                            converter=mins_to_hours,
                             when_is_shift_starting=when_is_shift_starting,
                             is_shift_confirmed=is_shift_confirmed,
                             delete=user.delete_job,

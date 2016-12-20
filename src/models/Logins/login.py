@@ -1,8 +1,7 @@
 from src.models.Databases.database import DataBase as db
 from datetime import datetime
 from uuid import uuid4
-from src.utilities.common import create_passwd_hash, check_passwd_hash
-import bcrypt
+from src.utilities.password_hasher import create_passwd_hash, check_passwd_hash
 
 class Login(object):
     """Login(class) -> Checks whether the user registration is valid.

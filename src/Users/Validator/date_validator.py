@@ -6,6 +6,16 @@ def is_leap_year(year):
     """Determine whether a year is a leap year."""
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
 
+def check_day(day):
+    """Verifies whether the day entered by the user is an
+    actually day.
+    """
+    days = {'mon': 'Monday',    'tue' : 'Tuesday',
+           'wed' : 'Wednesday', 'thu' : 'Thursday',
+               'fri' : 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
+    return days.get(str(day[0:3]).lower())
+
+
 def check_date(date):
     """check_date(str) -> return(tuple)
 
@@ -21,7 +31,7 @@ def check_date(date):
        - date: The date to check.
        - returns: A tuple consisting of two elements. If the date is correct
                   the first and second element which consists of the boolean value
-                  True is returned to the user. 
+                  True is returned to the user.
                   Otherwise returns two parts, where the first element
                   is False and the second element is an error message.
 
@@ -45,16 +55,16 @@ def check_date(date):
     >>.
     >>> check_date(''20167-13-31')
     (False, 'incorrect date format try YYYY-MM-DD')
-    
+
     """
     if date != None:
         if len(date) == 10 :
-             if '-' in date and date.count('-') == 2: # ensures that date 
+             if '-' in date and date.count('-') == 2: # ensures that date
                  year, month, day = date.split('-')
                  if year.isdigit() and len(year) == 4:
                      if month.isdigit() and len(month) == 2 and  0 < int(month) <= 12:
                         if day.isdigit() and len(day) == 2:
-  
+
                             thirty_days = [4, 6, 9, 11] # April(4), June(6), september(9) and November(11) months with 30 days
                             day = int(day)
                             month = int(month)
@@ -82,50 +92,3 @@ def check_date(date):
              return False, 'replace the delimeter with "-" e.g. YYYY-MM-DD'
         return False, 'incorrect date format try YYYY-MM-DD'
     return False, 'date cannot be None'
-
-def translate_day(day):
-
-    days = {'mon': 'Monday',    'tue' : 'Tuesday',
-           'wed' : 'Wednesday', 'thu' : 'Thursday',
-               'fri' : 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
-    return days.get(str(day[0:3]).lower())
-
-def month_to_str(month_num):
-    '''month_to_str(str) -> return(str)
-
-    Takes a number between 1-12 and returns a month name
-    corresponding to that number. e.g 1-> January, 
-    2 -> Feb, etc.
-
-    parameters:
-       -month_num : Month in number e.g 1-12.
-
-    >>> month_two_num(01)
-    'January'
-    '''
-    months = {'1': 'January', '2':'February', '3':'March',
-                  '4': 'April',   '5':'May',      '6': 'June',
-                  '7':'July',     '8': 'August',  '9':'September',
-              '10':'October', '11':'November','12': 'December'}
-    return months.get(str(month_num), None)
-
-def month_to_num(month):
-    """month_to_num(str) -> return(str)
-
-    Takes a month and if the first three characters
-    match returns the month number corresponding to 
-    that month.
-
-    e.g 1 -> January, 2 -> Feb, etc.
-
-    parameters:
-       -month : the month
-
-    >>> month_two_num(January)
-    '01'
-    """
-    months = {'Jan':'1', 'Feb':'2', 'Mar':'3',
-                  'Apr':'4', 'May':'5', 'Jun':'6',
-                  'Jul':'7', 'Aug':'8', 'Sep':'9',
-              'Oct':'10','Nov':'11','Dec':'12'}
-    return months.get(month.title(), None)

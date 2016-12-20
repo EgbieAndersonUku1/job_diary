@@ -1,7 +1,5 @@
 from src.models.Records.record import Records
-from src.utilities.common import (check_passwd_hash,
-	                              create_passwd_hash,
-	                              get_questions)
+from src.utilities.password_hasher import check_passwd_hash, create_passwd_hash
 
 class ValidiateSecretQuestions(object):
 	"""ValidiateSecretQuestions(class)

@@ -1,9 +1,9 @@
 from flask import session
 from src.Users.user import User
 from datetime import datetime
-from src.utilities.date_month_day_processor import month_to_num, check_date, translate_day
-from src.utilities.job_processor import get_hours_worked
-from src.utilities.time_processor import time_to_str
+from src.Users.Validator.date_validator import check_date, check_day
+from src.utilities.converter import month_to_num, time_to_str
+from src.Users.Jobs.job_processor import get_hours_worked
 from src.models.Registrations.registration import Registration
 import cgi
 
@@ -43,7 +43,7 @@ class ValidateJobDetailsForm(object):
                     self.start_mins, self.start_hours = start_mins, start_hours
                     self.end_mins, self.end_hours = end_mins, end_hours
 
-         if not day or translate_day(day[:3]) == None:
+         if not day or check_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
          if not job_title:
              self.errors['job_title'] = 'The job title field must be not be empty'
@@ -162,7 +162,7 @@ class ValidateJobDetailsForm(object):
                                              update=True)
             return user.update_job(row_id, record) # update the row within the form
 
-        user = User(session['username'], start_date, end_date, translate_day(day), _id=session['user_id']) # create a user object and add details to database
+        user = User(session['username'], start_date, end_date, check_day(day), _id=session['user_id']) # create a user object and add details to database
         return user.add_job_to_records(self._job.job_title,
                                        self._job.description,
                                        self._job.location,

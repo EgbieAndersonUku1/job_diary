@@ -9,11 +9,12 @@ import os
 import random
 import time
 import uuid
-from src.utilities.date_month_day_processor import month_to_num
+from src.utilities.converter import month_to_num
 from src.utilities.common import gen_row_id
-from src.utilities.job_processor import get_hours_worked
+from src.Users.Jobs.job_processor import get_hours_worked
 from src.models.Databases.database import DataBase as db
-from src.utilities.common import get_questions, create_passwd_hash
+from src.utilities.password_hasher import create_passwd_hash
+from src.utilities.common import get_questions
 from src.models.Registrations.registration import Registration
 
 class Records(object):
