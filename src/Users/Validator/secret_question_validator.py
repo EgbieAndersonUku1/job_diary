@@ -1,3 +1,7 @@
+#####################################################################
+# Author = Egbie Uku
+#####################################################################
+
 from src.Users.Models.Records.records import Record
 from src.utilities.password_hasher import check_passwd_hash, create_passwd_hash
 

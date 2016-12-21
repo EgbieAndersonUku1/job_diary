@@ -1,3 +1,8 @@
+#####################################################################
+# Author = Egbie Uku
+# Login Class
+#####################################################################
+
 from src.Users.Models.Databases.database import DataBase as db
 from datetime import datetime
 from uuid import uuid4

@@ -1,3 +1,7 @@
+#####################################################################
+# Author = Egbie Uku
+#####################################################################
+
 from flask import session
 from src.Users.user import User
 from datetime import datetime

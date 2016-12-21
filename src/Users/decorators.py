@@ -1,3 +1,7 @@
+#####################################################################
+# Author = Egbie Uku
+#####################################################################
+
 from functools import wraps
 from flask import session, request, url_for, redirect
 
