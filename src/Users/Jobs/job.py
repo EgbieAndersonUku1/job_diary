@@ -6,7 +6,7 @@
 ###################################################################
 
 import uuid
-from src.models.Records.record import Records
+from src.Users.Models.Records.record import Records
 from src.utilities.converter import time_to_str, time_to_units
 from src.Users.Jobs.job_processor import get_daily_rate, get_hours_worked
 
@@ -76,7 +76,8 @@ class Job(object):
                          month=self.start_date.split('-')[1], # get the month part
                          year=None,
                          row_id=None,
-                        is_shift_confirmed=kwargs['is_shift_confirmed'])
+                         is_shift_confirmed=kwargs['is_shift_confirmed'],
+                         _id=self.id)
 
         # if update is set to False saves the new job details to the database.
         # if update is set to True overide an existing job row with the new

@@ -12,10 +12,10 @@ import uuid
 from src.utilities.converter import month_to_num
 from src.utilities.common import gen_row_id
 from src.Users.Jobs.job_processor import get_hours_worked
-from src.models.Databases.database import DataBase as db
 from src.utilities.password_hasher import create_passwd_hash
 from src.utilities.common import get_questions
-from src.models.Registrations.registration import Registration
+from src.Users.Models.Registrations.registration import Registration
+from src.Users.Models.Databases.database import DataBase as db
 
 class Records(object):
     """Records (class)

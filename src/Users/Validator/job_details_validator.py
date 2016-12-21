@@ -4,7 +4,7 @@ from datetime import datetime
 from src.Users.Validator.date_validator import check_date, check_day
 from src.utilities.converter import month_to_num, time_to_str
 from src.Users.Jobs.job_processor import get_hours_worked
-from src.models.Registrations.registration import Registration
+from src.Users.Models.Registrations.registration import Registration
 import cgi
 
 class ValidateJobDetailsForm(object):

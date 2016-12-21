@@ -1,5 +1,5 @@
 import uuid
-from src.models.Databases.database import DataBase as db
+from src.Users.Models.Databases.database import DataBase as db
 from src.utilities.password_hasher import create_passwd_hash, check_passwd_hash
 import time
 

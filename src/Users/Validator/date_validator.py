@@ -15,16 +15,15 @@ def check_day(day):
                'fri' : 'Friday',    'sat' : 'Saturday',  'sun' : 'Sunday'}
     return days.get(str(day[0:3]).lower())
 
-
 def check_date(date):
     """check_date(str) -> return(tuple)
 
     Takes a date and checks :
        - if the date is in the format  YYYY-MM-DD.
        - whether the month is between 1-12.
-       - whether the days in the month is April, June, September and November are 30 days.
+       - whether the days in the month April, June, September and November are 30 days.
        -  whether they are 28 days in February and 29 days if it is a leap year.
-       - And finally checks whether they the rest of the months that are not has February,
+       - And finally checks whether they the rest of the months that are not February,
          April, June, September and November has 31 days.
 
      :parameters:

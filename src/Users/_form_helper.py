@@ -1,6 +1,6 @@
 from flask import render_template, redirect, session, url_for, request, abort
-from src.models.Logins.login import Login
-from src.models.Registrations.registration import Registration
+from src.Users.Models.Logins.login import Login
+from src.Users.Models.Registrations.registration import Registration
 
 def login_user(**kw):
     """

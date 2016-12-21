@@ -5,7 +5,7 @@
 # modify their jobs, etc
 ###############################################################################
 
-from src.models.Records.record import Records
+from src.Users.Models.Records.record import Records
 from src.Users.Jobs.job import Job
 
 class User(Job):

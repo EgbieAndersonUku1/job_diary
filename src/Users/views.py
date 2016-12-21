@@ -3,8 +3,8 @@ import json
 import datetime
 import uuid
 from src.utilities.converter import time_to_str, mins_to_hours, month_to_str
-from src.models.Registrations.registration import Registration
-from src.models.Databases.database import DataBase
+from src.Users.Models.Registrations.registration import Registration
+from src.Users.Models.Databases.database import DataBase
 from src.Users.decorators import login_required, admin_required
 from flask_paginate import Pagination
 from src.Users.Validator.secret_question_validator import ValidiateSecretQuestions

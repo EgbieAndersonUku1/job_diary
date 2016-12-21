@@ -1,4 +1,4 @@
-from src.models.Records.record import Records
+from src.Users.Models.Records.record import Records
 from src.utilities.password_hasher import check_passwd_hash, create_passwd_hash
 
 class ValidiateSecretQuestions(object):
