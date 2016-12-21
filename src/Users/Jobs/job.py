@@ -41,21 +41,20 @@ class Job(object):
             - loc        : The location for the job.
 
         :kwargs arguments
-            - start_time : The time shift/job starting.
+            - start_time : The time shift/job is starting.
             - finish_time: The time shift/job is ending
             - hourly_rate: The hourly rate for the job.
             - update     : (Optional: default False) parameter.
                            If set to True allows updating to be done
                            on a specific row.
-            - row_id     : Default (None). The row_id is a string
-                           the database.
+            - row_id     : Default (None). The row_id is a string.
                            When the 'update' flag is set to True
-                           the old data in that row is overidden
-                           with any new data.
-            - confirm_shift: States whether the shift/job has been
-                            confirmed. Returns True if the shift/job
-                            which represents a specific job row in
-                            has been confirmed and False otherwise.
+                           and coupled with the row_id enables
+                           the old data in that row to be overidden
+                           with new data.
+            - confirm_shift: A parameter which is either 'yes' or 'no'.
+                            Yes meaning the job was confirmed and no
+                            meaning the job was not confirmed.
         """
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
