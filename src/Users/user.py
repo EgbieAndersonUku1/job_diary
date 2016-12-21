@@ -5,7 +5,7 @@
 # modify their jobs, etc
 ###############################################################################
 
-from src.Users.Models.Records.record import Records
+from src.Users.Models.Records.records import Record
 from src.Users.Jobs.job import Job
 
 class User(Job):
@@ -25,7 +25,7 @@ class User(Job):
         Stores the user secret answers and questions
         to the database.
         """
-        Records.save_secret_answers(form, self.id, username)
+        Record.save_secret_answers(form, self.id, username)
 
     def validate_answers(self, form):
         """validate_answers(obj) -> return(bool)
@@ -45,10 +45,10 @@ class User(Job):
 
         Updates the old password to the new password.
         """
-        Records.update_password(username, password)
+        Record.update_password(username, password)
 
     def get_user_id(self, username):
-        return Records.get_user_id(username)
+        return Record.get_user_id(username)
 
     def de_activate_account(self):
         """alllows the person to delete their

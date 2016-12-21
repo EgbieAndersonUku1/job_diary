@@ -6,7 +6,7 @@
 ###################################################################
 
 import uuid
-from src.Users.Models.Records.record import Records
+from src.Users.Models.Records.records import Record
 from src.utilities.converter import time_to_str, time_to_units
 from src.Users.Jobs.job_processor import get_daily_rate, get_hours_worked
 
@@ -48,19 +48,19 @@ class Job(object):
                            If set to True allows updating to be done
                            on a specific row.
             - row_id     : Default (None). The row_id is a string
-                           which represents a specific job row in
                            the database.
                            When the 'update' flag is set to True
                            the old data in that row is overidden
                            with any new data.
             - confirm_shift: States whether the shift/job has been
                             confirmed. Returns True if the shift/job
+                            which represents a specific job row in
                             has been confirmed and False otherwise.
         """
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
         units  = time_to_units(hours)    # convert hours worked to units
-        record = Records(job_title=job_title,
+        record = Record(job_title=job_title,
                          descr=descr,
                          loc=loc,
                          start_time=kwargs['start_time'],
@@ -76,8 +76,8 @@ class Job(object):
                          month=self.start_date.split('-')[1], # get the month part
                          year=None,
                          row_id=None,
-                         is_shift_confirmed=kwargs['is_shift_confirmed'],
-                         _id=self.id)
+                         _id=None,
+                         is_shift_confirmed=kwargs['is_shift_confirmed'])
 
         # if update is set to False saves the new job details to the database.
         # if update is set to True overide an existing job row with the new
@@ -97,7 +97,7 @@ class Job(object):
                       -1: Sorts in descending order .e.g. 10, 9, 8, 7,....,1.
                        1: Sorts in ascending order  .e.g. 1,2,3,4 ,..., 10.
         """
-        return Records.find_by_user_id(self.id, sort_by)
+        return Record.find_by_user_id(self.id, sort_by)
         _id=None,
 
     def get_job_by_row_id(self, row_id):
@@ -111,7 +111,7 @@ class Job(object):
            - returns : Returns a single job object corresponding
                        to that row id.
         """
-        return Records.find_by_row_id(row_id, self.id)
+        return Record.find_by_row_id(row_id, self.id)
 
     def get_job_by_year(self, year):
         """get_job_by_year(str) -> returns(list[obj(..), .., obj(..)] or None))
@@ -119,7 +119,7 @@ class Job(object):
         Returns a list of job objects worked in that year or None if
         not found.
         """
-        return Records.find_by_year(year, self.id)
+        return Record.find_by_year(year, self.id)
 
     def get_job_by_date(self, date):
         """get_job_by_date(str) -> return(list[obj(..),..,obj(..)] or none)
@@ -131,7 +131,7 @@ class Job(object):
            - date : Returns all the jobs worked for
                     that specific date.
         """
-        return Records.find_by_date(date, self.id)
+        return Record.find_by_date(date, self.id)
 
     def get_job_by_day(self, day):
         """get_by_date_and_day(str) -> return(str)
@@ -142,7 +142,7 @@ class Job(object):
         :parameters
            - day : Searches the records for all jobs worked on that specific day.
         """
-        return Records.find_by_day(day, self.id)
+        return Record.find_by_day(day, self.id)
 
     def get_job_by_date_range(self, date_one, date_two):
         """get_by_date_range(str, str) -> return(list[obj(..),..,obj(..)] or none)
@@ -155,7 +155,7 @@ class Job(object):
             - date_one: The starting date.
             - date_two: The end date.
         """
-        return Records.find_by_date_range(date_one, date_two, self.id)
+        return Record.find_by_date_range(date_one, date_two, self.id)
 
     def get_job_by_month_range(self, month_one, month_two):
         """get_job_by_month_range(str, str) -> return(list[obj(..),..,obj(..)] or none)
@@ -169,7 +169,7 @@ class Job(object):
             - month_one: The first month to query by.
             - month_two: The second month to query by.
          """
-        return Records.find_by_month_range(month_one, month_two, self.id)
+        return Record.find_by_month_range(month_one, month_two, self.id)
 
     def get_job_by_month(self, month):
         """get_by_month(str) -> return(list[obj(..),..,obj(..)] or none)
@@ -181,7 +181,7 @@ class Job(object):
         :parameters
            - month  : The month to query by.
         """
-        return Records.find_by_month(month, self.id)
+        return Record.find_by_month(month, self.id)
 
     def get_job_by_start_time(self, start_time):
         """get_job_by_start_time(str) -> return(list[obj(..),..,obj(..)] or none)
@@ -198,7 +198,7 @@ class Job(object):
         >>> get_by_start_time('12:00')
         None
         """
-        return Records.find_by_start_time(start_time, self.id)
+        return Record.find_by_start_time(start_time, self.id)
 
     def get_job_by_finish_time(self, finish_time):
         """get_by_time(str) -> return(list[obj(..),..,obj(..)] or none)
@@ -216,7 +216,7 @@ class Job(object):
         >>> get_by_finish_time('12:00')
         None
         """
-        return Records.find_by_finish_time(finish_time, self.id)
+        return Record.find_by_finish_time(finish_time, self.id)
 
     def get_by_job_hours(self, hours):
         """get_by_hours(float) -> return(list[obj(..),..,obj(..)] or none)
@@ -232,7 +232,7 @@ class Job(object):
         >>> get_by_hours(2.10)
         objectID(...)
         """
-        return Records.find_by_hours_worked(hours, self.id)
+        return Record.find_by_hours_worked(hours, self.id)
 
     def get_by_job_title(self, job_title):
         """get_by_job_title(str) -> return(list[obj(..),..,obj(..)] or none)
@@ -243,7 +243,7 @@ class Job(object):
         :parameters
            - job_title : The job title to query by.
         """
-        return Records.find_by_job_title(job_title, self.id)
+        return Record.find_by_job_title(job_title, self.id)
 
     def get_by_daily_rate(self, daily_rate):
         """get_by_daily_rate(float) -> return(list[obj(..),..,obj(..)] or none)
@@ -254,7 +254,7 @@ class Job(object):
         :parameters
           - daily_rate: The daily rate (float) to query by.
         """
-        return Records.find_by_daily_rate(float(daily_rate), user_id=self.id)
+        return Record.find_by_daily_rate(float(daily_rate), user_id=self.id)
 
     def get_by_job_location(self, loc):
         """get_by_location(str) -> return(list[obj(..),..,obj(..)] or none)
@@ -265,11 +265,11 @@ class Job(object):
         :parameters
             - loc: The location of job to query by.
         """
-        return Records.find_by_location(loc, self.id)
+        return Record.find_by_location(loc, self.id)
 
     def to_json(self):
         """return all jobs belonging to user in json format."""
-        return Records.get_records_in_json(self.id)
+        return Record.get_records_in_json(self.id)
 
     def delete_job(self, row_id):
         """delete_job_row(str) -> return('')
@@ -278,7 +278,7 @@ class Job(object):
         :parameters
            - row_id: The job row to delete.
         """
-        Records.delete_row(row_id, self.id)
+        Record.delete_row(row_id, self.id)
         return ''
 
     def update_job(self, row_id, form):
@@ -293,7 +293,7 @@ class Job(object):
                      to overide the information in the old row id with the
                      information from the new the form object.
         """
-        return Records.update(row_id, form)
+        return Record.update(row_id, form)
 
     def get_job_by_confirmation(self, confirmation):
         """get_job_by_confirmation(str) -> return(list[obj(..),..,obj(..)])
@@ -308,7 +308,7 @@ class Job(object):
         objectID(...)
         >>> get_by_confirmation('no')
         """
-        return Records.find_by_confirmation(self.id, confirmation)
+        return Record.find_by_confirmation(self.id, confirmation)
 
     def send_jobs_by_email(self):
         """Sends the latest jobs by email. That is jobs that are starting on

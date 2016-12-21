@@ -29,7 +29,7 @@ class ValidateJobDetailsForm(object):
                # checks whether the user's shift/job started on the day before
                # and finished on the next day.
                try:
-                    start_time, finish_time = self.__concatenate_times(start_mins,
+                    start_time, finish_time = self.__join_hour_and_minute(start_mins,
                                                                        start_hours,
                                                                        end_hours,
                                                                        end_mins)
@@ -91,8 +91,8 @@ class ValidateJobDetailsForm(object):
             return False, self.errors, self._job
         return True, self.errors, self._job
 
-    def __concatenate_times(self, start_mins, start_hours, end_hours, end_mins):
-    	"""__concatenate_times(str, str, str, str) -> return (tuple)
+    def __join_hour_and_minute(self, start_mins, start_hours, end_hours, end_mins):
+    	"""__join_hour_and_minute(str, str, str, str) -> return (tuple)
 
         A private function that takes four parameters the start time hours(hh),
         the start minutes(mm), the end time hours (hh) and the end time minutes (mm).
@@ -111,7 +111,7 @@ class ValidateJobDetailsForm(object):
 
         >>> start_hours, start_mins = 19, 43
         >>> end_hours, end_mins = 20, 26
-        >>> __concatenate_times(start_mins, start_hours, end_hours, end_mins)
+        >>> __join_hour_and_minute(start_mins, start_hours, end_hours, end_mins)
         >>> (19:43, 20:26)
         """
         # guarantees that time is expessed as hh:mm
@@ -134,10 +134,10 @@ class ValidateJobDetailsForm(object):
     def __process_form_helper(self, user, row_id=None, update=False):
         """A private helper method that helps the process form method"""
 
-        start_time, finish_time = self.__concatenate_times(self.start_mins,
-                                                           self.start_hours,
-                                                           self.end_hours,
-                                                           self.end_mins)
+        start_time, finish_time = self.__join_hour_and_minute(self.start_mins,
+                                                              self.start_hours,
+                                                              self.end_hours,
+                                                              self.end_mins)
         return user.add_job_to_records(self._job.job_title,
                                        self._job.description,
                                        self._job.location,
@@ -153,11 +153,10 @@ class ValidateJobDetailsForm(object):
         Processes the form and adds the user job details to the database.
 
         :parameters
-           - start_date: A start date string.
-           - end_date  : The end date string.
-           - day       : The day string.
-           - returns   : returns a row id if update flag is on and an object
-                         if update flag is off.
+           - start_date: The start date for the job (string).
+           - end_date  : The ending date for the job (string).
+           - day       : The day of the week the job is on.
+           - returns   : Returns a row id.
 
         Optional flags
         -------------
@@ -168,7 +167,7 @@ class ValidateJobDetailsForm(object):
                     check_day(day), _id=session['user_id'])
         if update:
             return self.__process_form_helper(user, row_id, True)
-        return self.__process_form_helper(user=user, update=False)
+        return self.__process_form_helper(user)
 
     def _get_json(self):
         """Returns the jobs attributes in json format"""

@@ -1,4 +1,4 @@
-from src.Users.Models.Records.record import Records
+from src.Users.Models.Records.records import Record
 from src.utilities.password_hasher import check_passwd_hash, create_passwd_hash
 
 class ValidiateSecretQuestions(object):
@@ -14,7 +14,7 @@ class ValidiateSecretQuestions(object):
 		if not self.form.username.data:
 			return None
 		query = {'username' : str(self.form.username.data.lower())}
-		return Records.get_secret_answers(collection='forgotten_password', query=query)
+		return Record.get_secret_answers(collection='forgotten_password', query=query)
 
 	def validate_answers(self):
 	    """Validiates the users secret answers"""

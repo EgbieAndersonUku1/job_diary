@@ -17,7 +17,7 @@ from src.utilities.common import get_questions
 from src.Users.Models.Registrations.registration import Registration
 from src.Users.Models.Databases.database import DataBase as db
 
-class Records(object):
+class Record(object):
     """Records (class)
     The Records class directly access the database to either delete,
     retreive or update the job record details of the user.
