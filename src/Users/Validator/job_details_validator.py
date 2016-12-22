@@ -89,7 +89,7 @@ class ValidateJobDetailsForm(object):
         return True, self.errors, self._job
 
     def __join_hour_and_minute(self, hour, minute):
-    	"""__join_hour_and_minute(str, str, str, str) -> return (str)
+    	"""__join_hour_and_minute(str, str) -> return (str)
 
         A private function that takes two parameters the hour (hh),
         part of the time and  minute (mm) part of the time.
