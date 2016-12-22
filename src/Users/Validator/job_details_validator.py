@@ -104,6 +104,9 @@ class ValidateJobDetailsForm(object):
         >>> hour, minute = 19, 43
         >>> __join_hour_and_minute(hour, minute)
         >>> 19:43
+        >>> hour, minute = 1, 3
+        >>> __join_hour_and_minute(hour, minute)
+        >>> 01:03
         """
         # guarantees that time is expessed as hh:mm
         if len(str(hour)) == 1:
