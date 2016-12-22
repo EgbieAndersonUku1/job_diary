@@ -56,7 +56,6 @@ def check_date(date):
     >>.
     >>> check_date(''20167-13-31')
     (False, 'incorrect date format try YYYY-MM-DD')
-
     """
     if date != None:
         if len(date) == 10 :
@@ -69,7 +68,7 @@ def check_date(date):
                             day, month = int(day), int(month)
                             if month == 2:  # check whether the month is feb and whether is a leap year
                                 if is_leap_year(int(year)):
-                                    if 1 <= day <= 28:
+                                    if 1 <= day <= 29:
                                         return True, True
                                     return False, 'They can only be 29 days in February since this year is a leap year.'
                                 elif not is_leap_year(year):
@@ -84,7 +83,6 @@ def check_date(date):
                                     if 1 <= day <= 31:
                                         return True, True
                                     return False, 'check month ' + month_to_str(month) +' as it has only 31 days.'
-
                         return False,'day must be in the format of DD'
                      return False, 'month must be in the format of MM and between 1-12'
                  return False, 'year must be YYYY'
