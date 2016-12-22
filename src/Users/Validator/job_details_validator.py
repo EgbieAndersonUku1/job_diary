@@ -78,7 +78,7 @@ class ValidateJobDetailsForm(object):
 
         A private function that takes two parameters the hour (hh),
         part of the time and  minute (mm) part of the time.
-        It then concatcenates the hour part with the minute.
+        And then concatcenates the hour part with the minute.
         The final result is a single string in the form hh:mm.
 
         :parameters

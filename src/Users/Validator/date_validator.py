@@ -2,6 +2,8 @@
 # Author = Egbie Uku
 #####################################################################
 
+from src.utilities.converter import month_to_str
+
 def is_leap_year(year):
     """Determine whether a year is a leap year."""
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
@@ -63,10 +65,8 @@ def check_date(date):
                  if year.isdigit() and len(year) == 4:
                      if month.isdigit() and len(month) == 2 and  0 < int(month) <= 12:
                         if day.isdigit() and len(day) == 2:
-
                             thirty_days = [4, 6, 9, 11] # April(4), June(6), september(9) and November(11) months with 30 days
-                            day = int(day)
-                            month = int(month)
+                            day, month = int(day), int(month)
                             if month == 2:  # check whether the month is feb and whether is a leap year
                                 if is_leap_year(int(year)):
                                     if 1 <= day <= 28:
