@@ -24,3 +24,5 @@ Run program
 
 Terminal 1  python run.py runserver
 Terminal 2  sudo mongod
+
+Finally run 127.0.0.1:5000

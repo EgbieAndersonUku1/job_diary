@@ -6,8 +6,11 @@ from functools import wraps
 from flask import session, request, url_for, redirect
 
 def _login_helper(func, user='username'):
-    """helper function that checks whether user is logged in"""
-
+    """helper function that adds additional help to the
+    login required function and admin required function.
+    The help comes in the form of checking whether the user
+    is logged in as a user or as an admin.
+    """
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if session.get(user) is None:

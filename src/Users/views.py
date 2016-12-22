@@ -107,9 +107,10 @@ def entry_page(row_ID):
                                       end_mins)
     success, errors, form = job_form.verify_form()
     if success:
-        # row_ID comes from the form so False is expressed as unicode
+        # row_ID comes from the form so False is expressed as a unicode
         # instead of a boolean. This make the if-condition
-        # if row_ID == False always True instead of False.
+        # if row_ID == False or not(row_ID) == False always equals True instead
+        # of False.
         # By expressing it as str(row_ID) != 'False' it makes the if-statement
         # False when the string returned is not equal to the string False.
         if str(row_ID) != 'False': # means the row should be updated.
@@ -117,6 +118,8 @@ def entry_page(row_ID):
         else:
             row_id = job_form.process_form(start_date, end_date, day)
         return redirect(url_for('success_page', row_id=row_id))
+
+    # Render the details already entered by the user.
     return render_template('forms/JobEntryForm/job_entry_page.html',
                            start_date=form.start_date,
                            end_date=form.end_date,

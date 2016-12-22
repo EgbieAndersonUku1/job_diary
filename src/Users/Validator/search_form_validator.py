@@ -41,7 +41,7 @@ class ValidateSearchForm(object):
         return date.isalpha()
 
     def process_dates(self, val, val2):
-        """turn the dates into their month representives"""
+        """Takes two date values and processes them."""
         if self._is_date_str(val) and self._is_date_str(val2):
             if month_to_num(val[:3].title()) and month_to_num(val2[:3].title()):
                 return self._user.get_by_month_range(val, val2)

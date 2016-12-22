@@ -1,3 +1,7 @@
+###############################################################################
+# Author = Egbie Uku
+###############################################################################
+
 from flask import render_template, redirect, session, url_for, request, abort
 from src.Users.Models.Logins.login import Login
 from src.Users.Models.Registrations.registration import Registration
@@ -50,9 +54,10 @@ def register_user(**kw):
     if request.method == 'GET' and request.args.get('next'):
         session['next'] = request.args.get('next')
 
-    # if form validates attempt to register users details.
-    # if registration is successful meaning username is unique log user in
-    # login the user in to application and encode their details in a session.
+    # if the form validates attempt to register the users details.
+    # If registration is successful meaning that username is unique and
+    # the password is acceptable log user into the application.
+    # Finally encode their details in a session.
     if kw['form'].validate_on_submit():
         user = Registration(kw['form'].email.data, kw['form'].password.data)
         if user.register():

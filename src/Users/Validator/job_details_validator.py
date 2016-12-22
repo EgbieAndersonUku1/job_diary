@@ -73,22 +73,6 @@ class ValidateJobDetailsForm(object):
          self.is_shift_confirmed = cgi.escape(is_shift_confirmed)
          self._job = None
 
-    def verify_form(self):
-        """verify_form(None) -> return(tuple)
-
-        Verify whether the form itself has any errors.
-        Returns a tuple of three elements. The first element
-        is a boolean value True if the form has no errors and False
-        otherwise. The second element is a dictionary containing
-        all errors found, an empty dictionary if no errors are found.
-        details e.g title, description, etc. Finally the third element
-        is the job object containing the user's
-        """
-        self._job = ValidateJobDetailsForm(**self._get_json()) # set the obj to the ProcessForm
-        if self.errors:
-            return False, self.errors, self._job
-        return True, self.errors, self._job
-
     def __join_hour_and_minute(self, hour, minute):
     	"""__join_hour_and_minute(str, str) -> return(str)
 
@@ -114,6 +98,22 @@ class ValidateJobDetailsForm(object):
         if len(str(minute)) == 1:
             minute = '0{}'.format(minute)
         return '{}:{}'.format(hour, minute)
+
+    def verify_form(self):
+        """verify_form(None) -> return(tuple)
+
+        Verify whether the form itself has any errors.
+        Returns a tuple of three elements. The first element
+        is a boolean value True if the form has no errors and False
+        otherwise. The second element is a dictionary containing
+        all errors found, an empty dictionary if no errors are found.
+        details e.g title, description, etc. Finally the third element
+        is the job object containing the user's
+        """
+        self._job = ValidateJobDetailsForm(**self._get_json()) # set the obj to the ProcessForm
+        if self.errors:
+            return False, self.errors, self._job
+        return True, self.errors, self._job
 
     def __process_form_helper(self, user, row_id=None, update=False):
         """A private helper method that helps the process form method"""
