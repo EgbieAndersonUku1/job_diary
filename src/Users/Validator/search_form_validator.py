@@ -37,8 +37,6 @@ class ValidateSearchForm(object):
                      'Sun': 'Sunday'}
 
     def _fix_time_str(self, time):
-        # Temporay solution until I fix it: Databases stores values that end in 00 as 0
-        # due to one of my modules e.g 17:00 is stored as 17:0
         return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
 
     def _is_date_str(self, date):

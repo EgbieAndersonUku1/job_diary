@@ -1,7 +1,3 @@
-#####################################################################
-# Author = Egbie Uku
-#####################################################################
-
 from flask import session
 from src.Users.user import User
 from datetime import datetime
@@ -33,12 +29,9 @@ class ValidateJobDetailsForm(object):
                # checks whether the user's shift/job started on the day before
                # and finished on the next day.
                try:
-                    start_time, finish_time = self.__join_hour_and_minute(start_mins,
-                                                                       start_hours,
-                                                                       end_hours,
-                                                                       end_mins)
-                    time_to_str(get_hours_worked(start_date, start_time,
-                                                end_date,finish_time))
+                    self.start_time = self.__join_hour_and_minute(start_hours, start_mins)
+                    self.finish_time = self.__join_hour_and_minute(end_hours, end_mins)
+                    time_to_str(get_hours_worked(start_date, self.start_time, end_date, self.finish_time))
                except UnboundLocalError:
                   self.errors['next_day'] = """It appears that your shift started
                                                the day before and ended the next
@@ -95,58 +88,37 @@ class ValidateJobDetailsForm(object):
             return False, self.errors, self._job
         return True, self.errors, self._job
 
-    def __join_hour_and_minute(self, start_mins, start_hours, end_hours, end_mins):
-    	"""__join_hour_and_minute(str, str, str, str) -> return (tuple)
+    def __join_hour_and_minute(self, hour, minute):
+    	"""__join_hour_and_minute(str, str, str, str) -> return (str)
 
-        A private function that takes four parameters the start time hours(hh),
-        the start minutes(mm), the end time hours (hh) and the end time minutes (mm).
-        It then concatcenates the start hours with the start minutes, the
-        end hours with the end minutes. The final result is two string
-        the start time and end time which has the form hh:mm.
+        A private function that takes two parameters the hour (hh),
+        part of the time and  minute (mm) part of the time.
+        It then concatcenates the hour part with the minute.
+        The final result is a single string in the form hh:mm.
 
         :parameters
-            - start_hours: The hour part of the start time.
-            - start_mins : The minutes part of the start time.
-            - end_hours  : The hour part of the end time.
-            - end_mins   : The minutes part of the end time.
-            - returns    : Returns a tuple where the first element
-                           is the start time and last element is
-                           the finish time.
+            - hour: The hour part of the time.
+            - minute : The minutes part the time.
 
-        >>> start_hours, start_mins = 19, 43
-        >>> end_hours, end_mins = 20, 26
-        >>> __join_hour_and_minute(start_mins, start_hours, end_hours, end_mins)
-        >>> (19:43, 20:26)
+        >>> hour, minute = 19, 43
+        >>> __join_hour_and_minute(hour, minute)
+        >>> 19:43
         """
         # guarantees that time is expessed as hh:mm
-        if len(start_mins) == 1 and 1 <= int(start_mins) < 10:
-    	       start_time  = start_hours + ':0' + start_mins
-        if len(end_mins) == 1 and 1 <= int(end_mins) < 10:
-    	      finish_time = end_hours   + ":0" + end_mins
-        if len(start_mins) == 1 and not int(start_mins):
-            start_time  = start_hours + ':00'
-        if len(end_mins) == 1 and not int(end_mins):
-    	      finish_time = end_hours   + ":00"
-        if len(start_hours) == 2 and len(end_hours) == 2:
-            start_time  = start_hours + ':' + start_mins
-            finish_time = end_hours   + ":" + end_mins
-        else:
-            start_time  = start_hours + ':' + start_mins
-            finish_time = end_hours   + ":" + end_mins
-    	return start_time, finish_time
+        if len(str(hour)) == 1:
+            hour = '0{}'.format(hour)
+        if len(str(minute)) == 1:
+            minute = '0{}'.format(minute)
+        return '{}:{}'.format(hour, minute)
 
     def __process_form_helper(self, user, row_id=None, update=False):
         """A private helper method that helps the process form method"""
 
-        start_time, finish_time = self.__join_hour_and_minute(self.start_mins,
-                                                              self.start_hours,
-                                                              self.end_hours,
-                                                              self.end_mins)
         return user.add_job_to_records(self._job.job_title,
                                        self._job.description,
                                        self._job.location,
-                                       start_time=start_time,
-                                       finish_time=finish_time,
+                                       start_time=self.start_time,
+                                       finish_time=self.finish_time,
                                        hourly_rate=self._job.rate,
                                        is_shift_confirmed=self.is_shift_confirmed,
                                        update=update, row_id=row_id)
