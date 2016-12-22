@@ -9,7 +9,7 @@ from src.Users.Validator.validate_date import check_day, check_date
 from src.utilities.converter import month_to_num, time_to_str
 from src.Users.Jobs.job_processor import get_hours_worked
 from src.Users.Models.Registrations.registration import Registration
-import cgi
+from cgi import escape
 
 # Process the search form.
 class ValidateSearchForm(object):
@@ -21,7 +21,7 @@ class ValidateSearchForm(object):
         self.location  = form.location.data
         self.hrs_worked = form.hrs_worked.data
         self.year = form.year.data
-        self.month     = form.month.data
+        self.month = form.month.data
         self.date = form.date.data
         self.day  = form.day.data
         self.start_time = form.start_time.data
@@ -51,26 +51,26 @@ class ValidateSearchForm(object):
     def get_data(self):
         """retreive and process the data from the search form template"""
         if self.job_title:
-            return self._user.get_by_job_title(self.job_title.title())
+            return self._user.get_by_job_title(escape(self.job_title.title()))
         elif self.location:
-            return self._user.get_by_job_location(self.location)
+            return self._user.get_by_job_location(escape(self.location))
         elif self.date:
-            return self._user.get_job_by_date(str(self.date))
+            return self._user.get_job_by_date(escape(str(self.date)))
         elif self.day and check_day(self.day):
-            return self._user.get_job_by_day(self.days.get(self.day.title()[:3], None))
+            return self._user.get_job_by_day(self.days.get(escape(self.day.title()[:3], None)))
         elif self.start_time:
-            return self._user.get_job_by_start_time(str(self.start_time))
+            return self._user.get_job_by_start_time(escape(str(self.start_time)))
         elif self.finish_time:
-            return self._user.get_job_by_finish_time(str(self.finish_time))
+            return self._user.get_job_by_finish_time(escape(str(self.finish_time)))
         elif self.hrs_worked:
-            return self._user.get_by_job_hours(self.hrs_worked)
-        elif self.month and month_to_num(self.month[0:3].title()):
-            return self._user.get_job_by_month(str(self.month[0:3].title()))
+            return self._user.get_by_job_hours(escape(str(self.hrs_worked)))
+        elif self.month and month_to_num(escape(self.month[0:3].title())):
+            return self._user.get_job_by_month(escape(str(self.month[0:3].title())))
         elif self.daily_rate:
-            return self._user.get_by_daily_rate(self.daily_rate)
+            return self._user.get_by_daily_rate(escape(str(self.daily_rate)))
         elif self.val_one and self.val_two:
-            return self.process_dates(self.val_one, self.val_two)
+            return self.process_dates(escape(self.val_one), escape(self.val_two))
         elif self.year:
-            return self._user.get_job_by_year(self.year)
+            return self._user.get_job_by_year(escape(self.year))
         elif self.confirmation:
-            return self._user.get_job_by_confirmation(self.confirmation.lower())
+            return self._user.get_job_by_confirmation(escape(self.confirmation.lower()))

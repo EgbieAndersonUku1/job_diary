@@ -329,7 +329,7 @@ class Record(object):
             - hours  : The total hours the user worked.
             - user_id: The user itself.
         """
-        return cls._find(query={'_hours' : hours,
+        return cls._find(query={'_hours' : float(hours),
                                 'user_id': user_id},
                                  key=('date', -1))
 

@@ -5,7 +5,7 @@ from src.Users.Validator.date_validator import check_date, check_day
 from src.utilities.converter import month_to_num, time_to_str
 from src.Users.Jobs.job_processor import get_hours_worked
 from src.Users.Models.Registrations.registration import Registration
-import cgi
+from cgi import escape
 
 class ValidateJobDetailsForm(object):
     """Process the form and checks whether the job details entered by the user are correct"""
@@ -39,7 +39,7 @@ class ValidateJobDetailsForm(object):
                                                end date day by one.
                                              """
                else:
-                    # split the hh:mm and store in respective names.
+                    # split the hh:mm and store in their respective names.
                     self.start_hours, self.start_mins = self.start_time.split(':')
                     self.end_hours, self.end_mins = self.finish_time.split(':')
 
@@ -59,18 +59,18 @@ class ValidateJobDetailsForm(object):
              self.errors['end_date'] = 'The end date field must be not be empty'
 
          # escape the html
-         self.job_title   = cgi.escape(job_title).title()
-         self.description = cgi.escape(description).title()
-         self.location    = cgi.escape(location).title()
-         self.rate = cgi.escape(rate)
-         self.start_date = cgi.escape(start_date).title()
-         self.end_date   = cgi.escape(end_date).title()
-         self.start_hours = cgi.escape(start_hours).title()
-         self.start_mins  = cgi.escape(start_mins).title()
-         self.end_hours   = cgi.escape(end_hours).title()
-         self.end_mins = cgi.escape(end_mins).title()
-         self.day      = cgi.escape(day)
-         self.is_shift_confirmed = cgi.escape(is_shift_confirmed)
+         self.job_title   = escape(job_title, quote=True).title()
+         self.description = escape(description, quote=True).title()
+         self.location    = escape(location, quote=True).title()
+         self.rate = escape(rate, quote=True)
+         self.start_date = escape(start_date, quote=True).title()
+         self.end_date   = escape(end_date, quote=True).title()
+         self.start_hours = escape(start_hours, quote=True).title()
+         self.start_mins  = escape(start_mins, quote=True).title()
+         self.end_hours   = escape(end_hours, quote=True).title()
+         self.end_mins = escape(end_mins, quote=True).title()
+         self.day      = escape(day, quote=True)
+         self.is_shift_confirmed = escape(is_shift_confirmed)
          self._job = None
 
     def __join_hour_and_minute(self, hour, minute):
@@ -98,6 +98,22 @@ class ValidateJobDetailsForm(object):
         if len(str(minute)) == 1:
             minute = '0{}'.format(minute)
         return '{}:{}'.format(hour, minute)
+
+    def _get_json(self):
+        """Returns the jobs attributes in json format"""
+        return {
+            'job_title'   : self.job_title,
+            'location'    : self.location,
+            'description' : self.description,
+            'rate'        : self.rate,
+            'start_date'  : self.start_date,
+            'end_date'    : self.end_date,
+            'start_hours' : self.start_hours,
+            'start_mins'  : self.start_mins,
+            'end_hours'   : self.end_hours,
+            'end_mins'    : self.end_mins,
+            'day'         : self.day,
+            'is_shift_confirmed': self.is_shift_confirmed}
 
     def verify_form(self):
         """verify_form(None) -> return(tuple)
@@ -148,19 +164,3 @@ class ValidateJobDetailsForm(object):
         if update:
             return self.__process_form_helper(user, row_id, True)
         return self.__process_form_helper(user)
-
-    def _get_json(self):
-        """Returns the jobs attributes in json format"""
-        return {
-            'job_title'   : self.job_title,
-            'location'    : self.location,
-            'description' : self.description,
-            'rate'        : self.rate,
-            'start_date'  : self.start_date,
-            'end_date'    : self.end_date,
-            'start_hours' : self.start_hours,
-            'start_mins'  : self.start_mins,
-            'end_hours'   : self.end_hours,
-            'end_mins'    : self.end_mins,
-            'day'         : self.day,
-            'is_shift_confirmed': self.is_shift_confirmed}
