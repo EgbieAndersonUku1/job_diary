@@ -10,8 +10,8 @@ import cgi
 class ValidateJobDetailsForm(object):
     """Process the form and checks whether the job details entered by the user are correct"""
     def __init__(self, job_title, description, location,
-                 rate, start_date, end_date, start_hours,
-                 start_mins, end_hours, end_mins, day, is_shift_confirmed):
+                 rate, start_date, end_date, day, is_shift_confirmed,
+                 start_hours='00', start_mins='00', end_hours='00', end_mins='00'):
 
          self.errors = {}  # store all errors
          if start_date and end_date:
@@ -32,15 +32,16 @@ class ValidateJobDetailsForm(object):
                     self.start_time = self.__join_hour_and_minute(start_hours, start_mins)
                     self.finish_time = self.__join_hour_and_minute(end_hours, end_mins)
                     time_to_str(get_hours_worked(start_date, self.start_time, end_date, self.finish_time))
-               except UnboundLocalError:
+               except UnboundLocalError, ValueError:
                   self.errors['next_day'] = """It appears that your shift started
                                                the day before and ended the next
                                                day. In that case increment the
                                                end date day by one.
-                                           """
+                                             """
                else:
-                    self.start_mins, self.start_hours = start_mins, start_hours
-                    self.end_mins, self.end_hours = end_mins, end_hours
+                    # split the hh:mm and store in respective names.
+                    self.start_hours, self.start_mins = self.start_time.split(':')
+                    self.end_hours, self.end_mins = self.finish_time.split(':')
 
          if not day or check_day(day[:3]) == None:
              self.errors['day'] = 'The working day entered is incorrect'
@@ -49,7 +50,7 @@ class ValidateJobDetailsForm(object):
          if not location:
              self.errors['job_loc'] = 'The job location field must be not be empty'
          if not description:
-             self.errors['job_descr'] = 'The job description field must be not be empty'
+              self.errors['job_descr'] = 'The job description field must be not be empty'
          if not rate:
              self.errors['hourly_rate'] = 'The hourly rate field must be not be empty'
          if not start_date:
@@ -80,8 +81,8 @@ class ValidateJobDetailsForm(object):
         is a boolean value True if the form has no errors and False
         otherwise. The second element is a dictionary containing
         all errors found, an empty dictionary if no errors are found.
-        Finally the third element is the job object containing the user's
-        details e.g title, description, etc.
+        details e.g title, description, etc. Finally the third element
+        is the job object containing the user's
         """
         self._job = ValidateJobDetailsForm(**self._get_json()) # set the obj to the ProcessForm
         if self.errors:

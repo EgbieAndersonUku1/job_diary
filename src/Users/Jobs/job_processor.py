@@ -10,7 +10,6 @@ def _return_time_passed(start_date, start_time, finish_date, finish_time):
     """A wrapper function that returned the years, month, hours, days, minutes
     passed between two dates.
     """
-
     year1, month1, day1 = start_date.split('-')
     year2, month2, day2 = finish_date.split('-')
     hours1, minutes1 = start_time.split(':')
@@ -112,7 +111,6 @@ def when_is_shift_starting(start_date, start_time):
 
     Takes the date the job is starting along with its start
     time and returns how long it till the job starts.
-
     :parameters
         - start_date : The date the job is starting.
         - start_time : The time the job is starting.
@@ -138,6 +136,7 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} hours'.format(date_obj.hours) if date_obj.hours > 1 else '{} hour'.format(date_obj.hours))
     if date_obj.minutes:
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
+
 
     time_elasped = ', '.join(shift_start)
     return 'Starts in {}'.format(time_elasped) if time_elasped and int(time_elasped.split()[0]) > 0 else 'Job/shift in progress'
@@ -205,16 +204,16 @@ def get_jobs(active_jobs, jobs_obj, session, curr_date):
     user_jobs = jobs_obj(session['username'], _id=session['user_id'])
     total_pay, total_hrs, worked_jobs = [], [], []
 
-    if active_jobs:
-        jobs = user_jobs.get_all_jobs(sort_by=1) # sort job by ascending ldest active job first
-    else:
-        jobs = user_jobs.get_all_jobs()  # sort job in descending order newest first
-
     def get_jobs_helper(daily_rate, hrs, job):
         """returns the daily rate and the hours worked for the processed jobs"""
         total_pay.append(float(job.daily_rate))
         total_hrs.append(float(job._hours))
         worked_jobs.append(job)
+
+    if active_jobs:
+        jobs = user_jobs.get_all_jobs(sort_by=1) # sort job by ascending ldest active job first
+    else:
+        jobs = user_jobs.get_all_jobs()  # sort job in descending order newest first
 
     # sort the job based on whether the jobs are active
     for job in jobs:

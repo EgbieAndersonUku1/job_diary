@@ -100,9 +100,11 @@ def entry_page(row_ID):
 
     job_form = ValidateJobDetailsForm(title, descr, loc,
                                       hourly_rate, start_date,
-                                      end_date, start_hours,
+                                      end_date, day,
+                                      is_shift_confirmed,
+                                      start_hours,
                                       start_mins, end_hours,
-                                      end_mins, day, is_shift_confirmed)
+                                      end_mins)
     success, errors, form = job_form.verify_form()
     if success:
         # row_ID comes from the form so False is expressed as unicode
@@ -122,11 +124,11 @@ def entry_page(row_ID):
                            description=form.description,
                            location=form.location,
                            start_hours=form.start_hours,
-                           day=day,
                            start_mins=form.start_mins,
-                           rate=form.rate,
                            end_hours=form.end_hours,
                            end_mins=form.end_mins,
+                           day=day,
+                           rate=form.rate,
                            errors=errors,
                            is_shift_confirmed=is_shift_confirmed)
 @app.route('/logout')

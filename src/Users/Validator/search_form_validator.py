@@ -36,9 +36,6 @@ class ValidateSearchForm(object):
                      'Fri': 'Friday', 'Sat': 'Saturday',
                      'Sun': 'Sunday'}
 
-    def _fix_time_str(self, time):
-        return (time[:-1]  if len(time) == 5 and time[3] == '0' else time)
-
     def _is_date_str(self, date):
         """Returns True if date is in word format or False if date is in YYYY-MM-DD"""
         return date.isalpha()
@@ -62,9 +59,9 @@ class ValidateSearchForm(object):
         elif self.day and check_day(self.day):
             return self._user.get_job_by_day(self.days.get(self.day.title()[:3], None))
         elif self.start_time:
-            return self._user.get_job_by_start_time(self._fix_time_str(str(self.start_time)))
+            return self._user.get_job_by_start_time(str(self.start_time))
         elif self.finish_time:
-            return self._user.get_job_by_finish_time(self._fix_time_str(str(self.finish_time)))
+            return self._user.get_job_by_finish_time(str(self.finish_time))
         elif self.hrs_worked:
             return self._user.get_by_job_hours(self.hrs_worked)
         elif self.month and month_to_num(self.month[0:3].title()):

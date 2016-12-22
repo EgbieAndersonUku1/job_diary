@@ -102,13 +102,13 @@ class Job(object):
     def get_job_by_row_id(self, row_id):
         """get_job_by_row_id(None) -> return(list[obj(..)])
 
-        Returns a list containing a single job object.
+        Queries the records for a particular job object based on its
+        row id. Returns a list containing a single job object with that
+        row ID.
 
         :parameters
            - row_id  : Searches the database using a specific
                        row id and returns a job object.
-           - returns : Returns a single job object corresponding
-                       to that row id.
         """
         return Record.find_by_row_id(row_id, self.id)
 
@@ -229,7 +229,7 @@ class Job(object):
                     For example 2 hrs and 10 mins must be entered as 2.10.
 
         >>> get_by_hours(2.10)
-        objectID(...)
+        [objectID(...)]
         """
         return Record.find_by_hours_worked(hours, self.id)
 
