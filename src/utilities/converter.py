@@ -13,10 +13,12 @@ def units_to_hours(units):
 	"""units_to_hours(float) -> return(str)
 
 	Takes time which is expressed as time units and converts it to a string
-	representation of that time, where the units are now represented us hours and
+	representation of that time, where the units are now represented as hours and
 	minutes.
+
 	E.g the time unit for '12.75' would be expressed as '12 minutes and 45 minutes'.
 
+	:parameters
 	   - time : The time(units) to express as time representation.
 
 	>>> units_to_hours(549.5)
