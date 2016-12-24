@@ -4,11 +4,6 @@
 
 from datetime import datetime
 
-def tuple_to_float(time):
-	"""Takes a time tuple in the form of (hh, mm) and returns a float"""
-	hrs, mins = time
-	return float('{}.{}'.format(hrs, mins))
-
 def units_to_hours(units):
 	"""units_to_hours(float) -> return(str)
 
@@ -33,8 +28,8 @@ def units_to_hours(units):
 	minutes = '.{}'.format(minutes) # add a decimal point to the number e.g 05 -> .05
 	return time_to_str((hour, int(round((float(minutes)*60)))))
 
-def time_to_units(time):
-	"""time_to_units(tuple) -> returns(float)
+def hours_to_units(time):
+	"""hours_to_units(tuple) -> returns(float)
 
 	Takes a time tuple and returns the time as units.
 
