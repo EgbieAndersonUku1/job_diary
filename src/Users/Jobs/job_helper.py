@@ -207,8 +207,8 @@ def get_jobs(active_jobs, jobs_obj, session, curr_date):
 
     def get_jobs_helper(daily_rate, hrs, job):
         """returns the daily rate and the hours worked for the processed jobs"""
-        total_pay.append(float(job.daily_rate))
-        total_hrs.append(float(job._hours))
+        total_pay.append(float(daily_rate))
+        total_hrs.append(float(hrs))
         worked_jobs.append(job)
 
     if active_jobs:

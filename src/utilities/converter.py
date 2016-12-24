@@ -4,6 +4,11 @@
 
 from datetime import datetime
 
+def tuple_to_float(time):
+	"""Takes a time tuple in the form of (hh, mm) and returns a float"""
+	hrs, mins = time
+	return float('{}.{}'.format(hrs, mins))
+
 def time_to_hours(time):
 	"""time_to_hours(float) -> return(str)
 
