@@ -35,7 +35,7 @@ def is_shift_confirmed(job, func):
     if job.is_shift_confirmed.lower() == 'yes':
         return True
     elif job.is_shift_confirmed.lower() == 'no' and is_shift_now(job): # checks against present day and if shift is now
-        func(job.row_id[1:])
+        func(job.row_id[1:]) # delete the current job as the shift has not be confirmed.
         return False
     else:
          year, month, day = job.date.split('-')
@@ -45,8 +45,9 @@ def is_shift_confirmed(job, func):
                                        day=int(day),
                                        hour=int(job.start_time.split(':')[0]),
                                        minute=int(job.start_time.split(':')[1]))
-         if past_date < curr_date and job.is_shift_confirmed.lower() == 'no': # checks against past shift
-            func(job.row_id[1:])
+          # checks against past shift
+         if past_date < curr_date and job.is_shift_confirmed.lower() == 'no':
+            func(job.row_id[1:]) # delete this past job as has not be confirmed
             return False
          return True
 
@@ -211,7 +212,7 @@ def get_jobs(active_jobs, jobs_obj, session, curr_date):
         worked_jobs.append(job)
 
     if active_jobs:
-        jobs = user_jobs.get_all_jobs(sort_by=1) # sort job by ascending ldest active job first
+        jobs = user_jobs.get_all_jobs(sort_by=1) # sort job by ascending latest active job first
     else:
         jobs = user_jobs.get_all_jobs()  # sort job in descending order newest first
 

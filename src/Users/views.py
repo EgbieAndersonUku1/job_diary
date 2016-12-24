@@ -6,7 +6,7 @@
 import json
 import datetime
 import uuid
-from src.utilities.converter import time_to_str, mins_to_hours, month_to_str
+from src.utilities.converter import time_to_str, time_to_hours, month_to_str
 from src.Users.Models.Registrations.registration import Registration
 from src.Users.Models.Databases.database import DataBase
 from src.Users.decorators import login_required, admin_required
@@ -24,8 +24,7 @@ from flask import render_template, session, redirect, url_for, flash, request
 from _form_helper import login_user, register_user
 from src.utilities.password_hasher import create_passwd_hash
 from src.Users.user import User
-from src.Users.Jobs.job_helper import (get_daily_rate,
-                                       get_hours_worked, get_jobs,
+from src.Users.Jobs.job_helper import ( get_jobs,
                                         is_shift_now,
                                         is_shift_over,
                                         is_shift_confirmed,
@@ -178,10 +177,10 @@ def _display(html_link, active=False):
                            translate=month_to_str,
                            dt=datetime.datetime.strptime,
                            total_pay=round(sum(total_pay),2),
-                           total_hrs=round(sum(total_hrs), 2),
+                           total_hrs=sum(total_hrs),
                            active=active,
                            is_shift_over=is_shift_over,
-                           converter=mins_to_hours,
+                           converter=time_to_hours,
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
@@ -248,7 +247,7 @@ def perma_link():
                             dt=datetime.datetime.strptime,
                             is_shift_now=is_shift_now,
                             is_shift_over=is_shift_over,
-                            converter=mins_to_hours,
+                            converter=time_to_hours,
                             when_is_shift_starting=when_is_shift_starting,
                             is_shift_confirmed=is_shift_confirmed,
                             delete=user.delete_job,
@@ -261,7 +260,6 @@ def search():
 
     # FIX THE CODE REQUIRING THE RADIO BUTTONS
     #title  = request.form.get('jobInfo')
-
     form = SearchForm()
     error = ''
     if request.method == 'POST':

@@ -4,28 +4,36 @@
 
 from datetime import datetime
 
-def mins_to_hours(minutes):
-	"""mins_to_hours(float) -> return(str)
+def time_to_hours(time):
+	"""time_to_hours(float) -> return(str)
 
-	Takes a time which is in either minutes or hours
+	Takes a time which is in either an int or float
 	and converts to its string representation.
 
 	:parameters
-	   - minutes : either minutes/hrs and converts
-	               to its string representation.
-	               e.g 20.75 will be converted
-	               to 21 hours and 25 minutes.
+	   - time : If the time is an 'int' then method assumes that the time
+	            is in hours and returns the hour representation of that string.
+				E.g 549 hours would be returned as 549 hours.
 
-	>>> mins_to_hours(549)
-	9 hours and 15 minutes
+				If the time is a 'float' e.g 549.2 the program assumes the first
+				part before the decimal is the hour and the second part is the
+				minutes.
+
+				In the case of 549.20 would be returned as 549 hours and 20 minutes.
+
+	>>> time_to_hours(549)
+	549 hours
+	>>> time_to_hours(549.20)
 	"""
 	try:
-	      hrs, mins = str(minutes).split('.')
+	      hrs, mins = str(time).split('.')
 	except ValueError:
-	     return time_to_str((minutes, 0))
+	     return time_to_str((time, 0))
 
-	hour, minutes = str(minutes).split('.')
+	hour, minutes = str(time).split('.')
 	if int(minutes) < 60:
+		if len(minutes) == 1:
+			minutes = int(minutes) * 10
 		return time_to_str((hour, minutes))
 
 	time = str(round((int(hour) + (int(minutes)/60.0)),2))
