@@ -6,7 +6,7 @@
 import json
 import datetime
 import uuid
-from src.utilities.converter import time_to_str, time_to_hours, month_to_str
+from src.utilities.converter import time_to_str, units_to_hours, month_to_str
 from src.Users.Models.Registrations.registration import Registration
 from src.Users.Models.Databases.database import DataBase
 from src.Users.decorators import login_required, admin_required
@@ -180,7 +180,7 @@ def _display(html_link, active=False):
                            total_hrs=sum(total_hrs),
                            active=active,
                            is_shift_over=is_shift_over,
-                           converter=time_to_hours,
+                           converter=units_to_hours,
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
@@ -247,7 +247,7 @@ def perma_link():
                             dt=datetime.datetime.strptime,
                             is_shift_now=is_shift_now,
                             is_shift_over=is_shift_over,
-                            converter=time_to_hours,
+                            converter=units_to_hours,
                             when_is_shift_starting=when_is_shift_starting,
                             is_shift_confirmed=is_shift_confirmed,
                             delete=user.delete_job,

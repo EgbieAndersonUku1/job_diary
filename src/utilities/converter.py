@@ -9,41 +9,27 @@ def tuple_to_float(time):
 	hrs, mins = time
 	return float('{}.{}'.format(hrs, mins))
 
-def time_to_hours(time):
-	"""time_to_hours(float) -> return(str)
+def units_to_hours(units):
+	"""units_to_hours(float) -> return(str)
 
-	Takes a time which is in either an int or float
-	and converts to its string representation.
+	Takes time which is expressed as time units and converts it to a string
+	representation of that time, where the units are now represented us hours and
+	minutes.
+	E.g the time unit for '12.75' would be expressed as '12 minutes and 45 minutes'.
 
-	:parameters
-	   - time : If the time is an 'int' then method assumes that the time
-	            is in hours and returns the hour representation of that string.
-				E.g 549 hours would be returned as 549 hours.
+	   - time : The time(units) to express as time representation.
 
-				If the time is a 'float' e.g 549.2 the program assumes the first
-				part before the decimal is the hour and the second part is the
-				minutes.
-
-				In the case of 549.20 would be returned as 549 hours and 20 minutes.
-
-	>>> time_to_hours(549)
-	549 hours
-	>>> time_to_hours(549.20)
+	>>> units_to_hours(549.5)
+	549 hours and 30 minutes
+	>>> units_to_hours(549.20)
+	549 hours and 12 minutes
+	>>> units_to_hours(12.75)
+	12 hours and 45 minutes
 	"""
-	try:
-	      hrs, mins = str(time).split('.')
-	except ValueError:
-	     return time_to_str((time, 0))
 
-	hour, minutes = str(time).split('.')
-	if int(minutes) < 60:
-		if len(minutes) == 1:
-			minutes = int(minutes) * 10
-		return time_to_str((hour, minutes))
-
-	time = str(round((int(hour) + (int(minutes)/60.0)),2))
-	hrs, mins = time.split('.')
-	return time_to_str((hrs, int(mins)))
+	hour, minutes = str(units).split('.')
+	minutes = '.{}'.format(minutes) # add a decimal point to the number e.g 05 -> .05
+	return time_to_str((hour, int(round((float(minutes)*60)))))
 
 def time_to_units(time):
 	"""time_to_units(tuple) -> returns(float)
