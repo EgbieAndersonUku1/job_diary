@@ -24,7 +24,7 @@ def units_to_hours(units, to_str=True):
 	    - to_str: Optional default mode True. When set to True returns a
 	              string representation of the units otherwise returns a tuple
 		          where the first the element is hour and the second element is
-		          the minutes.
+		          the minutes
 
 	>>> units_to_hours(549.5, True)
 	549 hours and 30 minutes
