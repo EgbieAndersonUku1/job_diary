@@ -58,7 +58,7 @@ class Job(object):
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
         units  = time_to_units(hours)    # convert hours worked to units
-        record = Record(job_title=job_title,
+        job = Record(job_title=job_title,
                          descr=descr,
                          loc=loc,
                          start_time=kwargs['start_time'],
@@ -81,8 +81,8 @@ class Job(object):
         # if update is set to True overide an existing job row with the new
         # job details.
         if not kwargs['update']:
-            return record.save()
-        return self.update_job(kwargs['row_id'], record)
+            return job.save()
+        return self.update_job(kwargs['row_id'], job)
 
     def get_all_jobs(self, sort_by=-1):
         """get_by_user_id(int) -> return(list[objID(..),..,objID(..)])
