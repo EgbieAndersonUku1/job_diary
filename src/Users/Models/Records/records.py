@@ -286,7 +286,7 @@ class Record(object):
         >>> find_by_month(month_one, month_two, '12345')
         [obj]
         """
-        return cls._date_range('month', month[0:3].title(),
+        return cls._date_range('month', month_one[0:3].title(),
                                 month_two[0:3].title(), user_id)
 
     @classmethod

@@ -7,7 +7,7 @@ from src.Users.user import User
 from datetime import datetime
 from src.Users.Validator.validate_date import check_day, check_date
 from src.utilities.converter import month_to_num, time_to_str
-from src.Users.Jobs.job_processor import get_hours_worked
+from src.Users.Jobs.job_helper import get_hours_worked
 from src.Users.Models.Registrations.registration import Registration
 from cgi import escape
 
@@ -44,7 +44,7 @@ class ValidateSearchForm(object):
         """Takes two date values and processes them."""
         if self._is_date_str(val) and self._is_date_str(val2):
             if month_to_num(val[:3].title()) and month_to_num(val2[:3].title()):
-                return self._user.get_by_month_range(val, val2)
+                return self._user.get_job_by_month_range(val, val2)
         elif not self._is_date_str(val) and not self._is_date_str(val2):
             return self._user.get_job_by_date_range(val, val2)
 
