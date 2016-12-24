@@ -40,7 +40,7 @@ def units_to_hours(units, to_str=True):
 	(549, 12)
 	"""
 	hour, minutes = str(units).split('.')
-	minutes = '.{}'.format(minutes) # add a decimal point to the number e.g 05 -> .05
+	minutes = '.{}'.format(minutes) # Add a decimal point to the number e.g 05 -> .05
 	hours = (int(hour), int(round((float(minutes)*60))))
 	return time_to_str(hours) if to_str else hours
 
@@ -141,4 +141,3 @@ def month_to_num(month):
                   'Jul':'7', 'Aug':'8', 'Sep':'9',
               'Oct':'10','Nov':'11','Dec':'12'}
     return months.get(month.title(), None)
-
