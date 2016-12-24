@@ -234,6 +234,4 @@ def get_jobs(active_jobs, jobs_obj, session, curr_date):
                              datetime.strptime(curr_date, "%Y-%m-%d") and\
                              not is_shift_over(job):
                 get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
-
-    print total_hrs
     return jobs, total_pay, total_hrs, worked_jobs
