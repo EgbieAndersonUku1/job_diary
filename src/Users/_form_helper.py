@@ -54,7 +54,7 @@ def register_user(**kw):
     if request.method == 'GET' and request.args.get('next'):
         session['next'] = request.args.get('next')
 
-    # if the form validates attempt to register the users details.
+    # if the form validates, attempt to register the users details.
     # If registration is successful meaning that username is unique and
     # the password is acceptable log user into the application.
     # Finally encode their details in a session.

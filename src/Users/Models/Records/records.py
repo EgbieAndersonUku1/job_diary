@@ -11,7 +11,7 @@ import time
 import uuid
 from src.utilities.converter import month_to_num
 from src.utilities.common import gen_row_id
-from src.Users.Jobs.job_processor import get_hours_worked
+from src.Users.Jobs.job_helper import get_hours_worked
 from src.utilities.password_hasher import create_passwd_hash
 from src.utilities.common import get_questions
 from src.Users.Models.Registrations.registration import Registration
@@ -152,6 +152,7 @@ class Record(object):
                                   query={'username': username.lower()},
                                   return_obj=False)
         return login_obj['_id']
+
     @classmethod
     def _find(cls, query, key):
         """_find(dict, tuple) -> return (list of obj or None)
@@ -300,7 +301,7 @@ class Record(object):
             - user_id  : The user id to use for the query.
         """
         return cls._find(query={'start_time': start_time,
-                               'user_id': user_id},
+                                'user_id': user_id},
                                 key=('date', -1))
 
     @classmethod
@@ -357,7 +358,6 @@ class Record(object):
 
         :parameters:
             - daily_rate: A day's pay.
-            - user_id   : The user id.
         """
         return cls._find({'daily_rate': daily_rate,
                          'user_id':user_id},
@@ -379,10 +379,11 @@ class Record(object):
                                 key=('date', -1))
     @classmethod
     def update_password(cls, username, new_passwd):
-        """
+        """Allows the user to update their password.
         """
         query = {"username": username, "password" : new_passwd}
-        db.update(collections='login_credentials', key='password', value=new_passwd, query=query)
+        db.update(collections='login_credentials', key='password',
+                        value=new_passwd, query=query)
 
     @classmethod
     def update(cls, row_id, form, update_row=True):

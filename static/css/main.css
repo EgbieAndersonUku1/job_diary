@@ -39,30 +39,23 @@ img {
 h2 {
   color: blue;
   font-family: fantasy;
-  text-shadow: 2px 2px 5px red;
+  text-shadow: 2px 2px 5px yellow;
   font-size: 70px;
 }
 
 h5 {
   color: blue;
   font-family: fantasy;
-  text-shadow: 2px 2px 5px green;
+  text-shadow: 1px 1px 1px green;
   font-size: 50px;
 }
-
 h6 {
+
   color: blue;
   font-family: fantasy; Arial;
-  text-shadow: 2px 2px 5px green;
-  font-size: 5px;
+  font-size: 30px;
 }
 
-h6 {
-  color: blue;
-  font-family: fantasy; Arial;
-  text-shadow: 2px 2px 5px green;
-  font-size: 28px;
-}
 
 
 .mybutton {

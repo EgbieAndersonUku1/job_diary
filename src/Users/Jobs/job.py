@@ -8,14 +8,13 @@
 import uuid
 from src.Users.Models.Records.records import Record
 from src.utilities.converter import time_to_str, time_to_units
-from src.Users.Jobs.job_processor import get_daily_rate, get_hours_worked
+from src.Users.Jobs.job_helper import get_daily_rate, get_hours_worked
 
 class Job(object):
     """Job:(Class).
     The Job class allows the user to add, modify and delete jobs from database.
     """
-    def __init__(self, full_name, start_date=None, end_date=None, day=None, _id=None):
-        self.full_name = full_name
+    def __init__(self, start_date=None, end_date=None, day=None, _id=None):
         self.start_date = start_date
         self.end_date = end_date
         self.day = day

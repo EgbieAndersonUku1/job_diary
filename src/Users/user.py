@@ -15,7 +15,7 @@ class User(Job):
     add jobs, modify, edit or delete jobs.
     """
     def __init__(self, username, start_date=None, end_date=None, day=None, _id=None):
-        Job.__init__(self, username, start_date, end_date, day, _id)
+        Job.__init__(self, start_date, end_date, day, _id)
         self.id = _id
         self.username = username
 

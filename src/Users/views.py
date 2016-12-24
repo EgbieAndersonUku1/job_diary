@@ -24,12 +24,12 @@ from flask import render_template, session, redirect, url_for, flash, request
 from _form_helper import login_user, register_user
 from src.utilities.password_hasher import create_passwd_hash
 from src.Users.user import User
-from src.utilities.job_processor import (get_daily_rate,
-                                         get_hours_worked, get_jobs,
-                                         is_shift_now,
-                                         is_shift_over,
-                                         is_shift_confirmed,
-                                         when_is_shift_starting)
+from src.Users.Jobs.job_helper import (get_daily_rate,
+                                       get_hours_worked, get_jobs,
+                                        is_shift_now,
+                                        is_shift_over,
+                                        is_shift_confirmed,
+                                        when_is_shift_starting)
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
