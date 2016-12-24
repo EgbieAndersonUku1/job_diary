@@ -8,8 +8,8 @@ def units_to_hours(units, to_str=True):
 	"""units_to_hours(float) -> return(val)
 
 	Takes hours which is represented as units and converts it to units.
-	if to_str flag is True returns a representation of a units as a string,
-	where the units are now represented as hours and minutes in word form.
+    if to_str flag is True returns a representation of a units as a string,
+    where the units are now represented as hours and minutes in word form.
 
 	If to_str is set False returns a tuple where the first elements is the hours
 	and the second element is minutes.
@@ -20,48 +20,47 @@ def units_to_hours(units, to_str=True):
 	E.g if to_str is set to False the unit '12.75' would be returned as (12, 45).
 
 	:parameters
-	  - time  : The time(units) to express as time representation.
-	  - to_str: Optional default mode True. When set to True returns a
-	            string representation of the units otherwise returns a tuple
-			    where the first the element is hour and the second element is
-			    the minutes.
+	    - time  : The time(units) to express as time representation.
+        - to_str: Optional default mode True. When set to True returns a
+            string representation of the units otherwise returns a tuple
+		    where the first the element is hour and the second element is
+		    the minutes.
 
-	>>> units_to_hours(549.5, True)
-	549 hours and 30 minutes
-	>>> units_to_hours(549.20, True)
-	549 hours and 12 minutes
-	>>> units_to_hours(12.75, True)
-	12 hours and 45 minutes
-	>>> units_to_hours(9.15, True)
-	9 hours and 9 minutes
-	>>> units_to_hours(549.5)
-	(549, 30)
-	>>> units_to_hours(549.20)
-	(549, 12)
-	"""
-
+    >>> units_to_hours(549.5, True)
+    549 hours and 30 minutes
+    >>> units_to_hours(549.20, True)
+    549 hours and 12 minutes
+    >>> units_to_hours(12.75, True)
+    12 hours and 45 minutes
+    >>> units_to_hours(9.15, True)
+    9 hours and 9 minutes
+    >>> units_to_hours(549.5)
+    (549, 30)
+    >>> units_to_hours(549.20)
+    (549, 12)
+    """
 	hour, minutes = str(units).split('.')
 	minutes = '.{}'.format(minutes) # add a decimal point to the number e.g 05 -> .05
 	hours = (int(hour), int(round((float(minutes)*60))))
 	return time_to_str(hours) if to_str else hours
 
 def hours_to_units(time):
-	"""hours_to_units(tuple) -> returns(float)
+    """hours_to_units(tuple) -> returns(float)
 
 	Takes a tuple which consists of time in the form of (hh, mm)
 	and returns the time as units e.g float.
 
 	:parameters
 	    - time: tuple containing two elements. The first elements is
-	            the hours part and second is the minutes part.
+                the hours part and second is the minutes part.
 
 	>>> time_to_unit((2,2))
-	2.03
-	>>> time_to_unit((10,15))
-	10.25
-	"""
-	hours, minutes = time
-	return hours +  round(minutes/60.0, 2)
+    2.03
+    >>> time_to_unit((10,15))
+    10.25
+    """
+    hours, minutes = time
+    return hours +  round(minutes/60.0, 2)
 
 def time_to_str(time):
 	"""time_to_str(tuple) -> return(str)
