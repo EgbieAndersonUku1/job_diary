@@ -4,31 +4,46 @@
 
 from datetime import datetime
 
-def units_to_hours(units):
-	"""units_to_hours(float) -> return(str)
+def units_to_hours(units, to_str=True):
+	"""units_to_hours(float) -> return(val)
 
-	Takes hours which is represented as units and converts it to a string
-	representation of that time. The units are now represented as hours and
-	minutes in word form.
+	Takes hours which is represented as units and converts it to units.
+	if to_str flag is True returns a representation of a units as a string,
+	where the units are now represented as hours and minutes in word form.
 
-	E.g the time unit for '12.75' would be expressed as '12 minutes and 45 minutes'.
+	If to_str is set False returns a tuple where the first elements is the hours
+	and the second element is minutes.
+
+	E.g if to_str is set to true the time unit for '12.75' would be
+	returned as '12 minutes and 45 minutes'.
+
+	E.g if to_str is set to False the unit '12.75' would be returned as (12, 45).
 
 	:parameters
-	   - time : The time(units) to express as time representation.
+	  - time  : The time(units) to express as time representation.
+	  - to_str: Optional default mode True. When set to True returns a
+	            string representation of the units otherwise returns a tuple
+			    where the first the element is hour and the second element is
+			    the minutes.
 
-	>>> units_to_hours(549.5)
+	>>> units_to_hours(549.5, True)
 	549 hours and 30 minutes
-	>>> units_to_hours(549.20)
+	>>> units_to_hours(549.20, True)
 	549 hours and 12 minutes
-	>>> units_to_hours(12.75)
+	>>> units_to_hours(12.75, True)
 	12 hours and 45 minutes
-	>>> units_to_hours(9.15)
+	>>> units_to_hours(9.15, True)
 	9 hours and 9 minutes
+	>>> units_to_hours(549.5)
+	(549, 30)
+	>>> units_to_hours(549.20)
+	(549, 12)
 	"""
 
 	hour, minutes = str(units).split('.')
 	minutes = '.{}'.format(minutes) # add a decimal point to the number e.g 05 -> .05
-	return time_to_str((hour, int(round((float(minutes)*60)))))
+	hours = (int(hour), int(round((float(minutes)*60))))
+	return time_to_str(hours) if to_str else hours
 
 def hours_to_units(time):
 	"""hours_to_units(tuple) -> returns(float)
@@ -37,8 +52,8 @@ def hours_to_units(time):
 	and returns the time as units e.g float.
 
 	:parameters
-		- time: tuple containing two elements. The first elements is
-		        the hours part and second is the minutes part.
+	    - time: tuple containing two elements. The first elements is
+	            the hours part and second is the minutes part.
 
 	>>> time_to_unit((2,2))
 	2.03
@@ -55,9 +70,9 @@ def time_to_str(time):
 	string representation of that tuple.
 
 	parameters:
-		- time: contains a tuple (h, m)
-		        where the first element(h) is hours and
-		        the second element(m) m is the minutes.
+	    - time: contains a tuple (h, m)
+	            where the first element(hh) is hours and
+	            the second element(mm) is the minutes.
 
 	>>> time_to_str((1, 0))
 	1 hour
@@ -72,21 +87,21 @@ def time_to_str(time):
 	hours, mins = time
 
 	if hours > 1 and mins >1:
-		time_str = '{} hours and {} minutes'.format(hours, mins)
+	   time_str = '{} hours and {} minutes'.format(hours, mins)
 	elif hours==1 and mins == 1:
-		time_str = '{} hour and {} minute'.format(hours, mins)
+	   time_str = '{} hour and {} minute'.format(hours, mins)
 	elif hours==1 and mins > 1:
-		time_str = '{} hour and {} minutes'.format(hours, mins)
+	   time_str = '{} hour and {} minutes'.format(hours, mins)
 	elif hours>1 and mins ==1:
-		time_str = '{} hours  and {} minute'.format(hours, mins)
+	   time_str = '{} hours  and {} minute'.format(hours, mins)
 	elif not hours and mins > 1:
-		time_str = '{} minutes '.format(mins)
+	   time_str = '{} minutes '.format(mins)
 	elif not hours and mins == 1:
-		time_str = '{} minute'.format(mins)
+	   time_str = '{} minute'.format(mins)
 	elif hours == 1 and not mins:
-		time_str = '{} hour'.format(hours)
+	   time_str = '{} hour'.format(hours)
 	elif hours > 1 and not mins:
-		time_str = '{} hours '.format(hours)
+	   time_str = '{} hours '.format(hours)
 	return time_str
 
 def month_to_str(month_num):

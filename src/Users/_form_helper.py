@@ -56,8 +56,8 @@ def register_user(**kw):
 
     # if the form validates, attempt to register the users details.
     # If registration is successful meaning that username is unique and
-    # the password is acceptable log user into the application.
-    # Finally encode their details in a session.
+    # the password is acceptable, log the user into the application.
+    # Finally encode their details within a session.
     if kw['form'].validate_on_submit():
         user = Registration(kw['form'].email.data, kw['form'].password.data)
         if user.register():
