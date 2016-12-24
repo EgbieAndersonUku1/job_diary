@@ -7,9 +7,9 @@ from datetime import datetime
 def units_to_hours(units):
 	"""units_to_hours(float) -> return(str)
 
-	Takes time which is expressed as time units and converts it to a string
-	representation of that time, where the units are now represented as hours and
-	minutes.
+	Takes hours which is represented as units and converts it to a string
+	representation of that time. The units are now represented as hours and
+	minutes in word form.
 
 	E.g the time unit for '12.75' would be expressed as '12 minutes and 45 minutes'.
 
@@ -22,6 +22,8 @@ def units_to_hours(units):
 	549 hours and 12 minutes
 	>>> units_to_hours(12.75)
 	12 hours and 45 minutes
+	>>> units_to_hours(9.15)
+	9 hours and 9 minutes
 	"""
 
 	hour, minutes = str(units).split('.')
@@ -31,11 +33,12 @@ def units_to_hours(units):
 def hours_to_units(time):
 	"""hours_to_units(tuple) -> returns(float)
 
-	Takes a time tuple and returns the time as units.
+	Takes a tuple which consists of time in the form of (hh, mm)
+	and returns the time as units e.g float.
 
-	parameters:
-		- time: tuple of two where the first elements is
-		        hours and second is minutes.
+	:parameters
+		- time: tuple containing two elements. The first elements is
+		        the hours part and second is the minutes part.
 
 	>>> time_to_unit((2,2))
 	2.03
@@ -60,6 +63,7 @@ def time_to_str(time):
 	1 hour
 	>>> time_to_str((2, 0))
 	2 hours
+
 	>>> time_to_str((0, 1))
 	1 minute
 	>>> time_to_str((0, 10))
@@ -86,18 +90,17 @@ def time_to_str(time):
 	return time_str
 
 def month_to_str(month_num):
-    '''month_to_str(str) -> return(str)
+    """month_to_str(str) -> return(str)
 
     Takes a number between 1-12 and returns a month name
     corresponding to that number. e.g 1-> January,
     2 -> Feb, etc.
-
     parameters:
        -month_num : Month in number e.g 1-12.
 
     >>> month_two_num(01)
     'January'
-    '''
+    """
     months = {'1': 'January', '2':'February', '3':'March',
                   '4': 'April',   '5':'May',      '6': 'June',
                   '7':'July',     '8': 'August',  '9':'September',
