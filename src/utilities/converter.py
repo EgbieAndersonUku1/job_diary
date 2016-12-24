@@ -141,3 +141,4 @@ def month_to_num(month):
                   'Jul':'7', 'Aug':'8', 'Sep':'9',
               'Oct':'10','Nov':'11','Dec':'12'}
     return months.get(month.title(), None)
+
