@@ -79,7 +79,7 @@ def entry_page(row_ID):
     end_hours   = request.form.get('end_hours')
     end_mins    = request.form.get('end_mins')
     is_shift_confirmed = request.form.get('is_shift_confirmed')
-    
+
     if request.method == 'GET':
         return render_template('forms/JobEntryForm/job_entry_page.html',
                                 start_date=start_date,
@@ -158,7 +158,7 @@ def success_page(row_id):
    flash('The data below has been added to the database.')
    return render_template('forms/permalinks/perma_table.html', rows=user.get_job_by_row_id(row_id))
 
-def _display(html_link, active=False):
+def _display(html_link, active=False, permalink_jobs=False):
     """_display(str, str) -> return(value)
 
     :parameters
@@ -168,16 +168,15 @@ def _display(html_link, active=False):
 
     Renders the jobs worked or not worked along with the hours and total pay.
     """
-    jobs, total_pay, total_hrs, worked_jobs = get_jobs(active, User, session, curr_date)
-    user = User(session['username'], _id=session['user_id'])
-    page = request.args.get('page', type=int, default=1)
+    total_pay, total_hrs, jobs, user = get_jobs(active, permalink_jobs,
+                                              User, session, curr_date)
     return render_template(html_link,
-                           jobs=worked_jobs,
-                           date=curr_date,
+                           jobs=jobs,
                            translate=month_to_str,
-                           dt=datetime.datetime.strptime,
                            total_pay=round(sum(total_pay),2),
-                           total_hrs=sum(total_hrs),
+                           total_hrs=sum(total_hrs), # total hrs expressed in units e.g 12.75
+                           date=curr_date,
+                           dt=datetime.datetime.strptime,
                            active=active,
                            is_shift_over=is_shift_over,
                            converter=units_to_hours,
@@ -198,6 +197,12 @@ def history():
 def active_jobs():
     """renders the all jobs that are active (not worked)"""
     return _display('forms/CurrentJobs/current_jobs.html', True)
+
+@app.route('/search/permalinks/jobs')
+def perma_link():
+    """Displays the jobs retreived from the search function"""
+    return _display("forms/permalinks/perma_link.html", permalink_jobs=SEARCH_FORM_JOBS)
+
 
 @app.route('/job/edit/<value>')
 @login_required
@@ -228,30 +233,6 @@ def user_login():
     session['username'] = session['session_name']
     return redirect(url_for('history'))
 
-@app.route('/search/permalinks/jobs')
-def perma_link():
-    """Displays the jobs retreived from the search function"""
-
-    user = User(session['username'], _id=session['user_id'])
-    total_hrs, total_pay = [], []
-
-    for job in SEARCH_FORM_JOBS: # calculate the hours and wages from the jobs retreived.
-        total_pay.append(float(job.daily_rate))
-        total_hrs.append(float(job._hours))
-    return render_template("forms/permalinks/perma_link.html",
-                            jobs=SEARCH_FORM_JOBS,
-                            translate=month_to_str,
-                            total_pay=sum(total_pay),
-                            total_hrs=sum(total_hrs),
-                            curr_date=curr_date,
-                            dt=datetime.datetime.strptime,
-                            is_shift_now=is_shift_now,
-                            is_shift_over=is_shift_over,
-                            converter=units_to_hours,
-                            when_is_shift_starting=when_is_shift_starting,
-                            is_shift_confirmed=is_shift_confirmed,
-                            delete=user.delete_job,
-                            len=len)
 
 @app.route('/search', methods=('GET', 'POST'))
 @login_required

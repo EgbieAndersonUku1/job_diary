@@ -189,7 +189,7 @@ def get_daily_rate(units, hourly_rate):
     """
     return round((units * float(hourly_rate)), 2)
 
-def get_jobs(active_jobs, jobs_obj, session, curr_date):
+def get_jobs(active_jobs, permalink_jobs, jobs_obj, session, curr_date):
     """get_job sorts the active jobs from the none active jobs
 
     parameters:
@@ -216,7 +216,11 @@ def get_jobs(active_jobs, jobs_obj, session, curr_date):
     else:
         jobs = user_jobs.get_all_jobs()  # sort job in descending order newest first
 
-    # sort the job based on whether the jobs are active
+    if permalink_jobs:
+        for job in permalink_jobs:
+            get_jobs_helper(job.daily_rate, job._hours, job)
+        return total_pay, total_hrs, permalink_jobs, user_jobs
+        # sort the job based on whether the jobs are active
     for job in jobs:
         if not active_jobs:
             # if the shift day is less than the current day
@@ -234,4 +238,4 @@ def get_jobs(active_jobs, jobs_obj, session, curr_date):
                              datetime.strptime(curr_date, "%Y-%m-%d") and\
                              not is_shift_over(job):
                 get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
-    return jobs, total_pay, total_hrs, worked_jobs
+    return total_pay, total_hrs, worked_jobs, user_jobs

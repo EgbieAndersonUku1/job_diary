@@ -109,12 +109,12 @@
                        </td>
                        <td>
 
-                         {% if dt(job.date, "%Y-%m-%d") == dt(curr_date, "%Y-%m-%d") and is_shift_over(job) %}
+                         {% if dt(job.date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and is_shift_over(job) %}
                              <div id='worked'>
                                   Yes
                               </div>
                           <!-- Checks if the day the user's shift was on is over -->
-                         {% elif dt(job.date, "%Y-%m-%d") < dt(curr_date, "%Y-%m-%d")  %}
+                         {% elif dt(job.date, "%Y-%m-%d") < dt(date, "%Y-%m-%d")  %}
                             <div id='worked'>
                                  Yes
                             </div>
