@@ -7,7 +7,7 @@
 
 import uuid
 from src.Users.Models.Records.records import Record
-from src.utilities.converter import units_to_hours, hours_to_units
+from src.utilities.converter import time_to_str, hours_to_units
 from src.Users.Jobs.job_helper import get_daily_rate, get_hours_worked
 
 class Job(object):
@@ -65,7 +65,7 @@ class Job(object):
                          start_time=kwargs['start_time'],
                          finish_time=kwargs['finish_time'],
                          hourly_rate=kwargs['hourly_rate'],
-                         total_hours=units_to_hours(units),
+                         total_hours=time_to_str(hours),
                          _hours=units,
                          user_id=self.id,
                          daily_rate=get_daily_rate(units, kwargs['hourly_rate']),
