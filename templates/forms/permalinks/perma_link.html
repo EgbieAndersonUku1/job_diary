@@ -39,16 +39,16 @@
                     Hourly rate (£)
                   </th>
                   <th>
-                    Total hours worked
-                  </th>
-                  <th>
-                    Daily rate (£)
-                  </th>
-                  <th>
                     Start time
                   </th>
                   <th>
                     Finish time
+                  </th>
+                  <th>
+                    Total hours worked
+                  </th>
+                  <th>
+                    Daily rate (£)
                   </th>
                   <th>
                    Shift/Job confirmation
@@ -84,16 +84,16 @@
                          £{{ job.hourly_rate}}
                        </td>
                        <td>
-                         {{ job.total_hours}}
-                       </td>
-                       <td>
-                         £{{ job.daily_rate }}
-                       </td>
-                       <td>
                          <b>{{ job.start_time }}</b>
                        </td>
                        <td>
                          <b>{{ job.finish_time }}</b>
+                       </td>
+                       <td>
+                         {{ job.total_hours}}
+                       </td>
+                       <td>
+                         £{{ job.daily_rate }}
                        </td>
                        <td>
 
@@ -103,7 +103,7 @@
                             </div>
                          {% else %}
                             <div id='confirmation_required'>
-                               {{ jobs[0].is_shift_confirmed.title() }} 
+                               {{ jobs[0].is_shift_confirmed.title() }}
                             </div>
                          {% endif %}
                        </td>

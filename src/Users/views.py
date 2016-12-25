@@ -79,7 +79,7 @@ def entry_page(row_ID):
     end_hours   = request.form.get('end_hours')
     end_mins    = request.form.get('end_mins')
     is_shift_confirmed = request.form.get('is_shift_confirmed')
-
+    
     if request.method == 'GET':
         return render_template('forms/JobEntryForm/job_entry_page.html',
                                 start_date=start_date,

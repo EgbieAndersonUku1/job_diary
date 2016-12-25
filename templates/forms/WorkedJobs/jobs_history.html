@@ -58,16 +58,16 @@
                   Hourly rate (£)
                 </th>
                 <th>
-                  Hours worked
-                </th>
-                <th>
-                  Daily rate (£)
-                </th>
-                <th>
                   Start time
                 </th>
                 <th>
                   Finish time
+                </th>
+                <th>
+                  Hours worked
+                </th>
+                <th>
+                  Daily rate (£)
                 </th>
                 <th>
                   Update/Delete
@@ -94,16 +94,16 @@
                  £{{ jobs[0].hourly_rate}}
                </td>
                <td>
-                 {{ jobs[0].total_hours}}
-               </td>
-               <td>
-                 £{{ jobs[0].daily_rate }}
-               </td>
-               <td>
                  {{ jobs[0].start_time }}
                </td>
                <td>
                  {{ jobs[0].finish_time }}
+               </td>
+               <td>
+                 {{ jobs[0].total_hours}}
+               </td>
+               <td>
+                 £{{ jobs[0].daily_rate }}
                </td>
                <td>
                   {% if session['username'] == 'admin' %}
@@ -154,17 +154,18 @@
                 Hourly rate (£)
               </th>
               <th>
-                Hours worked
-              </th>
-              <th>
-                Daily rate (£)
-              </th>
-              <th>
                 Start time
               </th>
               <th>
                 Finish time
               </th>
+              <th>
+                Hours worked
+              </th>
+              <th>
+                Daily rate (£)
+              </th>
+
               <th>
                 Update/Delete
               </th>
@@ -197,17 +198,18 @@
                      £{{ job.hourly_rate}}
                    </td>
                    <td>
-                     {{ job.total_hours}}
-                   </td>
-                   <td>
-                     £{{ job.daily_rate }}
-                   </td>
-                   <td>
                      {{ job.start_time }}
                    </td>
                    <td>
                      {{ job.finish_time }}
                    </td>
+                   <td>
+                     {{ job.total_hours}}
+                   </td>
+                   <td>
+                     £{{ job.daily_rate }}
+                   </td>
+
                    <td>
                      <!--As an admin you can edit jobs that are active and non-active -->
                      {% if session['username'] == 'admin' %}
