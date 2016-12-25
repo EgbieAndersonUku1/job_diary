@@ -21,6 +21,9 @@ body {
   color: blue;
 }
 
+b {
+    color: #0842CA;
+}
 #confirmed {
    color:green;
    font-weight: bold;

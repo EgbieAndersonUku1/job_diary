@@ -65,10 +65,10 @@
                          {{ translate(job.month )[:3]}}
                        </td>
                        <td>
-                         {{ job.date.replace('-', '/') }}
+                          <b>{{ job.date.replace('-', '/') }}</b>
                        </td>
                        <td>
-                         {{ job.day[:3] }}
+                         <b>{{ job.day[:3] }}</b>
                        </td>
 
                        <td>
@@ -90,20 +90,20 @@
                          £{{ job.daily_rate }}
                        </td>
                        <td>
-                         {{ job.start_time }}
+                         <b>{{ job.start_time }}</b>
                        </td>
                        <td>
-                         {{ job.finish_time }}
+                         <b>{{ job.finish_time }}</b>
                        </td>
                        <td>
 
                           {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
                             <div id='confirmed'>
-                                <em><b>{{ jobs[0].is_shift_confirmed.title() }} </b></em>
+                                <em>{{ jobs[0].is_shift_confirmed.title() }}</em>
                             </div>
                          {% else %}
                             <div id='confirmation_required'>
-                               <b>{{ jobs[0].is_shift_confirmed.title() }} </b>
+                               {{ jobs[0].is_shift_confirmed.title() }} 
                             </div>
                          {% endif %}
                        </td>

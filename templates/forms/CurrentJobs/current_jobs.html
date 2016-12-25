@@ -23,9 +23,9 @@
         </div>
 
       {% elif len(jobs) == 1 %}
-               <!--if the shift is not confirmed before the start of that shift then the 
+               <!--if the shift is not confirmed before the start of that shift then the
                application assumes that that user shift is cancelled.
-              
+
                -->
                {% if not is_shift_confirmed(jobs[0], delete) %}
                     <div id='error_msg'>
@@ -34,7 +34,7 @@
                       <h5>You currently have no active jobs !!!</h5>
                     </div>
                       <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
-      
+
                {% else %}
               <!--get the data from the job-->
                 <h2>Current jobs yet to work </h2>
@@ -61,19 +61,19 @@
                   Hourly rate (£)
                 </th>
                 <th>
-                  Expected hours to work
-                </th>
-                <th>
-                  Expected daily rate (£)
-                </th>
-                <th>
                   Start time
                 </th>
                 <th>
                   Finish time
                 </th>
                 <th>
-                   Shift/job confirmation 
+                  Expected hours to work
+                </th>
+                <th>
+                  Expected daily rate (£)
+                </th>
+                <th>
+                   Shift/job confirmation
                 </th>
                 <th>
                   Job starts in
@@ -84,10 +84,10 @@
               </tr>
               <tr>
                <td>
-                 {{ jobs[0].date.replace('-', '/') }}
+                 <b>{{ jobs[0].date.replace('-', '/') }}</b>
                </td>
                <td>
-                 {{ jobs[0].day[:3] }}
+                 <b>{{ jobs[0].day[:3] }}</b>
                </td>
 
                <td>
@@ -103,16 +103,16 @@
                  £{{ jobs[0].hourly_rate}}
                </td>
                <td>
+                 <b>{{ jobs[0].start_time }}</b>
+               </td>
+               <td>
+                 <b>{{ jobs[0].finish_time }}</b>
+               </td>
+               <td>
                  {{ jobs[0].total_hours}}
                </td>
                <td>
                  £{{ jobs[0].daily_rate }}
-               </td>
-               <td>
-                 {{ jobs[0].start_time }}
-               </td>
-               <td>
-                 {{ jobs[0].finish_time }}
                </td>
                <td>
                   {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
@@ -121,7 +121,7 @@
                       </div>
                   {% else %}
                       <div id='confirmation_required'>
-                         <b>{{ jobs[0].is_shift_confirmed.title() }} </b>
+                         {{ jobs[0].is_shift_confirmed.title() }}
                       </div>
                   {% endif %}
                </td>
@@ -138,7 +138,7 @@
                 {% endif %}
 
       {% else %}
-              
+
               <h2>Current jobs yet to work</h2>
               <center>
               <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
@@ -163,16 +163,16 @@
               Hourly rate (£)
             </th>
             <th>
-              Expected hours to work
-            </th>
-            <th>
-              Expected daily rate (£)
-            </th>
-            <th>
               Start time
             </th>
             <th>
               Finish time
+            </th>
+            <th>
+              Expected hours to work
+            </th>
+            <th>
+              Expected daily rate (£)
             </th>
             <th>
               Shift/Job confirmation
@@ -190,10 +190,10 @@
                 {% else %}
                    <tr>
                      <td>
-                       {{ job.date.replace('-', '/') }}
+                       <b>{{ job.date.replace('-', '/') }}</b>
                      </td>
                      <td>
-                       {{ job.day[:3] }}
+                       <b>{{ job.day[:3] }}</b>
                      </td>
 
                      <td>
@@ -209,17 +209,19 @@
                        £{{ job.hourly_rate}}
                      </td>
                      <td>
+                       <b>{{ job.start_time }}</b>
+                     </td>
+                     <td>
+                       <b>{{ job.finish_time }}</b>
+                     </td>
+
+                     <td>
                        {{ job.total_hours}}
                      </td>
                      <td>
                        £{{ job.daily_rate }}
                      </td>
-                     <td>
-                       {{ job.start_time }}
-                     </td>
-                     <td>
-                       {{ job.finish_time }}
-                     </td>
+
                      <td>
                        {% if job.is_shift_confirmed.title() == 'Yes' %}
                           <div id='confirmed'>
