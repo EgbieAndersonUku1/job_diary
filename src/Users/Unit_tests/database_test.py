@@ -1,21 +1,40 @@
 ##################################################################
 # Author ; Egbie
-# Unit Test
-# The unit tests whether the connection between the python
-# program and the database is active. It does so by testing
-# whether data can be added to the database, whether it can can
-# be deleted and finally modified.
+# DATE   : 25/12/2016
 #
-# TO RUN THE TEST
+# Unit tests
+# ===========
+#
+# The unit tests are designed to test the connection between the python
+# program and the database. It does so by testing whether job data can be added
+# to the database, whether the data can be modified(updated)  or whether it can
+# be deleted and whether the job can be retreived based on its attributes such as
+# the job title, location, hours, daily rate, etc.
+#
+#  RUNNING THE TESTS
+#  =================
+#
+#  START THE MONGODB SERVER.
+#
 #  >>> python run.py shell
-#  This will activate a shell with all the data loaded into memory.
-#  If this command is not run the python program returns an importError
-#  because the file cannot be find. Next run.
+#
+#  THE SHELL COMMAND  WILL ACTIVATE A SHELL WITH ALL THE MODUELS LOADED INTO
+#  MEMORY. IF THIS COMMAND IS NOT RUN THE PYTHON PROGRAM RETURNS AN IMPORTERROR
+#  ON SOME OF THE MODULES. THIS IS ERROR IS CAUSED BECUASE NOT ALL MODULES
+#  ARE LOADED INTO MEMORY.
 #
 # >>> from src.Users.Unit_tests.database_test import DataBaseTest
 # >>> db = DataBaseTest()
-# The second command will initialized the database.
-##################################################################
+#
+# THE FIRST COMMAND LOADS THE PROGRAM INTO THE SHELL. THE SECOND COMMAND
+# INITIALIZED THE MONGODB DATABASE. ONCE INITIALIZED EACH TEST CAN BE RUN
+# SEPARATELY AS THE MODULES ITSELF ARE SELF CONTAINED OR THEY CAN BE RUN ALL
+#  ONCE USING THE RUN_TEST MODULE.
+#
+# IF THE PROGRAM IS RUN USING THE RUN_TESTS COMMAND A SUMMARY IS DISPLAYED
+# OF THE ENTIRE TESTS.
+#
+#############################################################################
 
 from src.Users.user import User
 from src.Users.Models.Databases.database import DataBase
@@ -26,13 +45,18 @@ from datetime import datetime
 from collections import OrderedDict
 from sys import exit
 
-DATABASE_INITIALIZE = False
-
 def initialize_database():
     """initialize the database"""
-    print'[*] initializing the database please wait...'
-    DataBase.initialize()
-    print'[+] Database initialized.'
+
+    print'\n[*] initializing the database please wait...'
+    try:
+        DataBase.initialize()
+    except:
+        print '[-] Failed to initialize database..'
+        print '[-] Check whether the Mongodb server is running and try again.'
+        print '[+] Goodbye!!'
+    else:
+        print'[+] Database initialized.'
 
 class DataBaseTest(User):
     """Test whether the data can effectively be added/deleted/modified from
@@ -40,12 +64,7 @@ class DataBaseTest(User):
     """
     def __init__(self, username='Egbie', start_date='2016-12-26', end_date='2016-12-26',
                 day='Monday', _id='1234'):
-                # check whether the database has been initialized.
-                global DATABASE_INITIALIZE
-                if not DATABASE_INITIALIZE:
-                    initialize_database()
-                    DATABASE_INITIALIZE = True
-
+                initialize_database() # initialize the database
                 User.__init__(self, username, start_date, end_date, day, _id=_id)
                 year, month, day = start_date.split('-')
                 self.user_id = _id
@@ -260,6 +279,8 @@ class DataBaseTest(User):
     def delete_job_test(self):
         """check if the jobs can be deleted from the database"""
 
+        assert self.row_id, '[+] Cannot delete job, because the row id is empty!!.'
+
         print '\n[+] Attempting to delete job from database, please wait...'
         self.delete_job(self.row_id.replace('#', ''))
         print '[+] Done, checking to see if job was deleted, please wait..'
@@ -270,8 +291,16 @@ class DataBaseTest(User):
         return True
 
     def update_job_status_test(self, status, row_id=None):
-        """Allows the status of the job to be updated"""
+        """update_job_status_test(str, str) -> return(bool)
 
+        Updates a job within the database using its row id.
+
+        :parameters
+            - status : Either 'Yes' or 'No'. Yes the job
+                       has been worked and No means the job
+                       has not yet worked.
+            - row_id : The row id using to update the job status.
+        """
         print '[*] Please wait, attempting to change the job status..'
         if not row_id:
             print '[+] Failed to change because the row id is None.'
@@ -279,10 +308,27 @@ class DataBaseTest(User):
         elif row_id:
             self.set_row_id(row_id)
 
-        self.update_job_status(self.row_id, status)
+        print '[+] Checking to see if row ID is valid, please wait...'
+        sleep(0.3)
+        if not self.get_job_by_row_id(self.row_id): # determine if the row id is valid.
+            print '[-] Failed, the row ID used is invalid !!!'
+            return False
+
+        print '[+] Row id valid checking status, please wait'
+        sleep(0.3)
+        if status.title() not in ['Yes', 'No']:
+            print '[-] The status is invalid. Use either "Yes" or "No"!!!'
+            return False
+
+        sleep(0.5)
+        print '[+] The status is valid, changing status, please wait..'
+        # if the row_id is valid and the status is valid update status
+        self.update_job_status(self.row_id, status.title())
+
+        # next check if the changes were made to the job.
         if status.title() == 'Yes':
             value = self.get_all_worked_jobs()
-        else:
+        elif status.title() == 'No':
             value = self.get_all_active_jobs()
         if value:
             print '[-] Successful changed the job status to: "{}"'.format(status).title()
@@ -292,6 +338,8 @@ class DataBaseTest(User):
 
     def _is_valued_changed(self, obj, obj2):
         """Checks whether the value in database has been updated"""
+
+        assert (obj and obj2), '[-] Empty values cannot be modified. Re-run the test function first.'
         errors  = {}
         values = ["end_date", "descr", "is_shift_confirmed",
                   "finish_time","start_time","month", "total_hours",
@@ -534,6 +582,7 @@ class DataBaseTest(User):
 
         self._get_summary(self.errors, NUM_OF_TESTS, successful_test, failed_test)
         self.reset_values()
+        print '[+] The test job data has been deleted from the database.'
         print'[+] Test will exiting in 5 seconds...\n'
         sleep(5)
         print'##################### Test complete have a nice day #####################'.center(40)
