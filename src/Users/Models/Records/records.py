@@ -47,10 +47,11 @@ class Record(object):
             year       : Year optional parameter.
             row_id     : The row id for the table consisting of the data.
             _id        : The _id use to identify the user table.
+            worked_job : default mode: False. This determines if the user's
+                         has worked the job.
             is_shift_confirmed: Checks if the shift has been confirmed.
                                 Returns True if the shift is confirmed
                                 and False othewise
-
         """
         self.job_title  = kwargs['job_title']
         self.descr = kwargs['descr']
@@ -70,6 +71,7 @@ class Record(object):
         self.month  = kwargs['month']
         self._id = uuid.uuid4().hex if kwargs['_id'] is None else kwargs['_id']
         self.is_shift_confirmed = kwargs['is_shift_confirmed']
+        self.worked_job = kwargs['worked_job']
 
     def get_json(self):
         """returns a json represent of the class"""
@@ -92,7 +94,8 @@ class Record(object):
                  'day'        : self.day,
                  'year'       : self.year,
                  '_id'        : self._id,
-                 'is_shift_confirmed' : self.is_shift_confirmed }
+                 'is_shift_confirmed' : self.is_shift_confirmed,
+                 'worked_job': self.worked_job.title() }
 
     def save(self):
         """Saves the data to the databases in the form of json"""
@@ -147,7 +150,7 @@ class Record(object):
 
     @classmethod
     def get_user_id(cls, username):
-        """ """
+        """Returns the users unique ID number."""
         login_obj = cls._find_one(collection='login_credentials',
                                   query={'username': username.lower()},
                                   return_obj=False)
@@ -220,11 +223,9 @@ class Record(object):
         :parameters
            - date   : The data to query by.
            - day    : The day to query by.
-           - user_id: The user ID
+           - user_id: The user I2D
         """
-        return cls._find(query={'day': day.title(),
-                               'user_id':user_id},
-                               key=('date', -1))
+        return cls._find(query={'day': day.title(),'user_id':user_id}, key=('date', -1))
 
     @classmethod
     def find_by_date(cls, date, user_id):
@@ -238,9 +239,7 @@ class Record(object):
            - day    : The day to query by.
            - user_id: The user ID
         """
-        return cls._find(query={'date': date,
-                                'user_id': user_id},
-                                 key=('date', -1))
+        return cls._find(query={'date': date,'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_year(cls, year, user_id):
@@ -252,9 +251,7 @@ class Record(object):
             - year   : The year in which to query
             - user_id: The user ID to use for the query.
         """
-        return cls._find(query={'year': int(year),
-                                'user_id': user_id},
-                                key=('date', -1))
+        return cls._find(query={'year': int(year),'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_month(cls, month, user_id):
@@ -300,9 +297,8 @@ class Record(object):
             - start_time: The time the job started.
             - user_id  : The user id to use for the query.
         """
-        return cls._find(query={'start_time': start_time,
-                                'user_id': user_id},
-                                key=('date', -1))
+        return cls._find(query={'start_time': start_time, 'user_id': user_id},
+                         key=('date', -1))
 
     @classmethod
     def find_by_finish_time(cls, finish_time, user_id):
@@ -315,9 +311,8 @@ class Record(object):
             - finish_time: The time the job ended.
             - user_id    : The user id to used for the query.
         """
-        return cls._find(query={'finish_time': finish_time,
-                                'user_id': user_id},
-                                 key=('date', -1))
+        return cls._find(query={'finish_time': finish_time,'user_id': user_id},
+                         key=('date', -1))
 
     @classmethod
     def find_by_hours_worked(cls, hours, user_id):
@@ -386,6 +381,12 @@ class Record(object):
                         value=new_passwd, query=query)
 
     @classmethod
+    def update_job_status(cls, row_id, status):
+        """ """
+        query = {'worked_job': status.title()}
+        db.update('jobs_details', 'row_id', row_id, query)
+
+    @classmethod
     def update(cls, row_id, form, update_row=True):
         """update(str, form_obj) -> return(str)
 
@@ -423,6 +424,17 @@ class Record(object):
         return cls._find(query={"is_shift_confirmed": confirmation,
                                'user_id':user_id},
                                 key=('date', -1))
+    @classmethod
+    def find_all_active_jobs(cls, user_id):
+        """ """
+        key =  ('date', -1)
+        return cls._find({'worked_job': 'No', 'user_id': user_id}, key)
+
+    @classmethod
+    def find_all_worked_jobs(cls, user_id):
+        """ """
+        key = ('date', -1)
+        return cls._find({'worked_job': 'Yes', 'user_id': user_id}, key)
 
     @classmethod
     def save_secret_answers(cls, form, user_id, username):

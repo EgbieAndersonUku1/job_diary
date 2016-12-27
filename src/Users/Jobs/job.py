@@ -20,7 +20,7 @@ class Job(object):
         self.day = day
         self.id = uuid.uuid4().hex if _id is None else _id
 
-    def add_job_to_records(self, job_title, descr, loc, **kwargs):
+    def add_job_to_records(self, job_title, descr, loc, worked_job='No', **kwargs):
         """add_job_to_records(str, str, str, **kwargs) -> Returns(str)
 
         This method has two primary functions. The first allows
@@ -54,29 +54,32 @@ class Job(object):
             - confirm_shift: A parameter which is either 'yes' or 'no'.
                             Yes meaning the job was confirmed and no
                             meaning the job was not confirmed.
+            - worked_job : Takes two parameters. True if the user has
+                           worked the job and False othewise.
         """
         hours = get_hours_worked(self.start_date, kwargs['start_time'],
                                  self.end_date, kwargs['finish_time'])
 
         units  = hours_to_units(hours)    # convert hours worked to units
         job = Record(job_title=job_title,
-                         descr=descr,
-                         loc=loc,
-                         start_time=kwargs['start_time'],
-                         finish_time=kwargs['finish_time'],
-                         hourly_rate=kwargs['hourly_rate'],
-                         total_hours=time_to_str(hours),
-                         _hours=units,
-                         user_id=self.id,
-                         daily_rate=get_daily_rate(units, kwargs['hourly_rate']),
-                         date=self.start_date,
-                         end_date=self.end_date,
-                         day=self.day,
-                         month=self.start_date.split('-')[1], # get the month part
-                         year=None,
-                         row_id=None,
-                         _id=None,
-                         is_shift_confirmed=kwargs['is_shift_confirmed'])
+                    descr=descr,
+                    loc=loc,
+                    start_time=kwargs['start_time'],
+                    finish_time=kwargs['finish_time'],
+                    hourly_rate=kwargs['hourly_rate'],
+                    total_hours=time_to_str(hours),
+                    _hours=units,
+                    user_id=self.id,
+                    daily_rate=get_daily_rate(units, kwargs['hourly_rate']),
+                    date=self.start_date,
+                    end_date=self.end_date,
+                    day=self.day,
+                    month=self.start_date.split('-')[1], # get the month part
+                    year=None,
+                    row_id=None,
+                    _id=None,
+                    is_shift_confirmed=kwargs['is_shift_confirmed'],
+                    worked_job=worked_job)
 
         # if update is set to False saves the new job details to the database.
         # if update is set to True overide an existing job row with the new
@@ -281,7 +284,7 @@ class Job(object):
         return ''
 
     def update_job(self, row_id, form):
-        """update_job_row(str, obj) -> return(None)
+        """update_job(str, obj) -> return(None)
 
         Updates a particular job row with new job information.
         Returns None.
@@ -314,6 +317,15 @@ class Job(object):
         the current working day.
         """
         pass
+
+    def get_all_active_jobs(self):
+        return Record.find_all_active_jobs(self.id)
+
+    def get_all_worked_jobs(self):
+        return Record.find_all_worked_jobs(self.id)
+
+    def update_job_status(self, row_id, status):
+        return Record.update_job_status(row_id, status)
 
     def __repr__(self):
         return '{}'.format(self.full_name)

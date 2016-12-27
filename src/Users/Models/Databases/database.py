@@ -33,7 +33,7 @@ class DataBase(object):
         job_details.create_index([('year', pymongo.DESCENDING)])
         job_details.create_index([('month', pymongo.DESCENDING)])
         job_details.create_index([('is_shift_confirmed', pymongo.DESCENDING)])
-                                   
+
     @staticmethod
     def insert_one(collection, data):
         """insert_one(str) -> return(none)
@@ -45,7 +45,7 @@ class DataBase(object):
 
         """
         DataBase.DATABASE[collection].insert_one(data)
-        
+
     @staticmethod
     def search(collections, query, key, limit_num):
         """search(str, value, value, tuple) -> return(cursor)
@@ -61,8 +61,8 @@ class DataBase(object):
         """
         field, value = key
         if query == None:
-            return DataBase.DATABASE[collections].find().sort(field, value).limit(limit_num) # query all documents       
-        return DataBase.DATABASE[collections].find(query).sort(field, value).limit(limit_num)        
+            return DataBase.DATABASE[collections].find().sort(field, value).limit(limit_num) # query all documents
+        return DataBase.DATABASE[collections].find(query).sort(field, value).limit(limit_num)
 
     @staticmethod
     def find_one(collections, query):
@@ -97,11 +97,9 @@ class DataBase(object):
 
         parameters:
            - collections: A table name from the database
-           - key        : The key returns the value to update_row
+           - key        : The key finds the specific row to update
            - value      : Replaces the old value with the new value.
-           - query      : The information to query from the database
+           - query      : The information used to update to the database
 
         """
         DataBase.DATABASE[collections].update_one({key: value}, {'$set':query})
-    
-    

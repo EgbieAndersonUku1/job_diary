@@ -203,7 +203,6 @@ def perma_link():
     """Displays the jobs retreived from the search function"""
     return _display("forms/permalinks/perma_link.html", permalink_jobs=SEARCH_FORM_JOBS)
 
-
 @app.route('/job/edit/<value>')
 @login_required
 def edit(value):
