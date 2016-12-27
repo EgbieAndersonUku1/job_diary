@@ -291,8 +291,8 @@ class DataBaseTest(User):
         return False
 
     def _is_valued_changed(self, obj, obj2):
+        """Checks whether the value in database has been updated"""
         errors  = {}
-
         values = ["end_date", "descr", "is_shift_confirmed",
                   "finish_time","start_time","month", "total_hours",
                   "daily_rate", "year", "date", "hourly_rate","job_title"]
@@ -303,7 +303,7 @@ class DataBaseTest(User):
         return errors
 
     def modified_data_test(self):
-        """test whether in database can be modified"""
+        """tests whether the data in the database can be modified"""
 
         assert self.row_id, 'The row ID cannot be an empty string or False.'
         old_record = self.get_job_by_row_id(self.row_id)      # returned as object
@@ -340,7 +340,7 @@ class DataBaseTest(User):
         return self._is_valued_changed(old_rec, new_rec)
 
     def _is_test_passed(self, result, failed, successful, errors, key, error_msg):
-        """Checks whether the test has been passed"""
+        """Checks whether the series of tests run has been passed"""
 
         sleep(0.5)
         if result:
@@ -369,7 +369,7 @@ class DataBaseTest(User):
         print "="*40
 
     def _get_error_report(self, errors):
-        """generate an error report"""
+        """generates an error report"""
         print '\n\n\n Report for job that did not update..'
         for key in errors:
             print "[-] {} :: {}".format(key.title(), errors[key])
