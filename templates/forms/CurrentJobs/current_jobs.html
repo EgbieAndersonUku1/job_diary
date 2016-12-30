@@ -13,8 +13,9 @@
 
    {% with messages = get_flashed_messages() %}
        {% if messages %}
+   </th>
            {% for message in messages %}
-                <div id='alert' class="alert alert-danger">
+            <div id='alert' class="alert alert-danger">
                     <ul>
                        <li>
                           <center>
@@ -44,7 +45,7 @@
             </center>
             <tr>
                 <th>
-                    Date 
+                    Date
                 </th>
                 <th>
                     Day
@@ -63,7 +64,6 @@
                 </th>
                 <th>
                     Start time
-                </th>
                 <th>
                     Finish time
                 </th>
@@ -84,11 +84,13 @@
                 </th>
             </tr>
             {% for job in jobs %}
-                {% if not is_shift_confirmed(job) and is_shift_now(job) %}
+                {% if not is_shift_confirmed(job) %}
                     {{ user.delete_job(job.row_id[1:])  }}
+                    <meta http-equiv="refresh" content='0.001'>
 
                 {% elif is_shift_over(job) and  job.is_shift_confirmed.lower() == 'yes' %}
                       {{ user.update_job_status(job.row_id, 'Yes') }}
+                      <meta http-equiv="refresh" content='0.001'>
                 {% else %}
                        <tr>
                            <td>

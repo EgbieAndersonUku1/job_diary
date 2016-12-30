@@ -5,7 +5,7 @@
 from flask import session
 from src.Users.user import User
 from datetime import datetime
-from src.Users.Validator.validate_date import check_day, check_date
+from src.Users.Validator.date_validator import check_day, check_date
 from src.utilities.converter import month_to_num, time_to_str
 from src.Users.Jobs.job_helper import get_hours_worked
 from src.Users.Models.Registrations.registration import Registration

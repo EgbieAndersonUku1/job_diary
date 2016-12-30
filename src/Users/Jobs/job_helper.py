@@ -115,7 +115,7 @@ def is_shift_over(job):
     True
     """
     curr_time, shift_end_time = _check_shift(job, False)
-    return True if curr_time > shift_end_time else False
+    return True if curr_time >= shift_end_time else False
 
 def has_previous_job_been_worked(job, curr_date, confirmation):
     """has_previous_job_been_worked(str, str, str) -> return(bool)
