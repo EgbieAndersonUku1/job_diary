@@ -122,7 +122,7 @@ def has_previous_job_been_worked(job, curr_date, confirmation):
 
     Takes a job, the current date and a job confirmation and checks
     whether the job has been worked or not. Returns True if the job
-    has been worked, returns None if the job was never confirmed and
+    has been worked, returns None if the job was never worked and
     returns False if the job has not been worked.
 
     :parameters
@@ -140,7 +140,8 @@ def has_previous_job_been_worked(job, curr_date, confirmation):
     elif datetime.strptime(job.start_date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d") \
         and confirmation.lower() == 'no':
         return None
-    return False
+    return False # used for editing/updating because a present/future job can be
+                 # edited saw that is now because a job worked in the past.
 
 def is_job_in_past_present_or_future(job, curr_date):
     """is_job_in_past_present_or_future(obj, str) -> return(str)
