@@ -37,10 +37,16 @@ def _check_shift(job, is_shift_now=False):
     """_check_shift(obj, str, str) -> returns(tuple)
 
        A wrapper function that returns the current time
-       and the shift time object. The current time object is
-       always returned and depending on which flag calculates
-       and returns the datetime object for current time to
-       the shift start or to the end of the shift time.
+       and the shift time date object.
+
+       If the _is_shift_time is set to True returns:
+
+         - The current time object and the the beginning
+            of the shift start object.
+
+       If the flag is set to False (default mode) returns the
+       current date object and the end of the shift time
+       date object.
 
        :parameters
            - job ; A job object.
