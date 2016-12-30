@@ -4,6 +4,19 @@
 
 {% block content %}
 
+<div style="overflow-x:auto;">
+
+   {% with messages = get_flashed_messages() %}
+     {% if messages %}
+       <ul class=flashes>
+           {% for message in messages %}
+             <li>{{ message }} </li>
+           {% endfor %}
+       </ul>
+       {% endif %}
+   {% endwith %}
+</div>
+
 <h2>Filter form</h2>
 <div row='row' >
 

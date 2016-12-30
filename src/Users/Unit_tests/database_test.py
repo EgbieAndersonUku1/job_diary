@@ -131,9 +131,9 @@ class DataBaseTest(User):
         """set the username"""
         self.username = username
 
-    def set_start_date(self, date):
+    def set_start_date(self, start_date):
         """set the start date for the job"""
-        self.start_date = date
+        self.start_date = start_date
 
     def set_end_date(self, end_date):
         """set the end date for the job"""
@@ -264,7 +264,7 @@ class DataBaseTest(User):
     def get_job_by_start_date_test(self):
         """return all jobs based on the name"""
         msg = 'jobs based on the start date'
-        return self._get_jobs(msg, self.get_job_by_date, 'date', date=self.start_date)
+        return self._get_jobs(msg, self.get_job_by_date, 'start_date', start_date=self.start_date)
 
     def get_job_by_row_id_test(self):
         """return all jobs based on the name"""
@@ -343,7 +343,7 @@ class DataBaseTest(User):
         errors  = {}
         values = ["end_date", "descr", "is_shift_confirmed",
                   "finish_time","start_time","month", "total_hours",
-                  "daily_rate", "year", "date", "hourly_rate","job_title"]
+                  "daily_rate", "year", "start_date", "hourly_rate","job_title"]
 
         for value in values:
             if obj[value] == obj2[value]:
@@ -428,7 +428,7 @@ class DataBaseTest(User):
         NUM_OF_TESTS = 18
         failed_test, successful_test = [], []
 
-        print '##################### Preparing tests...#####################'.center(40)
+        print '##################### Database unit tests...#####################'.center(40)
         print '\n\n[+] Test 1: Setting up fake data to be used for the database..'
         print '[+] Adding data to the database, please wait'
         print '[+] Checking if the data was successful saved to database'
@@ -585,4 +585,4 @@ class DataBaseTest(User):
         print '[+] The test job data has been deleted from the database.'
         print'[+] Test will exiting in 5 seconds...\n'
         sleep(5)
-        print'##################### Test complete have a nice day #####################'.center(40)
+        print'##################### Test complete have a nice day ##############'.center(40)

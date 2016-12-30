@@ -8,250 +8,148 @@
 
 <meta http-equiv="refresh" content='60'>
 
-
 {% block title %}Active jobs {% endblock %}
 {% block content %}
 
+   {% with messages = get_flashed_messages() %}
+       {% if messages %}
+           {% for message in messages %}
+                <div id='alert' class="alert alert-danger">
+                    <ul>
+                       <li>
+                          <center>
+                              <strong>{{ message }}</strong>
+                          </center>
+                       </li>
+                    </ul>
+                </div>
+            {% endfor %}
+        {% endif %}
+   {% endwith %}
+
+<table class='center'>
     <table class="table table-striped">
       {% if not jobs %}
-        <div id='error_msg'>
-             <h5>This is not an error this page has loaded correct.</h5>
-             <div>
-               <h5>You currently have no active jobs !!!</h5>
-             </div>
-             <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
-        </div>
-
-      {% elif len(jobs) == 1 %}
-               <!--if the shift is not confirmed before the start of that shift then the
-               application assumes that that user shift is cancelled.
-
-               -->
-               {% if not is_shift_confirmed(jobs[0], delete) %}
-                    <div id='error_msg'>
-                        <h5>This is not an error this page has loaded correct.</h5>
-                    <div>
-                      <h5>You currently have no active jobs !!!</h5>
-                    </div>
-                      <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
-
-               {% else %}
-              <!--get the data from the job-->
-                <h2>Current jobs yet to work </h2>
-              <center>
-              <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
-              </center>
-                <tr>
-                <th>
-                  Date
-                </th>
-                <th>
-                  Day
-                </th>
-                <th>
-                  Title
-                </th>
-                <th>
-                  Role
-                </th>
-                <th>
-                  Location
-                </th>
-                <th>
-                  Hourly rate (£)
-                </th>
-                <th>
-                  Start time
-                </th>
-                <th>
-                  Finish time
-                </th>
-                <th>
-                  Expected hours to work
-                </th>
-                <th>
-                  Expected daily rate (£)
-                </th>
-                <th>
-                   Shift/Job confirmed
-                </th>
-                <th>
-                  Job starts in
-                </th>
-                <th>
-                  Update/Delete
-                </th>
-              </tr>
-              <tr>
-               <td>
-                 <b>{{ jobs[0].date.replace('-', '/') }}</b>
-               </td>
-               <td>
-                 <b>{{ jobs[0].day[:3] }}</b>
-               </td>
-
-               <td>
-                 {{ jobs[0].job_title }}
-               </td>
-               <td>
-                  {{ jobs[0].descr }}
-               </td>
-               <td>
-                 {{ jobs[0].loc }}
-               </td>
-               <td>
-                 £{{ jobs[0].hourly_rate}}
-               </td>
-               <td>
-                 <b>{{ jobs[0].start_time }}</b>
-               </td>
-               <td>
-                 <b>{{ jobs[0].finish_time }}</b>
-               </td>
-               <td>
-                 {{ jobs[0].total_hours}}
-               </td>
-               <td>
-                 £{{ jobs[0].daily_rate }}
-               </td>
-               <td>
-                  {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
-                      <div id='confirmed'>
-                          <em><b>{{ jobs[0].is_shift_confirmed.title() }} </b></em>
-                      </div>
-                  {% else %}
-                      <div id='confirmation_required'>
-                         {{ jobs[0].is_shift_confirmed.title() }}
-                      </div>
-                  {% endif %}
-               </td>
-               <td>
-                  <div id='time'>
-                     <em>{{ when_is_shift_starting(jobs[0].date, jobs[0].start_time) }} </em>
-                  </div>
-               </td>
-               <td>
-                  <a href="{{ url_for('edit', value=jobs[0].row_id) }}">Edit</a> /
-                  <a href="{{ url_for('delete', row=jobs[0].row_id[1:]) }}">Delete</a>
-
-               </td>
-                {% endif %}
-
+            <div id='error_msg'>
+                 <h5>This is not an error this page has loaded correct.</h5>
+                 <div>
+                   <h5>You currently have no active jobs !!!</h5>
+                 </div>
+                 <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
+            </div>
       {% else %}
+            <h2>Current jobs yet to work</h2>
+            <center>
+            <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
+            </center>
+            <tr>
+                <th>
+                    Date {{ jobs }}
+                </th>
+                <th>
+                    Day
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Hourly rate (£)
+                </th>
+                <th>
+                    Start time
+                </th>
+                <th>
+                    Finish time
+                </th>
+                <th>
+                    Expected hours to work
+                </th>
+                <th>
+                    Expected daily rate (£)
+                </th>
+                <th>
+                    Shift/Job confirmed
+                </th>
+                <th>
+                    Job starts in
+                </th>
+                <th>
+                    Edit/Delete
+                </th>
+            </tr>
+            {% for job in jobs %}
+                {% if not is_shift_confirmed(job) and is_shift_now(job) %}
+                    {{ user.delete_job(job.row_id[1:])  }}
 
-              <h2>Current jobs yet to work</h2>
-              <center>
-              <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
-              </center>
-          <tr>
-            <th>
-              Date
-            </th>
-            <th>
-              Day
-            </th>
-            <th>
-              Role
-            </th>
-            <th>
-              Description
-            </th>
-            <th>
-              Location
-            </th>
-            <th>
-              Hourly rate (£)
-            </th>
-            <th>
-              Start time
-            </th>
-            <th>
-              Finish time
-            </th>
-            <th>
-              Expected hours to work
-            </th>
-            <th>
-              Expected daily rate (£)
-            </th>
-            <th>
-              Shift/Job confirmed
-            </th>
-            <th>
-              Job starts in
-            </th>
-            <th>
-              Update/Delete
-            </th>
-          </tr>
-          {% for job in jobs %}
-                {% if job.is_shift_confirmed.lower() == 'no' and is_shift_now(job) %}
-                   {{ delete(job.row_id[1:])  }}
+                {% elif is_shift_over(job) and  job.is_shift_confirmed.lower() == 'yes' %}
+                      {{ user.update_job_status(job.row_id, 'Yes') }}
+                      {{ jobs.pop(0) }}
                 {% else %}
-                   <tr>
-                     <td>
-                       <b>{{ job.date.replace('-', '/') }}</b>
-                     </td>
-                     <td>
-                       <b>{{ job.day[:3] }}</b>
-                     </td>
-
-                     <td>
-                       {{ job.job_title }}
-                     </td>
-                     <td>
-                        {{ job.descr }}
-                     </td>
-                     <td>
-                       {{ job.loc }}
-                     </td>
-                     <td>
-                       £{{ job.hourly_rate}}
-                     </td>
-                     <td>
-                       <b>{{ job.start_time }}</b>
-                     </td>
-                     <td>
-                       <b>{{ job.finish_time }}</b>
-                     </td>
-
-                     <td>
-                       {{ job.total_hours}}
-                     </td>
-                     <td>
-                       £{{ job.daily_rate }}
-                     </td>
-
-                     <td>
-                       {% if job.is_shift_confirmed.title() == 'Yes' %}
-                          <div id='confirmed'>
-                            <em>{{ job.is_shift_confirmed.title() }} </em>
-                          </div>
-                       {% else %}
-                          <div id='confirmation_required'>
-                              <em>{{ job.is_shift_confirmed.title() }} </em>
-                          </div>
-                        {% endif %}
-                     </td>
-                     <td>
-                        <div id='time'>
-                            {{ when_is_shift_starting(job.date, job.start_time) }}
-                        </div>
-                     </td>
-                     <td>
-                        <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
-                        <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-
-                     </td>
+                       <tr>
+                           <td>
+                               <b>{{ job.start_date.replace('-', '/') }}</b>
+                           </td>
+                           <td>
+                               <b>{{ job.day[:3] }}</b>
+                           </td>
+                           <td>
+                               {{ job.job_title }}
+                           </td>
+                           <td>
+                               {{ job.descr }}
+                           </td>
+                           <td>
+                               {{ job.loc }}
+                           </td>
+                           <td>
+                               £{{ job.hourly_rate}}
+                           </td>
+                           <td>
+                               <b>{{ job.start_time }}</b>
+                           </td>
+                           <td>
+                               <b>{{ job.finish_time }}</b>
+                           </td>
+                           <td>
+                               {{ job.total_hours}}
+                           </td>
+                           <td>
+                               £{{ job.daily_rate }}
+                           </td>
+                           <td>
+                               {% if job.is_shift_confirmed.title() == 'Yes' %}
+                                    <div id='confirmed'>
+                                        <em>{{ job.is_shift_confirmed.title() }} </em>
+                                    </div>
+                               {% else %}
+                                    <div id='confirmation_required'>
+                                        <em>{{ job.is_shift_confirmed.title() }} </em>
+                                    </div>
+                               {% endif %}
+                         </td>
+                         <td>
+                                <div id='time'>
+                                    {{ when_is_shift_starting(job.start_date, job.start_time) }}
+                                </div>
+                         </td>
+                        <td>
+                            <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a>/
+                            <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
+                            <br />
+                            <a href="{{ url_for('info_page', row_id=job.row_id)}}">Info</a>
+                        </td>
                 {% endif %}
-
         {% endfor %}
-        {% endif %}
+    {% endif %}
   </table>
   <center><caption><em>Gets the latest information automatically every 60 seconds</em></caption></center>
 
 
 
 {% endblock %}
-
-</tr>

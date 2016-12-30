@@ -6,6 +6,12 @@ from src.utilities.converter import month_to_num, time_to_str
 from src.Users.Jobs.job_helper import get_hours_worked
 from src.Users.Models.Registrations.registration import Registration
 from cgi import escape
+from src.utilities.common import create_flash_msg
+from src.Users.Jobs.job_helper import (is_shift_over,
+                                       has_previous_job_been_worked,
+                                       is_job_in_past_present_or_future,
+                                       is_shift_confirmed,
+                                       is_shift_now)
 
 class ValidateJobDetailsForm(object):
     """Process the form and checks whether the job details entered by the user are correct"""
@@ -131,9 +137,13 @@ class ValidateJobDetailsForm(object):
             return False, self.errors, self._job
         return True, self.errors, self._job
 
-    def __process_form_helper(self, user, row_id=None, update=False):
-        """A private helper method that helps the process form method"""
+    def __save(self, user, row_id=None, update=False):
+        """The save function saves the data to database. If row_id is not
+        false and update is equal to true updates a previous row with the
+        new data.
 
+        Returns a row id.
+        """
         return user.add_job_to_records(self._job.job_title,
                                        self._job.description,
                                        self._job.location,
@@ -143,7 +153,68 @@ class ValidateJobDetailsForm(object):
                                        is_shift_confirmed=self.is_shift_confirmed,
                                        update=update, row_id=row_id)
 
-    def process_form(self, start_date, end_date, day, row_id=None, update=False):
+    def __update_job_status(self, user, status):
+
+        row_id = self.__save(user)
+        user.update_job_status(row_id, 'Yes') # user has worked the job.
+        return row_id
+
+    def __evaluate_job_status(self, user, row_id, response, **kwargs):
+        """ """
+        msg = 'deleted'
+        if response == None and not row_id: # means the days has passed and the job was not confirmed.
+            return None, msg
+        if response == None and row_id:
+            user.delete_job(row_id[1:])
+            return None, msg
+        if not response: # determine the type of response
+            msg = 'unconfirmed'
+            user.update_job_status(row_id, 'No')
+        else:
+            user.update_job_status(row_id, 'Yes')
+            msg = 'confirmed'
+
+        if kwargs['update']:
+            create_flash_msg('A job was updated.')
+            return self.__save(user, row_id, True), msg # update using the user ID
+        elif not kwargs['update']:
+            job_status = is_job_in_past_present_or_future(kwargs['job'], kwargs['curr_date']) # check in job is in the future or present
+            if job_status == 'past' and kwargs['job'].is_shift_confirmed.lower() == 'yes':
+                return self.__update_job_status(user, 'Yes'), msg
+            elif job_status == 'past' and kwargs['job'].is_shift_confirmed.lower() == 'No':
+                return None, 'unconfirmed'
+            elif job_status  == 'present':
+                if kwargs['job'].is_shift_confirmed.lower() == 'no' and is_shift_now(kwargs['job']):
+                    return None, 'unconfirmed' # shift has already started
+                elif kwargs['job'].is_shift_confirmed.lower() == 'no' and not is_shift_now(kwargs['job']):
+                    return self.__save(user), 'not yet' # The shift has not yet started but is not confirmed yet
+                elif kwargs['job'].is_shift_confirmed.lower() == 'yes' and is_shift_now(kwargs['job']):
+                    return self.__save(user), 'confirmed' # user current working the shift
+                elif kwargs['job'].is_shift_confirmed.lower() == 'yes' and not is_shift_now(kwargs['job']):
+                    return self.__save(user), 'not yet' # shift not yet started
+                elif kwargs['job'].is_shift_confirmed.lower() == 'yes' and is_shift_over(kwargs['job']):
+                    return self.__update_job_status(user, 'Yes'), 'confirmed' # the current shift is now over.
+            elif job_status == 'future':
+                return self.__save(user), 'not yet'
+
+    def __process_form_helper(self, user, curr_date, job, row_id=None, update=False):
+        """A private helper method that helps the process form method"""
+
+        # if update is set to true, checks whether the updated job is now active or
+        # or now non-active. Non-active meaning the user has worked the shift/job
+        # and it is now currently over. Active means the job/shift has not yet started.
+        # If the job is now active updates the the status of job to No
+        # otherwise Yes if the job is now non-active.
+        response = has_previous_job_been_worked(job, curr_date, self.is_shift_confirmed.lower())
+        if update:
+            return self.__evaluate_job_status(user, row_id, response,
+                                              update=True, job=None,
+                                              curr_date=None)
+        return self.__evaluate_job_status(user, row_id, response,
+                                          update=False, job=job,
+                                          curr_date=curr_date)
+
+    def process_form(self, start_date, end_date, day, curr_date, job, row_id=None, update=False):
         """process_form(str, str, str, optional str, optional bool) -> return(obj or None)
 
         Processes the form and adds the user job details to the database.
@@ -162,5 +233,5 @@ class ValidateJobDetailsForm(object):
         user = User(session['username'], start_date, end_date,
                     check_day(day), _id=session['user_id'])
         if update:
-            return self.__process_form_helper(user, row_id, True)
-        return self.__process_form_helper(user)
+            return self.__process_form_helper(user, curr_date, job, row_id, update=True)
+        return self.__process_form_helper(user, curr_date, job)

@@ -4,10 +4,11 @@
 
 from datetime import datetime
 from dateutil import relativedelta
+from src.utilities.common import create_flash_msg
 import random
 
 def _return_time_passed(start_date, start_time, finish_date, finish_time):
-    """A wrapper function that returned the years, month, hours, days, minutes
+    """A wrapfunction that returned the years, month, hours, days, minutes
     passed between two dates.
     """
     year1, month1, day1 = start_date.split('-')
@@ -18,7 +19,40 @@ def _return_time_passed(start_date, start_time, finish_date, finish_time):
     sec_date   = datetime(int(year2), int(month2), int(day2), int(hours2), int(minutes2))
     return relativedelta.relativedelta(sec_date, first_date)
 
-def is_shift_confirmed(job, func):
+def _make_date_object(time, date):
+    """takes a time in the form of (hh:mm) and date and creates a data
+    object.
+    """
+    curr_time = datetime.now()
+    hour = time.split(':')[0]
+    mins = time.split(':')[1]
+    year, month, day = date.split('-')
+
+    date_obj = curr_time.replace(year=int(year),month=int(month),
+                                 day=int(day), hour=int(hour),
+                                 minute=int(mins))
+    return curr_time, date_obj
+
+def _check_shift(job, is_shift_now=False):
+    """_check_shift(obj, str, str) -> returns(tuple)
+
+       A wrapper function that returns the current time
+       and the shift time object. The current time object is
+       always returned and depending on which flag calculates
+       and returns the datetime object for current time to
+       the shift start or to the end of the shift time.
+
+       :parameters
+           - job ; A job object.
+           - is_shift_now : Default false. Used calculate the
+                            current date to start of the
+                            shift.
+    """
+    if is_shift_now:
+        return _make_date_object(job.start_time, job.start_date)
+    return _make_date_object(job.finish_time, job.end_date)
+
+def is_shift_confirmed(job):
     """is_shift_confirmed(obj, func) -> returns(bool)
 
     Checks whether the user's shift/job is confirmed.
@@ -32,27 +66,15 @@ def is_shift_confirmed(job, func):
         - returns: True if shift is confirmed and False otherwise.
 
     """
-    if job.is_shift_confirmed.lower() == 'yes':
-        return True
-    elif job.is_shift_confirmed.lower() == 'no' and is_shift_now(job): # checks against present day and if shift is now
-        func(job.row_id[1:]) # delete the current job as the shift has not be confirmed.
+    curr_date, shift_date = _check_shift(job, True)
+    if shift_date < curr_date and job.is_shift_confirmed.lower() == 'no':
         return False
-    else:
-         year, month, day = job.date.split('-')
-         curr_date = datetime.now()
-         past_date = curr_date.replace(year=int(year),
-                                       month=int(month),
-                                       day=int(day),
-                                       hour=int(job.start_time.split(':')[0]),
-                                       minute=int(job.start_time.split(':')[1]))
-          # checks against past shift
-         if past_date < curr_date and job.is_shift_confirmed.lower() == 'no':
-            func(job.row_id[1:]) # delete this past job as has not be confirmed
-            return False
-         return True
+    elif job.is_shift_confirmed.lower() == 'no' and is_shift_now(job): # checks against present day and if shift is now
+        return False
+    return True
 
 def is_shift_now(job):
-    """is_shift_now(str, str, str, str) -> return(bool)
+    """is_shift_now(str) -> return(bool)
 
     Checks if the user shift has started. Returns True
     if it has or False if it has not.
@@ -65,19 +87,9 @@ def is_shift_now(job):
     >>> is_shift_now((object(..)))
     True
     """
-    curr_time = datetime.now()
-    start_hour = job.start_time.split(':')[0]
-    start_mins = job.start_time.split(':')[1]
-    end_hours =  job.finish_time.split(':')[0]
-    end_mins =   job.finish_time.split(':')[1]
-    year, month, day = job.date.split('-')
-    shift_start_time = curr_time.replace(hour=int(start_hour), minute=int(start_mins))
-    shift_end_time = curr_time.replace(year=int(year),
-                                       month=int(month),
-                                       day=int(day),
-                                       hour=int(end_hours),
-                                       minute=int(end_mins))
-    return False if curr_time != shift_start_time else True
+    curr_time, shift_start_time = _check_shift(job)
+    #shift_finish_time = _make_date_object(job.finish_time, job.end_date)
+    return True if curr_time > shift_start_time else False
 
 def is_shift_over(job):
     """is_shift_over(obj) -> returns(bool)
@@ -96,16 +108,47 @@ def is_shift_over(job):
     >>> is_shift_over(object(..))
     True
     """
-    curr_time = datetime.now()
-    start_time = job.finish_time.split(':')[0]
-    finish_time = job.finish_time.split(':')[1]
-    year, month, day = job.date.split('-')
-    shift_end_time = curr_time.replace(year=int(year),
-                                       month=int(month),
-                                       day=int(day),
-                                       hour=int(start_time),
-                                       minute=int(finish_time))
+    curr_time, shift_end_time = _check_shift(job, False)
     return True if curr_time > shift_end_time else False
+
+def has_previous_job_been_worked(job, curr_date, confirmation):
+    """has_previous_job_been_worked(str, str, str) -> return(bool)
+
+    Takes a job, the current date and a job confirmation and checks
+    whether the job has been worked or not. Returns True if the job
+    has been worked, returns None if the job was never confirmed and
+    returns False if the job has not been worked.
+
+    :parameters
+        - job : A job object containing the users jobs.
+        - curr_date : The current date
+        - confirmation : Either yes or no. Yes the job
+                         was confirmed and no otherwise.
+    """
+
+    if datetime.strptime(job.start_date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d") \
+        and confirmation.lower() == 'yes':
+            return True
+    elif is_shift_over(job) and confirmation.lower() == 'yes':
+        return True
+    elif datetime.strptime(job.start_date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d") \
+        and confirmation.lower() == 'no':
+        return None
+    return False
+
+def is_job_in_past_present_or_future(job, curr_date):
+    """is_job_in_past_present_or_future(obj, str) -> return(str)
+
+    Checks whether the job in question is either in the past,
+    present or Future.
+    """
+    if datetime.strptime(job.start_date, "%Y-%m-%d") > datetime.strptime(curr_date, "%Y-%m-%d"):
+        job = 'future'
+    elif datetime.strptime(job.start_date, "%Y-%m-%d") == datetime.strptime(curr_date, "%Y-%m-%d"):
+        job = 'present'
+    else:
+        job = 'past'
+    return job
 
 def when_is_shift_starting(start_date, start_time):
     """when_is_shift_starting(str, str) -> returns(str)
@@ -137,7 +180,6 @@ def when_is_shift_starting(start_date, start_time):
         shift_start.append('{} hours'.format(date_obj.hours) if date_obj.hours > 1 else '{} hour'.format(date_obj.hours))
     if date_obj.minutes:
         shift_start.append('{} minutes'.format(date_obj.minutes) if date_obj.minutes > 1 else '{} minute'.format(date_obj.minutes))
-
 
     time_elasped = ', '.join(shift_start)
     return 'Starts in {}'.format(time_elasped) if time_elasped and int(time_elasped.split()[0]) > 0 else 'Job/shift in progress'
@@ -212,30 +254,11 @@ def get_jobs(active_jobs, permalink_jobs, jobs_obj, session, curr_date):
         worked_jobs.append(job)
 
     if active_jobs:
-        jobs = user_jobs.get_all_jobs(sort_by=1) # sort job by ascending latest active job first
+        jobs = user_jobs.get_all_active_jobs() # sort job by ascending latest active job first
+    elif permalink_jobs:
+        jobs = permalink_jobs
     else:
-        jobs = user_jobs.get_all_jobs()  # sort job in descending order newest first
-
-    if permalink_jobs:
-        for job in permalink_jobs:
-            get_jobs_helper(job.daily_rate, job._hours, job)
-        return total_pay, total_hrs, permalink_jobs, user_jobs
-        # sort the job based on whether the jobs are active
+        jobs = user_jobs.get_all_worked_jobs()  # sort job in descending order newest first
     for job in jobs:
-        if not active_jobs:
-            # if the shift day is less than the current day
-            # it means the shift has already been worked
-            if datetime.strptime(job.date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d"):
-                get_jobs_helper(job.daily_rate, job._hours, job)
-
-            # if job date is equal to current working date and is_shift_over equals True
-            # it means that the users shift is currently finished.
-            elif datetime.strptime(job.date, "%Y-%m-%d") == \
-                 datetime.strptime(curr_date, "%Y-%m-%d") and is_shift_over(job):
-                 get_jobs_helper(job.daily_rate, job._hours, job)
-
-        elif active_jobs and datetime.strptime(job.date, "%Y-%m-%d") >= \
-                             datetime.strptime(curr_date, "%Y-%m-%d") and\
-                             not is_shift_over(job):
-                get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
+        get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
     return total_pay, total_hrs, worked_jobs, user_jobs

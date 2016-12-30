@@ -18,14 +18,14 @@
     <table class='center'>
 
       <th id='label'>
-        Title
+        The job attributes
       </th>
       <th>
-        Description
+        The job values
       </th>
       <tr>
         <td >
-          Day
+          Day the job is starting
         </td>
         <td id="description">
            {{ rows.day }}
@@ -33,7 +33,7 @@
       </tr>
       <tr>
         <td>
-          Job Title
+          The job Title
         </td>
         <td>
           {{ rows.job_title }}
@@ -41,7 +41,7 @@
       </tr>
       <tr>
         <td>
-          Description
+          The job description
 
         </td>
         <td>
@@ -51,7 +51,7 @@
       </tr>
       <tr>
         <td>
-          Location
+          The location the job is in
         </td>
         <td>
           {{ rows.loc }}
@@ -59,7 +59,7 @@
       </tr>
       <tr>
         <td>
-            Hourly rate (£)
+            The hourly rate of the job (£)
         </td>
         <td>
           £{{ rows.hourly_rate }}
@@ -67,7 +67,7 @@
       </tr>
       <tr>
         <td>
-          Daily Rate (£)
+          The daily rate based on the N.O. of hours worked (£)
         </td>
         <td>
 
@@ -77,7 +77,7 @@
       </tr>
       <tr>
         <td>
-          Start time
+          The job start time
         </td>
         <td>
             {{ rows.start_time }}
@@ -86,7 +86,7 @@
 
       <tr>
         <td>
-          Finish time
+          The job finish time
         </td>
         <td>
           {{ rows.finish_time }}
@@ -94,7 +94,7 @@
       </tr>
       <tr>
         <td>
-          Total hours worked
+          The total hours the job/shift will last.
         </td>
         <td>
           {{ rows.total_hours }}
@@ -103,15 +103,24 @@
 
       <tr>
         <td>
-          Start Date
+          The date the job will start.
         </td>
         <td>
 
-          {{ rows.date }}
+          {{ rows.start_date }}
         </td>
       </tr>
       <tr>
-          <td> Has shift been confirmed ?
+        <td>
+          The date the jobs ends.
+        </td>
+        <td>
+
+          {{ rows.end_date }}
+        </td>
+      </tr>
+      <tr>
+          <td> Has the Shift/Job be confirmed ?
           </td>
           <td>
               {{ rows.is_shift_confirmed }}

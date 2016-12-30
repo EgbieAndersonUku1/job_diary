@@ -2,6 +2,7 @@
 # Author = Egbie Uku
 #####################################################################
 
+from flask import flash
 import random
 
 def gen_row_id():
@@ -18,3 +19,7 @@ def get_questions():
 	QUESTION_ONE = "what is your mother's maiden name"
 	QUESTION_TWO =  "what is your favourite activity"
 	return QUESTION_ONE, QUESTION_TWO
+
+def create_flash_msg(msg):
+    """creates a message that will be output to screen"""
+    flash(msg)

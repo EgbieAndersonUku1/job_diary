@@ -21,6 +21,12 @@ body {
   color: blue;
 }
 
+.flashes {
+    font-family: sans-serif;
+    font-size: 11px;
+    color:green;
+}
+
 b {
     color: #0842CA;
 }

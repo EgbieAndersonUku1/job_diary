@@ -71,7 +71,7 @@ class Job(object):
                     _hours=units,
                     user_id=self.id,
                     daily_rate=get_daily_rate(units, kwargs['hourly_rate']),
-                    date=self.start_date,
+                    start_date=self.start_date,
                     end_date=self.end_date,
                     day=self.day,
                     month=self.start_date.split('-')[1], # get the month part
@@ -325,7 +325,8 @@ class Job(object):
         return Record.find_all_worked_jobs(self.id)
 
     def update_job_status(self, row_id, status):
-        return Record.update_job_status(row_id, status)
+        Record.update_job_status(row_id, status)
+        return ''
 
     def __repr__(self):
         return '{}'.format(self.full_name)

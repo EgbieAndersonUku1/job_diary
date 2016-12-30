@@ -1,233 +1,129 @@
 {% extends 'secondary_base.html' %}
 
 <div class="container">
-<a href="#" class="btn btn-info btn-lg">
-  <span class="glyphicon glyphicon-user"></span> {{ session['username']}}
-  </a>
+    <a href="#" class="btn btn-info btn-lg">
+        <span class="glyphicon glyphicon-user"></span>
+            {{ session['username']}}
+        </a>
 </div>
 
 {% block title %} Jobs history page {% endblock %}
-
 {% block content %}
-    <table class="table table-striped">
-      {% if not jobs %}
-        <div id='error_msg'>
-             <h5>This is not an error this page has loaded correct.</h5>
-             <src img='static/css/error.png' alt=''></src>
-             <div id='error_msg2'>
-                  <h5>Your job history is totally empty!!<h5>
-             </div>
-             <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
-        </div>
-
-        {% elif len(jobs) == 1 %}
-               <!--if the shift is not confirmed before the start of that shift then the
-               application assumes that that user shift is cancelled.
-
-               -->
-               {% if not is_shift_confirmed(jobs[0], delete) %}
-                    <div id='error_msg'>
-                        <h5>This is not an error this page has loaded correct.</h5>
-                    <div>
-                      <h5>You currently have no active jobs !!!</h5>
-                    </div>
-                      <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
-                {% else %}
-                      <!--get the data from the job-->
-                <h2>Days and times of jobs worked. </h2>
-              <center>
-              <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
-              </center>
-                <tr>
-                <th>
-                  Date
-                </th>
-                <th>
-                  Day
-                </th>
-                <th>
-                  Title
-                </th>
-                <th>
-                  Role
-                </th>
-                <th>
-                  Location
-                </th>
-                <th>
-                  Hourly rate (£)
-                </th>
-                <th>
-                  Start time
-                </th>
-                <th>
-                  Finish time
-                </th>
-                <th>
-                  Hours worked
-                </th>
-                <th>
-                  Daily rate (£)
-                </th>
-                <th>
-                  Update/Delete
-                </th>
-              </tr>
-              <tr>
-               <td>
-                 {{ jobs[0].date.replace('-', '/') }}
-               </td>
-               <td>
-                 {{ jobs[0].day[:3] }}
-               </td>
-
-               <td>
-                 {{ jobs[0].job_title }}
-               </td>
-               <td>
-                  {{ jobs[0].descr }}
-               </td>
-               <td>
-                 {{ jobs[0].loc }}
-               </td>
-               <td>
-                 £{{ jobs[0].hourly_rate}}
-               </td>
-               <td>
-                 {{ jobs[0].start_time }}
-               </td>
-               <td>
-                 {{ jobs[0].finish_time }}
-               </td>
-               <td>
-                 {{ jobs[0].total_hours}}
-               </td>
-               <td>
-                 £{{ jobs[0].daily_rate }}
-               </td>
-               <td>
-                  {% if session['username'] == 'admin' %}
-                        <a href="{{ url_for('edit', value=jobs[0].row_id) }}">Edit</a> /
-                        <a href="{{ url_for('delete', row=jobs[0].row_id[1:]) }}">Delete</a>
-                     {% else %}
-                        <!-- As a normal user, user can only edit jobs if their shift is not over-->
-                        {% if dt(jobs[0].date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and is_shift_over(jobs[0]) %}
-                           N/A
-                        {% elif dt(jobs[0].date, "%Y-%m-%d") < dt(date, "%Y-%m-%d") %}
-                           N/A
-                        {% endif %}
-                      {% endif %}
-               </td>
-                {% endif %}
-
-      {% else %}
-              <h2>Dates of days and times worked </h2>
-              <center>
-              <h6>The total pay accumlated is £{{ total_pay }} over a period of {{ converter(total_hrs) }}. </h6>
-              </center>
-
-              {% if session['username'] == 'admin' %}
-                  <caption class="text-center">As an admin you can edit any shift regardless whether the shift has over or not.</caption>
-              {% else %}
-                    <caption class="text-center">Normal user can only edit shifts that are not over or has not began yet.</caption>
-              {% endif %}
-            <tr>
-              <th>
-                Month
-              </th>
-              <th>
-                Date
-              </th>
-              <th>
-                Day
-              </th>
-              <th>
-                Job title
-              </th>
-              <th>
-                Job description
-              </th>
-              <th>
-                Job location
-              </th>
-              <th>
-                Hourly rate (£)
-              </th>
-              <th>
-                Start time
-              </th>
-              <th>
-                Finish time
-              </th>
-              <th>
-                Hours worked
-              </th>
-              <th>
-                Daily rate (£)
-              </th>
-
-              <th>
-                Update/Delete
-              </th>
-            </tr>
-            {% for job in jobs %}
-                {% if job.is_shift_confirmed.lower() == 'no'  %}
-                   {{ delete(job.row_id[1:]) }}
-                {% else %}
-                 <tr>
-                   <td>
-                     {{ translate(job.month )[:3]}}
-                   </td>
-                   <td>
-                     {{ job.date.replace('-', '/') }}
-                   </td>
-                   <td>
-                     {{ job.day[:3] }}
-                   </td>
-
-                   <td>
-                     {{ job.job_title }}
-                   </td>
-                   <td>
-                      {{ job.descr }}.
-                   </td>
-                   <td>
-                     {{ job.loc }}
-                   </td>
-                   <td>
-                     £{{ job.hourly_rate}}
-                   </td>
-                   <td>
-                     {{ job.start_time }}
-                   </td>
-                   <td>
-                     {{ job.finish_time }}
-                   </td>
-                   <td>
-                     {{ job.total_hours}}
-                   </td>
-                   <td>
-                     £{{ job.daily_rate }}
-                   </td>
-
-                   <td>
-                     <!--As an admin you can edit jobs that are active and non-active -->
-                     {% if session['username'] == 'admin' %}
-                        <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
-                        <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
-                     {% else %}
-                        <!-- As a normal user, user can only edit jobs if their shift is not over-->
-                        {% if dt(job.date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and is_shift_over(job) %}
-                           N/A
-                        {% elif dt(job.date, "%Y-%m-%d") < dt(date, "%Y-%m-%d") %}
-                           N/A
-                        {% endif %}
-                      {% endif %}
-                   </td>
-                {% endif %}
-            {% endfor %}
+    <div style="overflow-x:auto;">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
-      </table>
+        {% endwith %}
+    </div>
 
+<table class="table table-striped">
+      {% if not jobs %}
+            <div id='error_msg'>
+                <h5>This is not an error this page has loaded correct.</h5>
+                    <src img='static/css/error.png' alt=''></src>
+                        <div id='error_msg2'>
+                            <h5>Your job history is totally empty!!<h5>
+                        </div>
+                    <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
+            </div>
+        {% else %}
+                <!--get the data from the job-->
+            <h2>Days and times of jobs worked. </h2>
+                <center>
+                    <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
+                </center>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Day
+                    </th>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Role
+                    </th>
+                    <th>
+                        Location
+                    </th>
+                    <th>
+                        Hourly rate (£)
+                    </th>
+                    <th>
+                        Start time
+                    </th>
+                    <th>
+                        Finish time
+                    </th>
+                    <th>
+                        Hours worked
+                    </th>
+                    <th>
+                        Daily rate (£)
+                    </th>
+                        {% if session['username'] == 'admin' %}
+                            <th>
+                                Update/Delete
+                            </th>
+                        {% else %}
+                            <th>
+                                Job information
+                            </th>
+                        {% endif %}
+                </tr>
+                    {% for job in jobs %}
+                        <tr>
+                            <td>
+                                {{ job.start_date.replace('-', '/') }}
+                            </td>
+                            <td>
+                                {{ job.day[:3] }}
+                            </td>
+                            <td>
+                                {{ job.job_title }}
+                            </td>
+                            <td>
+                                {{ job.descr }}
+                            </td>
+                            <td>
+                                {{ job.loc }}
+                            </td>
+                            <td>
+                                £{{ job.hourly_rate}}
+                            </td>
+                            <td>
+                                {{ job.start_time }}
+                            </td>
+                            <td>
+                                {{ job.finish_time }}
+                            </td>
+                            <td>
+                                {{ job.total_hours}}
+                            </td>
+                            <td>
+                                £{{ job.daily_rate }}
+                            </td>
+                            <td>
+                                {% if session['username'] == 'admin' %}
+                                    <a href="{{ url_for('edit', value=job.row_id) }}">Edit</a> /
+                                    <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
+                                {% else %}
+                                    <!-- As a normal user, user can only edit jobs if their shift is not over-->
+                                    {% if is_shift_over(jobs[0]) %}
+                                        <a href="{{ url_for('info_page', row_id=job.row_id)}}">info</a>
+                                    {% elif has_previous_job_been_worked(job, job.start_date, 'Yes') %}
+                                        <a href="{{ url_for('info_page', row_id=job.row_id)}}">info</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                    {% endfor %}
+                {% endif %}
+</table>
 {% endblock %}
-</tr>

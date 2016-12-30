@@ -62,11 +62,11 @@ class Record(object):
         self.total_hours = kwargs['total_hours'] # hours in words e.g 2 hrs and 10 mins
         self._hours  = kwargs['_hours']          # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
         self.user_id = kwargs['user_id']
-        self.date =  kwargs['date']
+        self.start_date =  kwargs['start_date']
         self.end_date = kwargs['end_date']
         self.day  =  kwargs['day']
         self.loc  = kwargs['loc']
-        self.year = int(self.date.split('-')[0]) if kwargs['year'] == None else kwargs['year']
+        self.year = int(self.start_date.split('-')[0]) if kwargs['year'] == None else kwargs['year']
         self.row_id = gen_row_id() if kwargs['row_id'] is None else kwargs['row_id']
         self.month  = kwargs['month']
         self._id = uuid.uuid4().hex if kwargs['_id'] is None else kwargs['_id']
@@ -87,7 +87,7 @@ class Record(object):
                  '_hours'     : self._hours,
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
-                 'date'       : '{}-{}-{}'.format(self.year, self.month, self.date.split('-')[-1]), # get the day part
+                 'start_date' : '{}-{}-{}'.format(self.year, self.month, self.start_date.split('-')[-1]), # get the day part
                  'end_date'   : '{}-{}-{}'.format(end_year, end_month, end_day),
                  'month'      : int(self.month),
                  'row_id'     : self.row_id,
@@ -239,7 +239,7 @@ class Record(object):
            - day    : The day to query by.
            - user_id: The user ID
         """
-        return cls._find(query={'date': date,'user_id': user_id}, key=('date', -1))
+        return cls._find(query={'start_date': date,'user_id': user_id}, key=('date', -1))
 
     @classmethod
     def find_by_year(cls, year, user_id):
@@ -398,7 +398,6 @@ class Record(object):
         """
         query = {"loc"    : form.loc.title(),
                  "_hours" : form._hours,
-                 "row_id" : form.row_id,
                  "user_id": form.user_id,
                  "descr"  : form.descr.title(),
                  "finish_time" : form.finish_time,
@@ -407,16 +406,16 @@ class Record(object):
                  "total_hours" : form.total_hours,
                  "daily_rate"  : form.daily_rate,
                  "year" : form.year,
-                 "date" : form.date,
+                 "start_date" : form.start_date,
                  "end_date": form.end_date,
                  "hourly_rate" : form.hourly_rate,
                  "day" : form.day.title(),
                  "job_title" : form.job_title.title(),
-                 'is_shift_confirmed': form.is_shift_confirmed}
+                 'is_shift_confirmed': str(form.is_shift_confirmed)}
 
         db.update('jobs_details', 'row_id', row_id, query)
         if update_row:
-            return form.row_id
+            return row_id
 
     @classmethod
     def find_by_confirmation(cls, user_id, confirmation):
@@ -426,14 +425,14 @@ class Record(object):
                                 key=('date', -1))
     @classmethod
     def find_all_active_jobs(cls, user_id):
-        """ """
-        key =  ('date', -1)
+        """Returns all jobs that the user has not worked """
+        key =  ('start_date', -1)
         return cls._find({'worked_job': 'No', 'user_id': user_id}, key)
 
     @classmethod
     def find_all_worked_jobs(cls, user_id):
-        """ """
-        key = ('date', -1)
+        """Return all jobs that user has worked"""
+        key = ('start_date', -1)
         return cls._find({'worked_job': 'Yes', 'user_id': user_id}, key)
 
     @classmethod

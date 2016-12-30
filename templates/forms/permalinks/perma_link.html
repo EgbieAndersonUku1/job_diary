@@ -65,7 +65,7 @@
                          {{ translate(job.month )[:3]}}
                        </td>
                        <td>
-                          <b>{{ job.date.replace('-', '/') }}</b>
+                          <b>{{ job.start_date.replace('-', '/') }}</b>
                        </td>
                        <td>
                          <b>{{ job.day[:3] }}</b>
@@ -97,30 +97,28 @@
                        </td>
                        <td>
 
-                          {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
+                          {% if job.is_shift_confirmed.title() == 'Yes' %}
                             <div id='confirmed'>
-                                <em>{{ jobs[0].is_shift_confirmed.title() }}</em>
+                                <em>{{ job.is_shift_confirmed.title() }}</em>
+                                /<a href="{{ url_for('info_page', row_id=job.row_id)}}">Info</a>
                             </div>
                          {% else %}
                             <div id='confirmation_required'>
-                               {{ jobs[0].is_shift_confirmed.title() }}
+                               {{ job.is_shift_confirmed.title() }}
+                               /<a href="{{ url_for('info_page', row_id=job.row_id)}}">Info</a>
                             </div>
                          {% endif %}
                        </td>
                        <td>
 
-                         {% if dt(job.date, "%Y-%m-%d") == dt(date, "%Y-%m-%d") and is_shift_over(job) %}
-                             <div id='worked'>
-                                  Yes
-                              </div>
-                          <!-- Checks if the day the user's shift was on is over -->
-                         {% elif dt(job.date, "%Y-%m-%d") < dt(date, "%Y-%m-%d")  %}
+                       <!-- Checks if the day the user's shift was on is over -->
+                         {% if has_previous_job_been_worked(job, date, job.is_shift_confirmed)  %}
                             <div id='worked'>
                                  Yes
                             </div>
                          {% else %}
                             <div id='time'>
-                                <em>{{ when_is_shift_starting(job.date, job.start_time) }}.</em>
+                                <em>{{ when_is_shift_starting(job.start_date, job.start_time) }}.</em>
 
                             </div>
                          {% endif %}
