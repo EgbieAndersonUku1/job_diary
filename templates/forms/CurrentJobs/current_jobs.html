@@ -44,7 +44,7 @@
             </center>
             <tr>
                 <th>
-                    Date {{ jobs }}
+                    Date 
                 </th>
                 <th>
                     Day
@@ -89,7 +89,6 @@
 
                 {% elif is_shift_over(job) and  job.is_shift_confirmed.lower() == 'yes' %}
                       {{ user.update_job_status(job.row_id, 'Yes') }}
-                      {{ jobs.pop(0) }}
                 {% else %}
                        <tr>
                            <td>
