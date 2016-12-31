@@ -55,7 +55,6 @@
 
         </tr>
         {% for job in jobs %}
-             {% if is_shift_confirmed(job) %}
              <tr>
                <td>
                  {{ translate(job.month )[:3]}}
@@ -119,8 +118,6 @@
                  {% endif %}
 
                </td>
-             {% endif %}
-
         {% endfor %}
 
     </table>
