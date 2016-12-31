@@ -129,6 +129,7 @@ class Evaluator(object):
 
         if cls.job_confirmed == 'unconfirmed':
             create_flash_msg('Job was deleted because it was not confirmed.')
+            user.delete_job(row_id[1:])
             return cls.job_confirmed, None
         elif cls.job_confirmed == 'not yet':
             create_flash_msg("""The job needs to be confirmed before the
