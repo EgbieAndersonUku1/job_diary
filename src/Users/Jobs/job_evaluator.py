@@ -126,6 +126,7 @@ class Evaluator(object):
     @classmethod
     def _save_to_database(cls, user, job, row_id=None, update=False):
         """Saves the user's job detase to the database."""
+
         if cls.job_confirmed == 'unconfirmed':
             create_flash_msg('Job was deleted because it was not confirmed.')
             return cls.job_confirmed, None
@@ -154,10 +155,10 @@ class Evaluator(object):
             if not confirmed and is_shift_now(job):
                 cls.set_job_confirmation(job_confirmed='unconfirmed')
 
-            # The job has been confirmed yet. But the job has
-            # not yet started which by definition means the
-            # user job is not over as it still  has time to be
-            # confirmed.
+            # The job has not been confirmed yet. But since
+            # the job is in the present it is flagged as
+            # not yet started it which means the user still has
+            # till the start of job/shift in order to confirm.
             elif not confirmed and not is_shift_now(job):
                 cls.set_job_confirmation(job_confirmed='not yet')
 
