@@ -157,7 +157,7 @@ class Evaluator(object):
 
             # The job has not been confirmed yet. But since
             # the job is in the present it is flagged as
-            # not yet started it which means the user still has
+            # not yet started. The means the user has
             # till the start of job/shift in order to confirm.
             elif not confirmed and not is_shift_now(job):
                 cls.set_job_confirmation(job_confirmed='not yet')
