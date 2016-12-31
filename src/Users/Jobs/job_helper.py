@@ -50,8 +50,8 @@ def _check_shift(job, is_shift_now=False):
 
        :parameters
            - job ; A job object.
-           - is_shift_now : Default false. Used calculate the
-                            current date to start of the
+           - is_shift_now : Default false. Used to calculate the
+                            current date to the start of the
                             shift.
     """
     if is_shift_now:
@@ -62,22 +62,13 @@ def is_shift_confirmed(job):
     """is_shift_confirmed(obj, func) -> returns(bool)
 
     Checks whether the user's shift/job is confirmed.
-    If confirmation is not made before the start of the shift
-    then the module assumes that shift in question was cancelled
-    and thus automatically deletes it from the database.
 
     :parameters
         - job: An object containg the user's job details.
-        - func: Delete function deletes the row job in question.
         - returns: True if shift is confirmed and False otherwise.
 
     """
-    curr_date, shift_date = _check_shift(job, True)
-    if shift_date < curr_date and job.is_shift_confirmed.lower() == 'no':
-        return False
-    elif job.is_shift_confirmed.lower() == 'no' and is_shift_now(job): # checks against present day and if shift is now
-        return False
-    return True
+    return True if job.is_shift_confirmed.lower() == 'yes' else False
 
 def is_shift_now(job):
     """is_shift_now(str) -> return(bool)
@@ -93,9 +84,8 @@ def is_shift_now(job):
     >>> is_shift_now((object(..)))
     True
     """
-    curr_time, shift_start_time = _check_shift(job)
-    #shift_finish_time = _make_date_object(job.finish_time, job.end_date)
-    return True if curr_time > shift_start_time else False
+    curr_time, shift_start_time = _check_shift(job, True)
+    return True if curr_time >= shift_start_time else False
 
 def is_shift_over(job):
     """is_shift_over(obj) -> returns(bool)
@@ -116,32 +106,6 @@ def is_shift_over(job):
     """
     curr_time, shift_end_time = _check_shift(job, False)
     return True if curr_time >= shift_end_time else False
-
-def has_previous_job_been_worked(job, curr_date, confirmation):
-    """has_previous_job_been_worked(str, str, str) -> return(bool)
-
-    Takes a job, the current date and a job confirmation and checks
-    whether the job has been worked or not. Returns True if the job
-    has been worked, returns None if the job was never worked and
-    returns False if the job has not been worked.
-
-    :parameters
-        - job : A job object containing the users jobs.
-        - curr_date : The current date
-        - confirmation : Either yes or no. Yes the job
-                         was confirmed and no otherwise.
-    """
-
-    if datetime.strptime(job.start_date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d") \
-        and confirmation.lower() == 'yes':
-            return True
-    elif is_shift_over(job) and confirmation.lower() == 'yes':
-        return True
-    elif datetime.strptime(job.start_date, "%Y-%m-%d") < datetime.strptime(curr_date, "%Y-%m-%d") \
-        and confirmation.lower() == 'no':
-        return None
-    return False # used for editing/updating because a present/future job can be
-                 # edited saw that is now because a job worked in the past.
 
 def is_job_in_past_present_or_future(job, curr_date):
     """is_job_in_past_present_or_future(obj, str) -> return(str)

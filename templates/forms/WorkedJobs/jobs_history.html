@@ -9,18 +9,22 @@
 
 {% block title %} Jobs history page {% endblock %}
 {% block content %}
-    <div style="overflow-x:auto;">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-    </div>
-
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    </th>
+        {% for message in messages %}
+         <div id='alert' class="alert alert-danger">
+                 <ul>
+                    <li>
+                       <center>
+                           <strong>{{ message }}</strong>
+                       </center>
+                    </li>
+                 </ul>
+             </div>
+         {% endfor %}
+     {% endif %}
+{% endwith %}
 <table class="table table-striped">
       {% if not jobs %}
             <div id='error_msg'>
@@ -116,12 +120,10 @@
                                     <a href="{{ url_for('delete', row=job.row_id[1:]) }}">Delete</a>
                                 {% else %}
                                     <!-- As a normal user, user can only edit jobs if their shift is not over-->
-                                    {% if is_shift_over(jobs[0]) %}
-                                        <a href="{{ url_for('info_page', row_id=job.row_id)}}">info</a>
-                                    {% elif has_previous_job_been_worked(job, job.start_date, 'Yes') %}
-                                        <a href="{{ url_for('info_page', row_id=job.row_id)}}">info</a>
-                                    {% endif %}
+                                    <a href="{{ url_for('info_page', row_id=job.row_id)}}">info</a>
+
                                 {% endif %}
+
                             </td>
                     {% endfor %}
                 {% endif %}

@@ -6,7 +6,6 @@
 import json
 import datetime
 import uuid
-from src.utilities.common import create_flash_msg
 from src.utilities.converter import time_to_str, units_to_hours, month_to_str
 from src.Users.Models.Registrations.registration import Registration
 from src.Users.Models.Databases.database import DataBase
@@ -14,7 +13,7 @@ from src.Users.decorators import login_required, admin_required
 from flask_paginate import Pagination
 from src.Users.Validator.secret_question_validator import ValidiateSecretQuestions
 from src.Users.Validator.search_form_validator import ValidateSearchForm
-from src.Users.Validator.job_details_validator import ValidateJobDetailsForm
+from src.Users.Validator.job_entry_validator import ValidateJobDetailsForm
 from src.Users.Forms.register_form import RegisterForm
 from src.Users.Forms.login_form import LoginForm
 from src.Users.Forms.search_form import SearchForm
@@ -25,12 +24,12 @@ from flask import render_template, session, redirect, url_for, request
 from _form_helper import login_user, register_user
 from src.utilities.password_hasher import create_passwd_hash
 from src.Users.user import User
+from src.Users.Jobs.job_evaluator import Evaluator
 from src.Users.Jobs.job_helper import ( get_jobs,
                                         is_shift_now,
                                         is_shift_over,
                                         is_shift_confirmed,
-                                        when_is_shift_starting,
-                                        has_previous_job_been_worked)
+                                        when_is_shift_starting)
 date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
@@ -61,21 +60,10 @@ def user_register():
                          template='forms/LoginRegistrationForm/registration.html',
                          redirect_link='home')
 
-def evaluate_job_status(row_id, job_status):
+def redirector(row_id, job_status):
 
-    msg = "The job was deleted because it was not confirmed."
-    if job_status == 'deleted':
-         create_flash_msg(msg)
-         return redirect(url_for('active_jobs'))
-    elif job_status == 'unconfirmed' and not row_id:
-        create_flash_msg(msg)
-        return redirect(url_for('active_jobs'))
-    elif job_status == 'not yet':
-        msg = """ One of the job entered needs to be confirmed before the start of job
-                  start date or it will be deleted automatically.
-              """
-        create_flash_msg(msg)
-        return redirect(url_for('active_jobs'))
+    if job_status == 'unconfirmed':
+         return redirect(url_for('history'))
     return redirect(url_for('info_page', row_id=row_id))
 
 @app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
@@ -86,8 +74,8 @@ def entry_page(row_ID):
     from the entry job page.
     """
     start_date, end_date = curr_date, curr_date
-    title   = request.form.get('job_title', '')
     descr   = request.form.get('description', '')
+    title   = request.form.get('job_title', '')
     day     = request.form.get('day', curr_day)
     loc     = request.form.get('location', '')
     hourly_rate = request.form.get('hourly_rate', '')
@@ -123,7 +111,7 @@ def entry_page(row_ID):
                                       start_hours,
                                       start_mins, end_hours,
                                       end_mins)
-    success, errors, form = job_form.verify_form()
+    success, errors, job = job_form.verify_form()
     if success:
         # row_ID comes from the form so False is expressed as a unicode
         # instead of a boolean. This make the if-condition
@@ -132,31 +120,26 @@ def entry_page(row_ID):
         # By expressing it as str(row_ID) != 'False' it makes the if-statement
         # False when the string returned is not equal to the string False.
         if str(row_ID) != 'False': # means the row should be updated.
-            row_id, status = job_form.process_form(start_date, end_date, day,
-                                                    curr_date, form, row_ID,
-                                                    update=True)
-
-            return evaluate_job_status(row_id, status)
+            msg, row_id = Evaluator.evaluate_and_save(job, curr_date, row_ID, True)
+            return redirector(row_id, msg)
         else:
-            row_id, status = job_form.process_form(start_date, end_date, day, curr_date, form)
-            return evaluate_job_status(row_id, status)
+            msg, row_id = Evaluator.evaluate_and_save(job,curr_date)
+            return redirector(row_id, msg)
 
-    flash_msg = 'A job has been removed from the active jobs page because the job has been worked'
     # Render the details already entered by the user.
     return render_template('forms/JobEntryForm/job_entry_page.html',
-                           start_date=form.start_date,
-                           end_date=form.end_date,
-                           job_title=form.job_title,
-                           description=form.description,
-                           location=form.location,
-                           start_hours=form.start_hours,
-                           start_mins=form.start_mins,
-                           end_hours=form.end_hours,
-                           end_mins=form.end_mins,
-                           day=day,
-                           rate=form.rate,
+                           start_date=job.start_date,
+                           end_date=job.end_date,
+                           job_title=job.job_title,
+                           description=job.description,
+                           location=job.location,
+                           start_hours=job.start_hours,
+                           start_mins=job.start_mins,
+                           end_hours=job.end_hours,
+                           end_mins=job.end_mins,
+                           day=job.day,
+                           rate=job.rate,
                            errors=errors,
-                           flash_msg=create_flash_msg(flash_msg),
                            is_shift_confirmed=is_shift_confirmed)
 @app.route('/logout')
 @login_required
@@ -178,7 +161,6 @@ def reset():
 @app.route('/deletedpage')
 @login_required
 def deleted_jobs_page():
-
     return render_template('forms/deleted/deletedjobs.html')
 
 @app.route('/info/<row_id>')
@@ -186,7 +168,6 @@ def deleted_jobs_page():
 def info_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User(session['username'],_id=session['user_id'])
-   create_flash_msg('The data added to the database.')
    return render_template('forms/permalinks/perma_table.html', rows=user.get_job_by_row_id(row_id))
 
 
@@ -213,8 +194,7 @@ def _display(html_link, active=False, permalink_jobs=False):
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
-                           user=user,
-                           has_previous_job_been_worked=has_previous_job_been_worked)
+                           user=user)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required

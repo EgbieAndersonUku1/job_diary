@@ -5,8 +5,12 @@
   <span class="glyphicon glyphicon-user"></span> {{ session['username']}}
   </a>
 </div>
-
 <meta http-equiv="refresh" content='60'>
+
+<!-- FIX THE REFRESH  ON LINE 98 AND 99 METHOD BECAUSE AFTER DELETION THE FLASH MESSAGE
+    ONLY SHOWN FOR 1 SECOND BEFORE IT IS REFRESED
+
+-->
 
 {% block title %}Active jobs {% endblock %}
 {% block content %}
@@ -84,13 +88,13 @@
                 </th>
             </tr>
             {% for job in jobs %}
-                {% if not is_shift_confirmed(job) %}
+                {% if not is_shift_confirmed(job) and is_shift_now(job) %}
                     {{ user.delete_job(job.row_id[1:])  }}
-                    <meta http-equiv="refresh" content='0.001'>
+                    <meta http-equiv="refresh" content="0">
 
-                {% elif is_shift_over(job) and  job.is_shift_confirmed.lower() == 'yes' %}
+                {% elif is_shift_over(job) and is_shift_confirmed(job) %}
                       {{ user.update_job_status(job.row_id, 'Yes') }}
-                      <meta http-equiv="refresh" content='0.001'>
+                      <meta http-equiv="refresh" content="0"
                 {% else %}
                        <tr>
                            <td>
