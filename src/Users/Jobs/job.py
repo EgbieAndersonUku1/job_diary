@@ -9,6 +9,7 @@ import uuid
 from src.Users.Models.Records.records import Record
 from src.utilities.converter import time_to_str, hours_to_units
 from src.Users.Jobs.job_helper import get_daily_rate, get_hours_worked
+from src.utilities.common import create_flash_msg
 
 class Job(object):
     """Job:(Class).
@@ -280,6 +281,7 @@ class Job(object):
         :parameters
            - row_id: The job row to delete.
         """
+        create_flash_msg('A job was deleted.')
         Record.delete_row(row_id, self.id)
         return ''
 
