@@ -194,7 +194,7 @@ def _display(html_link, active=False, permalink_jobs=False):
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
-                           user=user)
+                           user=user, len=len)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required
