@@ -125,7 +125,7 @@ class Evaluator(object):
 
     @classmethod
     def _save_to_database(cls, user, job, row_id=None, update=False):
-        """Saves the user's job detase to the database."""
+        """Saves the user's job details to the database."""
 
         if cls.job_confirmed == 'unconfirmed':
             create_flash_msg('Job was deleted because it was not confirmed.')
