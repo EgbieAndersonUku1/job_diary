@@ -89,20 +89,6 @@ class Job(object):
             return job.save()
         return self.update_job(kwargs['row_id'], job)
 
-    def get_all_jobs(self, sort_by=-1):
-        """get_by_user_id(int) -> return(list[objID(..),..,objID(..)])
-
-        Returns a list all the jobs worked by the users in descending
-        order (default mode).
-
-        :parameters
-           - sort_by : Takes two parameters in the form of either (-1 or 1).
-                      -1: Sorts in descending order .e.g. 10, 9, 8, 7,....,1.
-                       1: Sorts in ascending order  .e.g. 1,2,3,4 ,..., 10.
-        """
-        return Record.find_by_user_id(self.id, sort_by)
-        _id=None,
-
     def get_job_by_row_id(self, row_id):
         """get_job_by_row_id(None) -> return(list[obj(..)])
 

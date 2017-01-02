@@ -21,7 +21,7 @@ from src.Users.Forms.forgotten_password_form import ForgottenPasswordForm
 from src.Users.Forms.new_password_form import NewPasswordForm
 from job_diary import app
 from flask import render_template, session, redirect, url_for, request
-from _form_helper import login_user, register_user
+from registration_and_login_helper import login_user, register_user
 from src.utilities.password_hasher import create_passwd_hash
 from src.Users.user import User
 from src.Users.Jobs.job_evaluator import Evaluator

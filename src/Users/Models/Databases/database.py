@@ -17,6 +17,7 @@ class DataBase(object):
         client = pymongo.MongoClient(DataBase.URI)
         DataBase.DATABASE = client['users']
         job_details = client['users']['jobs_details']
+        cache = client['users']['cache']
 
         # created index one line because mongo does query compound indexes properly
         job_details.create_index([('user_id', pymongo.DESCENDING)])
@@ -33,6 +34,10 @@ class DataBase(object):
         job_details.create_index([('year', pymongo.DESCENDING)])
         job_details.create_index([('month', pymongo.DESCENDING)])
         job_details.create_index([('is_shift_confirmed', pymongo.DESCENDING)])
+
+        # create an index for the cache
+        cache.create_index([('current_jobs', pymongo.DESCENDING)])
+        cache.create_index([('worked_jobs', pymongo.DESCENDING)])
 
     @staticmethod
     def insert_one(collection, data):
@@ -56,7 +61,7 @@ class DataBase(object):
          - collections: A table name for the database.
          - query      : Queries the database based on the query.
          - key        : Sorts the data based on the key.
-         - limit_num  : Limits the data returned.
+         - limit_num  : Limits the data returned. 0 values returns all values.
          - return     : Returns a cursor object.
         """
         field, value = key

@@ -271,10 +271,6 @@ class DataBaseTest(User):
         msg = 'jobs based on the row id'
         return self._get_jobs(msg, self.get_job_by_row_id, 'row_id', row_id=self.row_id)
 
-    def get_job_by_user_id_test(self):
-        """return all jobs based on the name"""
-        msg = 'jobs based on the user id'
-        return self._get_jobs(msg, self.get_all_jobs)
 
     def delete_job_test(self):
         """check if the jobs can be deleted from the database"""
@@ -425,7 +421,7 @@ class DataBaseTest(User):
 
     def run_tests(self):
         """run the test to determine if access to the database is okay"""
-        NUM_OF_TESTS = 18
+        NUM_OF_TESTS = 17
         failed_test, successful_test = [], []
 
         print '##################### Database unit tests...#####################'.center(40)
@@ -550,14 +546,8 @@ class DataBaseTest(User):
                              successful_test, self.errors,
                              test_fifteen, error_msg)
 
-        print '\n[+] Test 16:'
-        print '[+] Checking to see if jobs can be retreived by on user ID..'
-        test_sixteen  = 'Test 16 :'
-        error_msg = 'Error : Failed to to retreive jobs based on the user id'
-        self._is_test_passed(self.get_job_by_user_id_test(), failed_test,
-                             successful_test, self.errors, test_sixteen, error_msg)
 
-        print '\n[+] Test 17'
+        print '\n[+] Test 16'
         print '[+] Checking to see if job within the database can be modified...'
         test_seventeen = 'Test 17 :'
         errors = self.modified_data_test()
@@ -566,7 +556,7 @@ class DataBaseTest(User):
             print '[+] Successful modified jobs within the database.'
             passed_test = True
         else:
-            print '\n[+] Test 17 failed generating error report..'
+            print '\n[+] Test 16 failed generating error report..'
             self._get_error_report(errors)
 
         error_msg = 'Error : Failed to modified jobs in the database'

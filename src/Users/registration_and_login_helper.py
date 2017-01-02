@@ -5,6 +5,7 @@
 from flask import render_template, redirect, session, url_for, request, abort
 from src.Users.Models.Logins.login import Login
 from src.Users.Models.Registrations.registration import Registration
+from src.Users.Models.Caches.cache import Cache
 
 def login_user(**kw):
     """
@@ -57,14 +58,17 @@ def register_user(**kw):
     # if the form validates, attempt to register the users details.
     # If registration is successful meaning that username is unique and
     # the password is acceptable, log the user into the application.
+    # Next create the cache system
     # Finally encode their details within a session.
     if kw['form'].validate_on_submit():
         user = Registration(kw['form'].email.data, kw['form'].password.data)
         if user.register():
             user = Login(user.email, user.password) # logs the user in.
-            user.save()
             session['username'] = user.username
             session['user_id'] = user._id
             session['session_name'] = user.username
+            cache = Cache(session['user_id']) # create the cache in db
+            cache.save()
+            user.save()
             return redirect(url_for('register_secret_questions_answers'))
     return render_template(kw['template'], form=kw['form'], error=kw['error'])
