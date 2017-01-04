@@ -85,7 +85,8 @@ def is_shift_now(job):
     True
     """
     curr_time, shift_start_time = _check_shift(job, True)
-    return True if curr_time >= shift_start_time else False
+    shift_end_time = _check_shift(job)
+    return True if shift_start_time <= curr_time <= shift_end_time[1] else False
 
 def is_shift_over(job):
     """is_shift_over(obj) -> returns(bool)
@@ -216,20 +217,11 @@ def get_jobs(active_jobs, permalink_jobs, jobs_obj, session, curr_date):
                        jobs worked.
     """
     user_jobs = jobs_obj(session['username'], _id=session['user_id'])
-    total_pay, total_hrs, worked_jobs = [], [], []
 
-    def get_jobs_helper(daily_rate, hrs, job):
-        """returns the daily rate and the hours worked for the processed jobs"""
-        total_pay.append(float(daily_rate))
-        total_hrs.append(float(hrs))
-        worked_jobs.append(job)
-
+    # REPLACE THIS WITH SOME KIND OF CACHE................
     if active_jobs:
-        jobs = user_jobs.get_all_active_jobs() # sort job by ascending latest active job first
+        return user_jobs.get_all_active_jobs(), user_jobs # sort job by ascending latest active job first
     elif permalink_jobs:
-        jobs = permalink_jobs
+        return permalink_jobs, user_jobs
     else:
-        jobs = user_jobs.get_all_worked_jobs()  # sort job in descending order newest first
-    for job in jobs:
-        get_jobs_helper(job.daily_rate, job._hours, job) # user has yet to work the shift
-    return total_pay, total_hrs, worked_jobs, user_jobs
+        return user_jobs.get_all_worked_jobs(), user_jobs  # sort job in descending order newest first

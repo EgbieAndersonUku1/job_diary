@@ -35,7 +35,7 @@ class Record(object):
             finish_time: The time the job ends.
             hourly_rate: The rate for the job.
             total_hours: (float) The total hours worked
-            _hours     : The total hours worked to be
+             hours     : The total hours worked to be
                          used only with mongodb for comparing.
             user_id    : The user id for the record.
             daily_rate : The daily rate for the job.
@@ -60,7 +60,7 @@ class Record(object):
         self.finish_time = kwargs['finish_time']
         self.hourly_rate = kwargs['hourly_rate']
         self.total_hours = kwargs['total_hours'] # hours in words e.g 2 hrs and 10 mins
-        self._hours  = kwargs['_hours']          # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
+        self.hours  = kwargs['hours']          # hours in float 2.10 e.g 2 hrs and .10 mins for db comparision
         self.user_id = kwargs['user_id']
         self.start_date =  kwargs['start_date']
         self.end_date = kwargs['end_date']
@@ -84,7 +84,7 @@ class Record(object):
                  'finish_time': self.finish_time,
                  'hourly_rate': float(self.hourly_rate),
                  'total_hours': self.total_hours,
-                 '_hours'     : self._hours,
+                 'hours'     : self.hours,
                  'user_id'    : str(self.user_id),
                  'daily_rate' : float(self.daily_rate),
                  'start_date' : '{}-{}-{}'.format(self.year, self.month, self.start_date.split('-')[-1]), # get the day part
@@ -325,7 +325,7 @@ class Record(object):
             - hours  : The total hours the user worked.
             - user_id: The user itself.
         """
-        return cls._find(query={'_hours' : float(hours),
+        return cls._find(query={'hours' : float(hours),
                                 'user_id': user_id},
                                  key=('date', -1))
 
@@ -397,7 +397,7 @@ class Record(object):
             - form   : form object containing the new info.
         """
         query = {"loc"    : form.loc.title(),
-                 "_hours" : form._hours,
+                 "hours" : form.hours,
                  "user_id": form.user_id,
                  "descr"  : form.descr.title(),
                  "finish_time" : form.finish_time,
@@ -422,7 +422,7 @@ class Record(object):
         """return all jobs based on their confirmation"""
         return cls._find(query={"is_shift_confirmed": confirmation,
                                'user_id':user_id},
-                                key=('date', -1))
+                                key=('start_date', -1))
     @classmethod
     def find_all_active_jobs(cls, user_id):
         """Returns all jobs that the user has not worked """

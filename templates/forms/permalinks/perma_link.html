@@ -10,8 +10,7 @@
 
 {% block content %}
     <table class="table table-striped">
-          <h2>Jobs past, present and future</h2>
-          <h4>The total pay accumlated is £{{ total_pay }} over a period of {{ converter(total_hrs) }}.</h4>
+        <h2>Jobs past, present and future</h2>
         <tr>
           <th>
             Month
@@ -86,9 +85,11 @@
                </td>
                <td>
                  {{ job.total_hours}}
+                 {{ total.store_hrs(job.hours) }}
                </td>
                <td>
                  £{{ job.daily_rate }}
+                 {{ total.store_val(job.daily_rate) }}
                </td>
                <td>
 
@@ -121,6 +122,7 @@
         {% endfor %}
 
     </table>
+    <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
     <center><caption><em>Updates every 60 seconds</em></caption></center>
 {% endblock %}
 

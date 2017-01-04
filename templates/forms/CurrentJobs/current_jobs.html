@@ -47,12 +47,17 @@
                              <h5>You currently have no active jobs !!!</h5>
                         </div>
                              <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
+                {% elif is_shift_over(jobs[0]) and is_shift_confirmed(jobs[0]) %}
+                        {{ user.update_job_status(jobs[0].row_id, 'Yes') }}
+                        <div id='error_msg'>
+                             <h5>This is not an error this page has loaded correct.</h5>
+                        <div>
+                             <h5>The last current job has been worked !!!</h5>
+                        </div>
+                             <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
                 {% else %}
                       <!--get the data from the job-->
                     <h2>Current jobs yet to work </h2>
-                        <center>
-                            <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
-                        </center>
                             <tr>
                                 <th>
                                     Date
@@ -121,9 +126,11 @@
                                 </td>
                                 <td>
                                     {{ jobs[0].total_hours}}
+                                    {{ total.store_hrs(jobs[0].hours) }}
                                 </td>
                                 <td>
                                     £{{ jobs[0].daily_rate }}
+                                    {{ total.store_val(jobs[0].daily_rate) }}
                                 </td>
                                 <td>
                                     {% if jobs[0].is_shift_confirmed.title() == 'Yes' %}
@@ -145,12 +152,10 @@
                                     <a href="{{ url_for('edit', value=jobs[0].row_id) }}">Edit</a> /
                                     <a href="{{ url_for('delete', row=jobs[0].row_id[1:]) }}">Delete</a>
                                 </td>
+                                <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
                 {% endif %}
           {% else %}
                 <h2>Current jobs yet to work</h2>
-                <center>
-                    <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
-                </center>
                 <tr>
                     <th>
                         Date
@@ -225,9 +230,11 @@
                                </td>
                                <td>
                                    {{ job.total_hours}}
+                                   {{ total.store_hrs(job.hours) }}
                                </td>
                                <td>
                                    £{{ job.daily_rate }}
+                                    {{ total.store_val(job.daily_rate) }}
                                </td>
                                <td>
                                    {% if job.is_shift_confirmed.title() == 'Yes' %}
@@ -255,5 +262,15 @@
             {% endfor %}
         {% endif %}
       </table>
+
+      <!--clear_all() clears the records so whenever the user hits back or refreshes the page
+      the previous calculated amount is not added to refreshed amount thus double or triple
+      the result -->
+      {% if len(jobs) > 1 %}
+            <h4>The total pay  accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
+            {{ total.clear_all() }}
+      {% endif %}
+
       <center><caption><em>Gets the latest information automatically every 60 seconds</em></caption></center>
+
 {% endblock %}

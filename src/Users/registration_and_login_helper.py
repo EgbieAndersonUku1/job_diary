@@ -5,7 +5,6 @@
 from flask import render_template, redirect, session, url_for, request, abort
 from src.Users.Models.Logins.login import Login
 from src.Users.Models.Registrations.registration import Registration
-from src.Users.Models.Caches.cache import Cache
 
 def login_user(**kw):
     """
@@ -68,7 +67,6 @@ def register_user(**kw):
             session['user_id'] = user._id
             session['session_name'] = user.username
             cache = Cache(session['user_id']) # create the cache in db
-            cache.save()
             user.save()
             return redirect(url_for('register_secret_questions_answers'))
     return render_template(kw['template'], form=kw['form'], error=kw['error'])

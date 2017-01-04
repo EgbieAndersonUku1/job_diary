@@ -129,7 +129,8 @@ class Evaluator(object):
 
         if cls.job_confirmed == 'unconfirmed':
             create_flash_msg('Job was deleted because it was not confirmed.')
-            user.delete_job(row_id[1:])
+            if row_id:
+                user.delete_job(row_id[1:])
             return cls.job_confirmed, None
         elif cls.job_confirmed == 'not yet':
             create_flash_msg("""The job needs to be confirmed before the
@@ -145,12 +146,14 @@ class Evaluator(object):
     def _evaluate(cls, job_status, confirmed, job):
         """evaluates the details of the job provided by the user"""
 
+
         if job_status == 'past' and confirmed:
             cls.set_worked_job(job, 'Yes')
             cls.set_job_confirmation(job, 'yes', 'confirmed')
         elif job_status == 'past' and not confirmed:
             cls.set_job_confirmation(job, job_confirmed='unconfirmed')
         elif job_status  == 'present':
+
             # The shift has started but it was never confirmed
             # which means the user never worked the shift/job
             if not confirmed and is_shift_now(job):
@@ -168,7 +171,7 @@ class Evaluator(object):
                 cls.set_job_confirmation(job, 'yes','confirmed')
 
             # confirmed but the shift has not yet started.
-            elif confirmed and not is_shift_now(job):
+            elif confirmed and not is_shift_now(job) and not is_shift_over(job):
                 cls.set_job_confirmation(job_confirmed='confirmed')
 
             # the shift/job was worked by the user.

@@ -38,9 +38,6 @@
         {% else %}
                 <!--get the data from the job-->
             <h2>Days and times of jobs worked. </h2>
-                <center>
-                    <h6>The total pay you will earn over a period of {{ converter(total_hrs) }} is £{{ total_pay }}.</h6>
-                </center>
                 <tr>
                     <th>
                         Date
@@ -110,9 +107,11 @@
                             </td>
                             <td>
                                 {{ job.total_hours}}
+                                {{ total.store_hrs(job.hours) }}
                             </td>
                             <td>
                                 £{{ job.daily_rate }}
+                                {{ total.store_val(job.daily_rate) }}
                             </td>
                             <td>
                                 {% if session['username'] == 'admin' %}
@@ -128,4 +127,16 @@
                     {% endfor %}
                 {% endif %}
 </table>
+
+{% if jobs %}
+      <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
+{% endif %}
+
+<!--Clears the records so whenever the user hits back or refreshes the page
+the previous calculated amount is not added to refreshed amount thus double or triple
+the result
+ -->
+{{ total.clear_all() }}
+
+
 {% endblock %}

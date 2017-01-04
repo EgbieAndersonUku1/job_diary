@@ -21,7 +21,7 @@ class DataBase(object):
 
         # created index one line because mongo does query compound indexes properly
         job_details.create_index([('user_id', pymongo.DESCENDING)])
-        job_details.create_index([('_hours', pymongo.DESCENDING)])
+        job_details.create_index([('hours', pymongo.DESCENDING)])
         job_details.create_index([('loc', pymongo.DESCENDING)])
         job_details.create_index([('start_time', pymongo.DESCENDING)])
         job_details.create_index([('finish_time', pymongo.DESCENDING)])
@@ -67,6 +67,8 @@ class DataBase(object):
         field, value = key
         if query == None:
             return DataBase.DATABASE[collections].find().sort(field, value).limit(limit_num) # query all documents
+        elif query == None and key == None:
+            return DataBase.DATABASE[collections].find()
         return DataBase.DATABASE[collections].find(query).sort(field, value).limit(limit_num)
 
     @staticmethod

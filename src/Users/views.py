@@ -6,7 +6,9 @@
 import json
 import datetime
 import uuid
-from src.utilities.converter import time_to_str, units_to_hours, month_to_str
+from src.Users.Models.Caches.cache import Cache
+from src.Users.Models.TotalUserMoneys.total_amount import TotalAmount
+from src.utilities.converter import time_to_str, month_to_str
 from src.Users.Models.Registrations.registration import Registration
 from src.Users.Models.Databases.database import DataBase
 from src.Users.decorators import login_required, admin_required
@@ -25,6 +27,7 @@ from registration_and_login_helper import login_user, register_user
 from src.utilities.password_hasher import create_passwd_hash
 from src.Users.user import User
 from src.Users.Jobs.job_evaluator import Evaluator
+from src.Users.Models.TotalUserMoneys.total_amount import TotalAmount
 from src.Users.Jobs.job_helper import ( get_jobs,
                                         is_shift_now,
                                         is_shift_over,
@@ -34,6 +37,7 @@ date = datetime.datetime.now()
 curr_day = datetime.date.today().strftime("%A")
 curr_date = "{}-{}-{}".format(date.year, date.month, date.day)
 SEARCH_FORM_JOBS = ''
+
 
 @app.before_first_request
 def initialize():
@@ -61,7 +65,6 @@ def user_register():
                          redirect_link='home')
 
 def redirector(row_id, job_status):
-
     if job_status == 'unconfirmed':
          return redirect(url_for('history'))
     return redirect(url_for('info_page', row_id=row_id))
@@ -170,7 +173,6 @@ def info_page(row_id):
    user = User(session['username'],_id=session['user_id'])
    return render_template('forms/permalinks/perma_table.html', rows=user.get_job_by_row_id(row_id))
 
-
 def _display(html_link, active=False, permalink_jobs=False):
     """_display(str, str) -> return(value)
 
@@ -181,20 +183,16 @@ def _display(html_link, active=False, permalink_jobs=False):
 
     Renders the jobs worked or not worked along with the hours and total pay.
     """
-    total_pay, total_hrs, jobs, user = get_jobs(active, permalink_jobs,
-                                              User, session, curr_date)
+    jobs, user = get_jobs(active, permalink_jobs, User, session, curr_date)
     return render_template(html_link,
                            jobs=jobs,
                            translate=month_to_str,
-                           total_pay=round(sum(total_pay),2),
-                           total_hrs=sum(total_hrs), # total hrs expressed in units e.g 12.75
                            date=curr_date,
                            is_shift_over=is_shift_over,
-                           converter=units_to_hours,
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,
-                           user=user, len=len)
+                           user=user, len=len, total=TotalAmount)
 
 @app.route('/history/jobs', methods=('GET', 'POST'))
 @login_required

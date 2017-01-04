@@ -69,7 +69,7 @@ class Job(object):
                     finish_time=kwargs['finish_time'],
                     hourly_rate=kwargs['hourly_rate'],
                     total_hours=time_to_str(hours),
-                    _hours=units,
+                    hours=units,
                     user_id=self.id,
                     daily_rate=get_daily_rate(units, kwargs['hourly_rate']),
                     start_date=self.start_date,

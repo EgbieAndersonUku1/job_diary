@@ -72,7 +72,7 @@ def check_date(date):
                                         return True, True
                                     return False, 'They can only be 29 days in February since this \
                                                    year {} is a leap year.'.format(year)
-                                elif not is_leap_year(year):
+                                elif not is_leap_year(int(year)):
                                      if 1 <= day <= 29:
                                         return True, True
                                      return False, 'There can only be 28 days in February since this is not a leap year!!'
