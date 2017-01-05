@@ -56,6 +56,7 @@
                         </div>
                              <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
                 {% else %}
+                     {{ total.clear_all() }}
                       <!--get the data from the job-->
                     <h2>Current jobs yet to work </h2>
                             <tr>
@@ -153,6 +154,7 @@
                                     <a href="{{ url_for('delete', row=jobs[0].row_id[1:]) }}">Delete</a>
                                 </td>
                                 <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}</h4>
+
                 {% endif %}
           {% else %}
                 <h2>Current jobs yet to work</h2>

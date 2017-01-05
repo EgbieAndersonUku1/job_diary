@@ -36,6 +36,7 @@
                     <img src="/static/fonts/empty.jpeg" class="img-circle" alt="Cinque Terre" width="210" height="236">
             </div>
         {% else %}
+            {{ total.clear_all() }}
                 <!--get the data from the job-->
             <h2>Days and times of jobs worked. </h2>
                 <tr>
@@ -130,13 +131,14 @@
 
 {% if jobs %}
       <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
+      {{ total.clear_all() }}
 {% endif %}
 
 <!--Clears the records so whenever the user hits back or refreshes the page
 the previous calculated amount is not added to refreshed amount thus double or triple
 the result
  -->
-{{ total.clear_all() }}
+
 
 
 {% endblock %}
