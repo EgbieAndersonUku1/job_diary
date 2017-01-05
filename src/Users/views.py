@@ -8,7 +8,7 @@ import datetime
 import uuid
 from src.Users.Models.Caches.cache import Cache
 from src.Users.Models.TotalUserMoneys.total_amount import TotalAmount
-from src.utilities.converter import time_to_str, month_to_str
+from src.utilities.converter import time_to_str, units_to_hours, month_to_str
 from src.Users.Models.Registrations.registration import Registration
 from src.Users.Models.Databases.database import DataBase
 from src.Users.decorators import login_required, admin_required
@@ -183,12 +183,13 @@ def _display(html_link, active=False, permalink_jobs=False):
 
     Renders the jobs worked or not worked along with the hours and total pay.
     """
-    jobs, user = get_jobs(active, permalink_jobs, User, session, curr_date)
+    jobs, user = get_jobs(active, permalink_jobs,User, session, curr_date)
     return render_template(html_link,
                            jobs=jobs,
-                           translate=month_to_str,
+                           translate=month_to_str, # total hrs expressed in units e.g 12.75
                            date=curr_date,
                            is_shift_over=is_shift_over,
+                           converter=units_to_hours,
                            when_is_shift_starting=when_is_shift_starting,
                            is_shift_now=is_shift_now,
                            is_shift_confirmed=is_shift_confirmed,

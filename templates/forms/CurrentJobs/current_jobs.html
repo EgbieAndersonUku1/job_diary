@@ -152,7 +152,7 @@
                                     <a href="{{ url_for('edit', value=jobs[0].row_id) }}">Edit</a> /
                                     <a href="{{ url_for('delete', row=jobs[0].row_id[1:]) }}">Delete</a>
                                 </td>
-                                <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
+                                <h4>The total pay accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}</h4>
                 {% endif %}
           {% else %}
                 <h2>Current jobs yet to work</h2>
@@ -268,9 +268,9 @@
       the result -->
       {% if len(jobs) > 1 %}
             <h4>The total pay  accumlated is £{{ total.get_total() }} over a period of {{ total.get_hrs() }}.</h4>
-            {{ total.clear_all() }}
       {% endif %}
 
       <center><caption><em>Gets the latest information automatically every 60 seconds</em></caption></center>
+      {{ total.clear_all() }}
 
 {% endblock %}

@@ -30,7 +30,7 @@ class TotalAmount(object):
 
     @classmethod
     def get_hrs(cls):
-        return sum(cls.hrs)
+        return units_to_hours(sum(cls.hrs))
 
     @classmethod
     def store_val(cls, value):
@@ -41,7 +41,7 @@ class TotalAmount(object):
     @classmethod
     def get_total(cls):
         """return the total amount of money"""
-        return units_to_hours(round(sum(cls.total), 2))
+        return round(sum(cls.total), 2)
 
     @classmethod
     def clear_all(cls):

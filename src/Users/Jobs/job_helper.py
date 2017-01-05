@@ -218,7 +218,8 @@ def get_jobs(active_jobs, permalink_jobs, jobs_obj, session, curr_date):
     """
     user_jobs = jobs_obj(session['username'], _id=session['user_id'])
 
-    # REPLACE THIS WITH SOME KIND OF CACHE................
+    # REPLACE THIS WITH SOME KIND OF CACHE TO PREVENT FOR HITTING THE DATABASE
+    # ON A READ VIEW................
     if active_jobs:
         return user_jobs.get_all_active_jobs(), user_jobs # sort job by ascending latest active job first
     elif permalink_jobs:
