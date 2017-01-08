@@ -64,7 +64,7 @@ def user_register():
                          template='forms/LoginRegistrationForm/registration.html',
                          redirect_link='home')
 
-def redirector(row_id, job_status):
+def redirector(row_id, job_status, update=False):
     if job_status == 'unconfirmed':
          return redirect(url_for('history'))
     return redirect(url_for('info_page', row_id=row_id))
@@ -124,10 +124,9 @@ def entry_page(row_ID):
         # False when the string returned is not equal to the string False.
         if str(row_ID) != 'False': # means the row should be updated.
             msg, row_id = Evaluator.evaluate_and_save(job, curr_date, row_ID, True)
-            return redirector(row_id, msg)
         else:
             msg, row_id = Evaluator.evaluate_and_save(job,curr_date)
-            return redirector(row_id, msg)
+        return redirector(row_id, msg)
 
     # Render the details already entered by the user.
     return render_template('forms/JobEntryForm/job_entry_page.html',
