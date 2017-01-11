@@ -4,7 +4,16 @@
 ########################################################################
 
 from flask import render_template, redirect, url_for, Blueprint, request
+from src.Users.decorators import login_required
 
+editor = Blueprint('editor', __name__)
+history = Blueprint('history', __name__)
+curr_jobs = Blueprint('curr_jobs', __name__)
+job_info = Blueprint('job_info', __name__)
+resetor = Blueprint('restor', __name__)
+deletor = Blueprint('deletor', __name__)
+permalink = Blueprint('permalink', __name__)
+job_entry = Blueprint('job_entry', __name__)
 
 def _redirector(row_id, job_status, update=False):
     if job_status == 'unconfirmed':
@@ -33,50 +42,45 @@ def _render_template(html_link, active=False, permalink_jobs=False):
                            is_shift_confirmed=is_shift_confirmed,
                            user=user, len=len, total=TotalAmount)
 
-@app.route('/job/edit/<value>')
+@editor.route('/job/edit/<value>')
 @login_required
 def edit_job(value):
     """Allows the jobs to be edited"""
     user = User(session['username'], _id=session['user_id'])
     return render_template('forms/EditForm/edit_page.html', form=user.get_job_by_row_id(str(value)))
 
-
-@app.route('/history/jobs', methods=('GET', 'POST'))
+@history.route('/history/jobs', methods=('GET', 'POST'))
 @login_required
 def job_histories():
     """renders the entire job history active and none active"""
-    return _display('forms/WorkedJobs/jobs_history.html')
+    return _render_template('forms/WorkedJobs/jobs_history.html')
 
-@app.route('/active/jobs', methods=('GET', 'POST'))
+@curr_jobs.route('/active/jobs', methods=('GET', 'POST'))
 @login_required
 def current_jobs():
     """renders the all jobs that are active (not worked)"""
-    return _display('forms/CurrentJobs/current_jobs.html', True)
+    return _render_template('forms/CurrentJobs/current_jobs.html', True)
 
-@app.route('/info/<row_id>')
+@job_info.route('/info/<row_id>')
 @login_required
 def job_info_page(row_id):
    """redirects the user to successful page entry after successful input"""
    user = User(session['username'],_id=session['user_id'])
    return render_template('forms/permalinks/perma_table.html', rows=user.get_job_by_row_id(row_id))
 
-@app.route('/jobs/reset')
+@resetor.route('/jobs/reset')
 @login_required
 def reset_job_page():
     """reset the value in the form for the application"""
-    return redirect(url_for('entry_page', row_ID=False))
+    return redirect(url_for('job_entry.entry_page', row_ID=False))
 
-
-
-
-
-@app.route('/search/permalinks/jobs')
+@permalink.route('/search/permalinks/jobs')
 def job_perma_link():
     """Displays the jobs retreived from the search function"""
-    return _display("forms/permalinks/perma_link.html", permalink_jobs=SEARCH_FORM_JOBS)
+    return _render_template("forms/permalinks/perma_link.html", permalink_jobs=SEARCH_FORM_JOBS)
 
 
-@app.route('/delete/<row>')
+@deletor.route('/delete/<row>')
 @login_required
 def delete_job_page(row):
     """deletes data from the a specific row"""
@@ -85,7 +89,7 @@ def delete_job_page(row):
     return redirect(request.referrer)
 
 
-@app.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
+@job_entry.route('/job/entry/<row_ID>', methods=('GET', 'POST'))
 @login_required
 def job_entry_page(row_ID):
     """entry_page(func)

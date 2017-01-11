@@ -1,8 +1,13 @@
 from flask import render_template, url_for, Blueprint, redirect, session
+from src.Users.decorators import login_required, admin_required
+
+search_page = Blueprint('search_page', __name__)
+register_questions = Blueprint('register_questions', __name__)
+retreive_password = Blueprint('password_retrieval', __name__)
 
 SEARCH_FORM_JOBS = ''
 
-@app.route('/search', methods=('GET', 'POST'))
+@search_page.route('/search', methods=('GET', 'POST'))
 @login_required
 def search():
     """Search form that allows the user to search the form based on the job attributes"""
@@ -13,6 +18,7 @@ def search():
     error = ''
     if request.method == 'POST':
         if form.validate_on_submit:
+
             search_form = ValidateSearchForm(form)
             jobs = search_form.get_data()
             if jobs:
@@ -23,7 +29,7 @@ def search():
         return render_template('forms/SearchPageForm/search_page.html', form=form, error=error)
     return render_template('forms/SearchPageForm/search_page.html', form=form)
 
-@app.route('/secret/questions', methods=('GET', 'POST'))
+@register_questions.route('/secret/questions', methods=('GET', 'POST'))
 def register_secret_questions_answers():
 
     form = ForgottenPasswordForm()
@@ -35,7 +41,7 @@ def register_secret_questions_answers():
                            form=form,
                            username=session['username'])
 
-@app.route('/secret/questions/answers', methods=('GET', 'POST'))
+@retreive_password.route('/secret/questions/answers', methods=('GET', 'POST'))
 def forgotten_password():
     """
     """

@@ -2,9 +2,13 @@
 # Author; Egbie
 ###############################################################################
 
-# ADD BLUEPRINT HERE
+from flask import Blueprint
+from src.Users.registration_and_login_helper import register_user
+from src.Users.Forms.login_form import RegisterForm
 
-@app.route('/register', methods=('GET', 'POST'))
+user_registration = Blueprint('user_registration', __name__)
+
+@user_registration.route('/register', methods=('GET', 'POST'))
 def user_register():
     """Register the user to the application"""
     form = RegisterForm()
