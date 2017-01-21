@@ -66,7 +66,6 @@ def register_user(**kw):
             session['username'] = user.username
             session['user_id'] = user._id
             session['session_name'] = user.username
-            cache = Cache(session['user_id']) # create the cache in db
             user.save()
             return redirect(url_for('register_secret_questions_answers'))
     return render_template(kw['template'], form=kw['form'], error=kw['error'])

@@ -27,7 +27,7 @@
     {% from '_formhelper.html' import render_field %}
 
     <div class='container'>
-    <form method="post" action="{{ url_for('search_page.search') }}" role="form">
+    <form method="post" action="{{ url_for('search') }}" role="form">
         {{ form.hidden_tag() }}
           <div>
            <label class="radio-inline"><input type="radio" name="jobInfo">{{ render_field(form.job_title, class='form-control') }}</label>

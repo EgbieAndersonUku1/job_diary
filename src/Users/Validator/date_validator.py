@@ -4,6 +4,15 @@
 
 from src.utilities.converter import month_to_str
 
+def fix_date(date):
+    """fixes the date if date is not in the format of DD-MM-YYYY"""
+    day, month, year = date.split('-')
+    if len(day) == 1:
+        day = '0' + day
+    if len(month) == 1:
+        month = '0' + month
+    return "{}-{}-{}".format(year, month, day)
+
 def is_leap_year(year):
     """Determine whether a year is a leap year."""
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
