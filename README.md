@@ -9,7 +9,7 @@ ORM :  pymongo,
 language : Python
 
 
-As a person who works all over London different places sometimes each week. I sometimes find it hard to keep track of the different locations that I have worked at. I often used Excel to keep track of my job outgoings including my pay. This has resulted in a huge Excel file that sometimes difficult to navigate especially if looking for a specific month or job.
+I sometimes work for a company that enables to me travel all over London. My boss Simon and Claire often send me to different places in London e.g Wembley, St JohnWoods As a person who works all over London different places sometimes each week I sometimes find it hard to keep track of the different locations that I have worked at. I often used Excel to keep track of my job outgoings including my pay. This has resulted in a huge Excel file that sometimes difficult to navigate especially if looking for a specific month or job.
 
 This is my primary reason for creating this web application and when finished and will keep a record of all the different locations that I have worked along with the daily and weekly pay, present and future places that I am going to be working at, job title, description, etc and anything I could not acheive in Excel.
 
@@ -23,6 +23,6 @@ module as it uses CDN which requires internet access.
 Run program
 
 Terminal 1  python run.py runserver
-Terminal 2  sudo mongod
+Terminal 2  sudo mongod (this starts the server)
 
 Finally run 127.0.0.1:5000

@@ -4,5 +4,5 @@ py-bcrypt==0.4
 flask-wtf
 Flask-Script
 flask-paginate
-Flask-Upload
 Flask-Cache
+python-dateutil
