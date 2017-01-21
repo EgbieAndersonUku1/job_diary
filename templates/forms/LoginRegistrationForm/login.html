@@ -17,7 +17,7 @@
 
       <div class="panel panel-default">
 
-      <form method='Post' action="{{ url_for('login') }}" role='form'>
+      <form method='Post' action="{{ url_for('login_user.login') }}" role='form'>
         {{ form.hidden_tag() }}
         {{ render_field(form.username, class='form-control') }}
         {{ render_field(form.password, class='form-control') }}
@@ -27,7 +27,7 @@
 
       </form>
       <center>
-        <a href='{{ url_for("forgotten_password", ) }}'>Forgotten password</a>
+        <a href='{{ url_for("retreive_password.forgotten_password", ) }}'>Forgotten password</a>
       </center>
     </div>
     </div>

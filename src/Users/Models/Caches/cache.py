@@ -3,7 +3,7 @@
 ###############################################################################
 
 import uuid
-from src.Users.Models.Databases.database import DataBase
+#from src.Users.Models.Databases.database import DataBase
 
 class Cache(object):
     """Cache(class)
@@ -19,4 +19,14 @@ class Cache(object):
     of the database.
     """
     def __init__(self):
-        pass
+        self.cache = {}
+
+    def save_to_cache(self, amount, active_jobs=False):
+        if active_jobs:
+            self.cache['active_jobs'] = amount
+        else:
+            self.cache['worked_jobs'] = amount
+
+    def clear_cache(self):
+        self.cache = []
+        

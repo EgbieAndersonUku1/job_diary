@@ -9,7 +9,7 @@
  <div class="container">
    <div class="row">
        <div class="col-md-offset-3 col-md-6">
-    <form method="Post" action="{{ url_for('entry_page', row_ID=form.row_id) }}">
+    <form method="Post" action="{{ url_for('job_entry.entry_page', row_ID=form.row_id) }}">
         <div class="form-group">
           <label id='title_id' for="job_title">Job Title</label>
           <input type='text' id="job_tile" class='form-control' name="job_title" maxlength="25" value='{{form.job_title}}' >
