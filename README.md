@@ -1,28 +1,20 @@
 # job_diary
 
-Web Technology used:  Flask,
-
-DataBase used:  Mongodb,
-
-ORM :  pymongo,
-
-language : Python
+Web Technology used  Flask
+DataBase used used Mongodb.
+ORM used pymongo.
+language Python 2.7.
 
 
-I sometimes work for a company that enables to me travel all over London. My boss Simon and Claire often send me to different places in London e.g Wembley, St JohnWoods As a person who works all over London different places sometimes each week I sometimes find it hard to keep track of the different locations that I have worked at. I often used Excel to keep track of my job outgoings including my pay. This has resulted in a huge Excel file that sometimes difficult to navigate especially if looking for a specific month or job.
+I sometimes work for a company that enables me to travel all over London in order to work with different companies. The location sent to me by bosses Simon and Claire can vary from week to week or month to month e.g Wembley, St JohnWoods, Twickenham, to name but a few. So in order to keep track of my job outgoings I often use Excel to keep track of the different locations that I have worked at or will work out. This includes the pay, the time, the length of the job and various aspect relating to the job. But like everything in life there is a downside and this is no different. This particular downside comes in the form of a huge Excel spreadsheet that is sometimes difficult to navigate especially if I looking for a specific month or a job.
 
-This is my primary reason for creating this web application and when finished and will keep a record of all the different locations that I have worked along with the daily and weekly pay, present and future places that I am going to be working at, job title, description, etc and anything I could not acheive in Excel.
+This is my primary reason for creating this web application which enables me to track my outgoings by keeping a record of all the different locations that I have worked. This includes the pay, future jobs, etc. By including a web interface this adds abstraction and encapulsation and allow me to access jobs by their attributes e.g. by title, pay, months while hiding the unecssary details.
 
-Along with an easy web interface, search parameter that will all be built using HTML, CSS and Bootstrap. Giving the application a nice look and feel and thus enable me to query jobs by either months, days, hours, pay, dates, etc.
-
-It will also send me an email to remind when the day gets close to a place I am going to work at.
-Although the program is run on your local computer. It still needs the internet to fully utilise the Bootstrap
-module as it uses CDN which requires internet access.
-
+I have used CDN bootstrap to give it a more polish interface. This also means it needs access to the internet in order to render the graphics the way it was intended.
 
 Run program
 
-Terminal 1  python run.py runserver
-Terminal 2  sudo mongod (this starts the server)
+Terminal 1  python run.py runserver.
+Terminal 2  sudo mongod (this starts the server).
 
-Finally run 127.0.0.1:5000
+Finally run 127.0.0.1:5000.
