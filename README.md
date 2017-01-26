@@ -1,7 +1,7 @@
 # job_diary
 
-Web Technology used  Flask
-DataBase used used Mongodb.
+## Web Technology used  Flask
+DataBase used Mongodb.
 ORM used pymongo.
 language Python 2.7.
 
