@@ -14,7 +14,7 @@ I have used CDN bootstrap to give it a more polish interface. This also means it
 
 One of the reason I created job_diary was because jobtracker was limited and did not protect from various attacks such as Cross Site attack. While job diary uses the flask implementation in order to better enhance security.
 
-## This was program was never intended to be run on appengine or online. I wrote this program to be run on a loopback address. I wrote jobtracker an ancestor with the intention of running it on googleappengine. My goal in writing jobtracker was actually the test the googleengine and as a result it lacks various security such as cross-site scripting. This was rectified in job diary as it uses flask to handle the security aspect.
+## This was program was never intended to be run on appengine or online. I wrote this program to be run on a loopback address. I wrote jobtracker an ancestor with the intention of running it on google appengine. My goal in writing jobtracker was actually the test the googleengine and as a result it lacks various security such as cross-site scripting. This was rectified in job diary as it uses flask to handle the security aspect.
 
 ## Run program
 
