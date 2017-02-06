@@ -10,7 +10,10 @@ I sometimes work for a company that enables me to travel all over London in orde
 
 This is my primary reason for creating this web application which enables me to track my outgoings by keeping a record of all the different locations that I have worked. This includes the pay, future jobs, etc. By including a web interface this adds abstraction and encapulsation and allow me to access jobs by their attributes e.g. by title, pay, months while hiding the unecssary details.
 
-I have used CDN bootstrap to give it a more polish interface. This also means it needs access to the internet in order to render the graphics the way it was intended.
+I have used CDN bootstrap to give it a more polish interface. This also means it needs access to the internet in order to render the graphics the way it was intended. 
+
+
+## This was program was never intended to be run on appengine or online. I wrote this program to be run on a loopback address. I wrote jobtracker an ancestor to be run googleappengine.
 
 ## Run program
 
