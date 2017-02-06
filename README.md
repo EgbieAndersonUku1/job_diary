@@ -12,6 +12,7 @@ This is my primary reason for creating this web application which enables me to 
 
 I have used CDN bootstrap to give it a more polish interface. This also means it needs access to the internet in order to render the graphics the way it was intended. 
 
+One of the reason I created job_diary was because jobtracker was limited and did not protect from various attacks such as Cross Site attack. While job diary uses the flask implementation in order to better enhance security.
 
 ## This was program was never intended to be run on appengine or online. I wrote this program to be run on a loopback address. I wrote jobtracker an ancestor to be run googleappengine.
 
