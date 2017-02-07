@@ -16,6 +16,8 @@ One of the reason I created job_diary was because jobtracker was limited and did
 
 ## This was program was never intended to be run on appengine or online. I wrote this program to be run on a loopback address. I wrote jobtracker an ancestor with the intention of running it on google appengine. My goal in writing jobtracker was actually to test the googleappengine and as a result it lacks various security such as cross-site scripting. This was rectified in job diary as it uses flask to handle the security aspect.
 
+## project status: complete.
+
 ## Run program
 
 ## Terminal 1  python run.py runserver.
