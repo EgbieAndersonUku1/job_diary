@@ -6,7 +6,7 @@
 ## language Python 2.7.
 
 
-I sometimes work for a company that enables me to travel all over London in order to work with different companies. The location sent to me by bosses Simon and Claire can vary from week to week or month to month e.g Wembley, St JohnWoods, Twickenham, to name but a few. So in order to keep track of my job outgoings I often use Excel to keep track of the different locations that I have worked at or will work out. This includes the pay, the time, the length of the job and various aspect relating to the job. But like everything in life there is a downside and this is no different. This particular downside comes in the form of a huge Excel spreadsheet that is sometimes difficult to navigate especially if I looking for a specific month or a job.
+A job diary application to track the different companies I work for. So in order to keep track of my job outgoings I often use Excel to keep track of the different locations that I have worked at or will work out. This includes the pay, the time, the length of the job and various aspect relating to the job. But like everything in life there is a downside and this is no different. This particular downside comes in the form of a huge Excel spreadsheet that is sometimes difficult to navigate especially if I looking for a specific month or a job.
 
 This is my primary reason for creating this web application which enables me to track my outgoings by keeping a record of all the different locations that I have worked. This includes the pay, future jobs, etc. By including a web interface this adds abstraction and encapulsation and allow me to access jobs by their attributes e.g. by title, pay, months while hiding the unecssary details
 
